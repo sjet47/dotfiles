@@ -1,4 +1,0 @@
-#!/bin/sh
-homepath="/Users/sjet"
-version="frp_0.34.3_darwin_amd64"
-$homepath/bin/$version/frpc -c $homepath/bin/$version/frpc.ini

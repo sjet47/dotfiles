@@ -51,6 +51,11 @@ if has('syntax') && has('eval')
   packadd! matchit
 endif
 
+set undodir=~/.vimdir/undo/
+set directory=~/.vimdir/swp/
+set backupdir=~/.vimdir/bak/
+
+
 map <C-a> ggvG$
 map <C-h> ^
 map <C-L> $
