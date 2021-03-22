@@ -1,11 +1,18 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="/Users/sjet/Library/Python/3.9/bin:$PATH"
+export PATH="/Users/sjet/Library/Python/3.9/lib/python/site-packages:$PATH"
 export PATH="/Users/sjet/Library/Python/3.8/bin:$PATH"
 export PATH="/Users/sjet/Library/Python/3.8/lib/python/site-packages:$PATH"
 export PATH="/Users/sjet/workspace:$PATH"
 export PATH="/Users/sjet/scripts:$PATH"
 export PATH="/Users/sjet/bin:$PATH"
+export PATH="/Users/sjet/n2t/tools:$PATH"
 export NVM_DIR="$HOME/.nvm"
+export SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+export CPATH="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
+export PATH="/Users/sjet/Library/Boost/boost_1_75_0:$PATH"
+export PATH="/Users/sjet/Library/Boost/boost_1_75_0/stage/lib:$PATH"
   [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 # Path to your oh-my-zsh installation.
@@ -366,3 +373,18 @@ export NVM_IOJS_ORG_MIRROR=http://npm.taobao.org/mirrors/iojs
 # GDB
 # On 10.12 (Sierra) or later with SIP, you need to run this:
 # echo "set startup-with-shell off" >> ~/.gdbinit
+
+# ==> ncurses
+# ncurses is keg-only, which means it was not symlinked into /usr/local,
+# because macOS already provides this software and installing another version in
+# parallel can cause all kinds of trouble.
+
+# If you need to have ncurses first in your PATH run:
+#   echo 'export PATH="/usr/local/opt/ncurses/bin:$PATH"' >> ~/.zshrc
+
+# For compilers to find ncurses you may need to set:
+#   export LDFLAGS="-L/usr/local/opt/ncurses/lib"
+#   export CPPFLAGS="-I/usr/local/opt/ncurses/include"
+
+# For pkg-config to find ncurses you may need to set:
+#   export PKG_CONFIG_PATH="/usr/local/opt/ncurses/lib/pkgconfig"
