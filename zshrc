@@ -117,6 +117,9 @@ alias buildpath="~/Library/Developer/Xcode/DerivedData"
 alias sshwin="ssh -p 2322 sjet@itfs127.com"
 alias mkdir="mkdir -p"
 alias df="df -h"
+alias ls="exa"
+alias la="exa -a"
+alias ll="exa -l"
 # openblas is keg-only, which means it was not symlinked into /usr/local,
 # because macOS provides BLAS in Accelerate.framework.
 export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles

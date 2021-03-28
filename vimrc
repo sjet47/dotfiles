@@ -58,4 +58,4 @@ set backupdir=~/.vimdir/bak/
 
 map <C-a> ggvG$
 map <C-h> ^
-map <C-L> $
+map <C-l> $
