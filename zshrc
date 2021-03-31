@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export NVM_DIR="$HOME/.nvm"
 export DOTFILE_DIR="$HOME/dotfiles"
-source $DOTFILE_DIR/macenv.zsh
+source $HOME/macenv.zsh
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
