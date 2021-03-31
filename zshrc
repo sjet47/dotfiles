@@ -2,7 +2,6 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export NVM_DIR="$HOME/.nvm"
 export DOTFILE_DIR="$HOME/dotfiles"
-source $HOME/macenv.zsh
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -102,5 +101,6 @@ alias sshwin="ssh -p 2322 sjet@itfs127.com"
 alias mkdir="mkdir -p"
 alias df="df -h"
 
+source $HOME/.macrc
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
