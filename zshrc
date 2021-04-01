@@ -102,7 +102,7 @@ alias mkdir="mkdir -p"
 alias df="df -h"
 alias la="ls -a"
 
-if [[ -f $HOME/.macrc]];then
+if [[ -e $HOME/.macrc ]]; then
 	source $HOME/.macrc
 fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
