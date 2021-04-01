@@ -8,17 +8,17 @@ function mklnk(){
 }
 
 
-mklnk .gitconfig
+mklnk gitconfig
 
-mklnk .npmrc
+mklnk npmrc
 
-mklnk .pip
+mklnk pip
 
-mklnk .vim
+mklnk vim
 
-mklnk .vimrc
+mklnk vimrc
 
-mklnk .zshrc
+mklnk zshrc
 
 source $HOME/.zshrc
 
