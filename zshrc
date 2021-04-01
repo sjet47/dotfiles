@@ -100,7 +100,10 @@ fi
 alias sshwin="ssh -p 2322 sjet@itfs127.com"
 alias mkdir="mkdir -p"
 alias df="df -h"
+alias la="ls -a"
 
-source $HOME/.macrc
+if [[ -f $HOME/.macrc]];then
+	source $HOME/.macrc
+fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
