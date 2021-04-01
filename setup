@@ -1,0 +1,28 @@
+#!/bin/zsh
+
+function backup(){
+	if [[ -e $HOME/$1 ]]; then
+		mv $HOME/$1 $HOME/$1.bak
+	fi
+}
+
+backup .gitconfig
+ln -s ./gitconfig $HOME/.gitconfig
+
+backup .npmrc
+ln -s ./npmrc $HOME/.npmrc
+
+backup .pip
+ln -s ./pip $HOME/.pip
+
+backup .vim
+ln -s ./vim $HOME/.vim
+
+backup .vimrc
+ln -s ./vimrc $HOME/.vimrc
+
+backup .zshrc
+ln -s ./zshrc $HOME/.zshrc
+
+source $HOME/.zshrc
+
