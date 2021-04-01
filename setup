@@ -1,28 +1,24 @@
 #!/bin/zsh
 
-function backup(){
-	if [[ -e $HOME/$1 ]]; then
-		mv $HOME/$1 $HOME/$1.bak
+function mklnk(){
+	if [[ -e $HOME/.$1 ]]; then
+		mv $HOME/.$1 $HOME/.$1.bak
 	fi
+	ln -s $HOME/dotfiles/$1 $HOME/.$1
 }
 
-backup .gitconfig
-ln -s ./gitconfig $HOME/.gitconfig
 
-backup .npmrc
-ln -s ./npmrc $HOME/.npmrc
+mklnk .gitconfig
 
-backup .pip
-ln -s ./pip $HOME/.pip
+mklnk .npmrc
 
-backup .vim
-ln -s ./vim $HOME/.vim
+mklnk .pip
 
-backup .vimrc
-ln -s ./vimrc $HOME/.vimrc
+mklnk .vim
 
-backup .zshrc
-ln -s ./zshrc $HOME/.zshrc
+mklnk .vimrc
+
+mklnk .zshrc
 
 source $HOME/.zshrc
 
