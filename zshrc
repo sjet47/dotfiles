@@ -100,7 +100,10 @@ fi
 alias sshwin="ssh -p 2322 sjet@itfs127.com"
 alias mkdir="mkdir -p"
 alias df="df -h"
-alias la="ls -a"
+alias ls="exa"
+alias la="exa -a"
+alias ll="exa -l"
+alias leakchk="alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no""
 
 if [[ -e $HOME/.macrc ]]; then
 	source $HOME/.macrc
