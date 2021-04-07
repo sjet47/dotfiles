@@ -12,5 +12,5 @@
 	required = true
 [pull]
 	rebase = true
-[merge]
-	rebase = true
+[init]
+	defaultBranch = main
