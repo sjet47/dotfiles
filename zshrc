@@ -103,7 +103,7 @@ alias df="df -h"
 alias ls="exa"
 alias la="exa -a"
 alias ll="exa -l"
-alias chkmemleak="valgrind --tool=memcheck --leak-check=full --vgdb=no""
+alias chkmemleak="valgrind --tool=memcheck --leak-check=full --vgdb=no"
 alias python="python3"
 
 if [[ -e $HOME/.macrc ]]; then
