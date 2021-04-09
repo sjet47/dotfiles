@@ -16,7 +16,7 @@
 	defaultBranch = main
 [alias]
 	st = status
-	co = checkout
+	ck = checkout
 	br = branch
 	sw = switch
 	pl = pull
