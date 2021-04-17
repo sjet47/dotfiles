@@ -102,7 +102,7 @@ alias mkdir="mkdir -p"
 alias df="df -h"
 alias ls="exa"
 alias la="exa -a"
-alias ll="exa -l"
+alias ll="exa -lh"
 alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
 alias python="python3"
 
