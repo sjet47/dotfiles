@@ -14,6 +14,7 @@ mklnk pip
 mklnk vim
 mklnk vimrc
 mklnk zshrc
+mklnk gdbinit
 
 if [[ ! -e $HOME/.vimdir ]]; then
 	mkdir $HOME/.vimdir
