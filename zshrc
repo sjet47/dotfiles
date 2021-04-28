@@ -105,6 +105,8 @@ alias la="exa -a"
 alias ll="exa -lh"
 alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
 alias python="python3"
+alias dockerdev="docker exec -it dev su sjet"
+alias gdb="gdb -tui -q"
 
 if [[ -e $HOME/.macrc ]]; then
 	source $HOME/.macrc
