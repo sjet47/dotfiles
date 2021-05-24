@@ -24,4 +24,4 @@ if [[ ! -e $HOME/.vimdir ]]; then
 fi
 
 source $HOME/.zshrc
-
+p10k configure
