@@ -108,8 +108,14 @@ alias python="python3"
 alias dockerdev="docker exec -it dev su sjet"
 alias gdb="gdb -tui -q"
 
-if [[ -e $HOME/.macrc ]]; then
+if [[ -e $HOME/.macrc ]]
+then
 	source $HOME/.macrc
+fi
+
+if [[ -e $HOME/.archrc ]]
+then
+	source $HOME/.archrc
 fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
