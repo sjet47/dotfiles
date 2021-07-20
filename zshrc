@@ -97,6 +97,9 @@ fi
 #
 # Example aliases
 
+alias rm="rm -i"
+alias cp="cp -i"
+alias mv="mv -i"
 alias sshwin="ssh -p 2322 sjet@itfs127.com"
 alias mkdir="mkdir -p"
 alias df="df -h"

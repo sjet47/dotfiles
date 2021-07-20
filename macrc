@@ -17,6 +17,7 @@ export PATH="/Users/sjet/Library/Boost/boost_1_75_0:$PATH"
 export PATH="/Users/sjet/Library/Boost/boost_1_75_0/stage/lib:$PATH"
   [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+export PKG_CONFIG_PATH="/usr/local/Cellar/opencv/4.5.2_4/lib/pkgconfig/:$PKG_CONFIG_PATH"
 
 # NVM Source
 export NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node
