@@ -1,3 +1,5 @@
+# Local environment
+source $HOME/.localenv
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export NVM_DIR="$HOME/.nvm"
@@ -109,15 +111,6 @@ alias python="python3"
 alias dockerdev="docker exec -it dev su sjet"
 alias gdb="gdb -tui -q"
 
-if [[ -e $HOME/.macrc ]]
-then
-	source $HOME/.macrc
-fi
-
-if [[ -e $HOME/.archrc ]]
-then
-	source $HOME/.archrc
-fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export NVM_DIR="$HOME/.nvm"
