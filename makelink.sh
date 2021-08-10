@@ -15,6 +15,7 @@ mklnk vim
 mklnk vimrc
 mklnk zshrc
 mklnk gdbinit
+touch $HOME/.localenv
 
 if [[ ! -e $HOME/.vimdir ]]; then
 	mkdir $HOME/.vimdir
