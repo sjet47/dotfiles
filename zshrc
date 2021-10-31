@@ -1,7 +1,8 @@
-# Local environment
+# User profiles
 source $HOME/.profile
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.bin:$HOME/.script:$PATH
 export NVM_DIR="$HOME/.nvm"
 export DOTFILE_DIR="$HOME/dotfiles"
 # Path to your oh-my-zsh installation.
