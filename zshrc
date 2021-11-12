@@ -100,9 +100,10 @@ fi
 #
 # Example aliases
 
+alias erc="vim $HOME/.zshrc"
+alias relrc="source $HOME/.zshrc"
 alias rm="rm -i"
-alias sshwin="ssh -p 2322 sjet@itfs127.com"
-alias mkdir="mkdir -p"
+alias md="mkdir -p"
 alias df="df -h"
 alias ls="lsd"
 alias la="lsd -a"
@@ -111,6 +112,24 @@ alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
 alias python="python3"
 alias dockerdev="docker exec -it dev su sjet"
 alias gdb="gdb -tui -q"
+alias grep="grep --color=auto"
+alias mj="make -j"
+alias pid="ps aux | grep"
+alias port="netstat -nap | grep"
+alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
+alias gps="git push"
+alias gpl="git pull"
+
+# Functions
+
+mc() { mkdir "$1"; cd "$1" }
+cl() { cd "$1"; ls }
+bak() { mv "$1" "$1".bak }
+mje() { make -j "$1" "$2" && ./"$2" }
+mjd() { make -j "$1" "$2" && gdb ./"$2" }
+md5chk() { md5sum "$1" | grep -f "$1".md5 }
+tg() { tar -czf "$1".tar.gz "$1" }
+te() { tar -xzf "$1" }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
