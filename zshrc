@@ -119,6 +119,17 @@ alias port="netstat -nap | grep"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gps="git push"
 alias gpl="git pull"
+alias gtc="git clone"
+
+issue=($(cat /etc/issue))
+disv=$issue[1]
+if [[ $disv == "Arch" ]]
+then
+	alias update="yay -Syyu"
+elif [[ $disv == "Ubuntu" ]]
+then
+	alias update="sudo apt update && sudo apt upgrade -y"
+fi
 
 # Functions
 
