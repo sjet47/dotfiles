@@ -121,14 +121,25 @@ alias gps="git push"
 alias gpl="git pull"
 alias gtc="git clone"
 
-issue=($(cat /etc/issue))
-disv=$issue[1]
+os_name=$(uname)
+if [[ $os_name == "Linux" ]]
+then
+	issue=($(cat /etc/issue))
+	disv=$issue[1]
+elif [[ $os_name == "Darwin" ]]
+then
+	disv="macOS"
+fi
+
 if [[ $disv == "Arch" ]]
 then
 	alias update="yay -Syyu"
 elif [[ $disv == "Ubuntu" ]]
 then
 	alias update="sudo apt update && sudo apt upgrade -y"
+elif [[ $disv == "macOS" ]]
+then
+	alias update="brew update && brew upgrade"
 fi
 
 # Functions
