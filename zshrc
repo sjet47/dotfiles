@@ -133,7 +133,7 @@ fi
 
 if [[ $disv == "Arch" ]]
 then
-	alias update="yay -Syyu"
+	alias update="yay -Syyu --noconfirm"
 elif [[ $disv == "Ubuntu" ]]
 then
 	alias update="sudo apt update && sudo apt upgrade -y"
