@@ -120,6 +120,7 @@ alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gps="git push"
 alias gpl="git pull"
 alias gtc="git clone"
+alias gb2utf8="enca -L zh_CN -x UTF-8"
 
 os_name=$(uname)
 if [[ $os_name == "Linux" ]]
