@@ -100,10 +100,14 @@ fi
 #
 # Example aliases
 
+alias mkdir="mkdir -p -v"
+alias mv="mv -v"
+alias cp="cp -v"
+alias rm="rm -i -v"
+alias ln="ln -v"
 alias erc="vim $HOME/.zshrc"
 alias relrc="source $HOME/.zshrc"
-alias rm="rm -i"
-alias md="mkdir -p"
+alias md="mkdir"
 alias df="df -h"
 alias ls="lsd"
 alias la="lsd -a"

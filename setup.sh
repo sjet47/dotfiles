@@ -25,20 +25,25 @@ touch $HOME/.profile
 
 # User binary
 if [[ ! -e $HOME/.bin ]]; then
-	mkdir $HOME/.bin
+	mkdir -p -v $HOME/.bin
 fi
 
-# User scripts
+# User script
 if [[ ! -e $HOME/.script ]]; then
-	mkdir $HOME/.script
+	mkdir -p -v $HOME/.script
+fi
+
+# User library
+if [[ ! -e $HOME/.lib ]]; then
+	mkdir -p -v $HOME/.lib
 fi
 
 # vimdir
 if [[ ! -e $HOME/.vimdir ]]; then
-	mkdir $HOME/.vimdir
-	mkdir $HOME/.vimdir/swp
-	mkdir $HOME/.vimdir/bak
-	mkdir $HOME/.vimdir/undo
+	mkdir -p -v $HOME/.vimdir
+	mkdir -p -v $HOME/.vimdir/swp
+	mkdir -p -v $HOME/.vimdir/bak
+	mkdir -p -v $HOME/.vimdir/undo
 fi
 
 # Load zshrc
