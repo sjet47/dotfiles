@@ -123,8 +123,13 @@ alias port="netstat -nap | grep"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gps="git push"
 alias gpl="git pull"
-alias gtc="git clone"
+alias gsw="git switch"
 alias gb2utf8="enca -L zh_CN -x UTF-8"
+alias t="tmux"
+alias tl="tmux ls"
+alias ta="tmux attach -t"
+alias tk="tmux kill-session -t"
+alias tn="tmux new -s"
 
 os_name=$(uname)
 if [[ $os_name == "Linux" ]]
@@ -157,6 +162,7 @@ mjd() { make -j "$1" "$2" && gdb ./"$2" }
 md5chk() { md5sum "$1" | grep -f "$1".md5 }
 tg() { tar -czf "$1".tar.gz "$1" }
 te() { tar -xzf "$1" }
+gtc() { git clone "http://github.com/$1" }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
