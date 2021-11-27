@@ -55,7 +55,57 @@ set undodir=~/.vimdir/undo/
 set directory=~/.vimdir/swp/
 set backupdir=~/.vimdir/bak/
 
-
 map <C-a> ggvG$
 map <C-h> ^
 map <C-l> $
+
+noremap 1 !
+noremap 2 @
+noremap 3 #
+noremap 4 $
+noremap 5 %
+noremap 6 ^
+noremap 7 &
+noremap 8 *
+noremap 9 (
+noremap 0 )
+noremap - _
+" and then the opposite
+noremap ! 1
+noremap @ 2
+noremap # 3
+noremap $ 4
+noremap % 5
+noremap ^ 6
+noremap & 7
+noremap * 8
+noremap ( 9
+noremap ) 0
+noremap _ -
+
+
+" map each number to its shift-key character
+inoremap 1 !
+inoremap 2 @
+inoremap 3 #
+inoremap 4 $
+inoremap 5 %
+inoremap 6 ^
+inoremap 7 &
+inoremap 8 *
+inoremap 9 (
+inoremap 0 )
+inoremap - _
+" and then the opposite
+inoremap ! 1
+inoremap @ 2
+inoremap # 3
+inoremap $ 4
+inoremap % 5
+inoremap ^ 6
+inoremap & 7
+inoremap * 8
+inoremap ( 9
+inoremap ) 0
+inoremap _ -
+inoremap jj <Esc>

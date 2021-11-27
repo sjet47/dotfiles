@@ -100,31 +100,41 @@ fi
 #
 # Example aliases
 
+alias erc="vim $HOME/.zshrc"
+alias relrc="source $HOME/.zshrc"
+
 alias mkdir="mkdir -p -v"
 alias mv="mv -v"
 alias cp="cp -v"
 alias rm="rm -i -v"
 alias ln="ln -v"
-alias erc="vim $HOME/.zshrc"
-alias relrc="source $HOME/.zshrc"
 alias md="mkdir"
 alias df="df -h"
 alias ls="lsd"
 alias la="lsd -a"
 alias ll="lsd -lh"
-alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
+
 alias python="python3"
 alias dockerdev="docker exec -it dev su sjet"
-alias gdb="gdb -tui -q"
-alias grep="grep --color=auto"
+
 alias mj="make -j"
+alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
+alias gdb="gdb -tui -q"
+
+alias grep="grep --color=auto"
 alias pid="ps aux | grep"
 alias port="netstat -nap | grep"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
+alias gb2utf8="enca -L zh_CN -x UTF-8"
+
+alias gst="git status"
+alias gad="git add"
+alias gcm="git commit"
 alias gps="git push"
 alias gpl="git pull"
 alias gsw="git switch"
-alias gb2utf8="enca -L zh_CN -x UTF-8"
+alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
 alias t="tmux"
 alias tl="tmux ls"
 alias ta="tmux attach -t"
@@ -157,11 +167,14 @@ fi
 mc() { mkdir "$1"; cd "$1" }
 cl() { cd "$1"; ls }
 bak() { mv "$1" "$1".bak }
+
 mje() { make -j "$1" "$2" && ./"$2" }
 mjd() { make -j "$1" "$2" && gdb ./"$2" }
+
 md5chk() { md5sum "$1" | grep -f "$1".md5 }
 tg() { tar -czf "$1".tar.gz "$1" }
 te() { tar -xzf "$1" }
+
 gtc() { git clone "http://github.com/$1" }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
