@@ -1,13 +1,42 @@
-# User profiles
-source $HOME/.profile
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=$HOME/.bin:$HOME/.script:$PATH
-export NVM_DIR="$HOME/.nvm"
-export DOTFILE_DIR="$HOME/dotfiles"
+###########################################################
+#                   ZSH User Profile                      #
+###########################################################
+
+
+## Environment Variable
+
+# PATH export PATH=$PATH:$NEWPATH
+export PATH=$PATH:$HOME/.bin:$HOME/.script
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
+# NVM path
+export NVM_DIR="$HOME/.nvm"
+
+# Dotfile symbol link
+export DOTFILE_DIR="$HOME/dotfiles"
+
+# You may need to manually set your language environment
+#export LANG=en_US.UTF-8
+
+# Manual page path
+#export MANPATH="/usr/local/man:$MANPATH"
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='vim'
+fi
+
+# Compilation flags
+#export ARCHFLAGS="-arch x86_64"
+
+
+## ZSH Configuration
+
+# Theme
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -40,7 +69,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+ DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -74,73 +103,30 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
+
+## Other profiles need to load
+
+# Oh my zsh
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
+# Powerline10k
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# export MANPATH="/usr/local/man:$MANPATH"
+# NVM
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# Local profile
+source $HOME/.profile
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='vim'
-fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
+## User alias and function
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
 
-alias erc="vim $HOME/.zshrc"
-alias relrc="source $HOME/.zshrc"
-
-alias mkdir="mkdir -p -v"
-alias mv="mv -v"
-alias cp="cp -v"
-alias rm="rm -i -v"
-alias ln="ln -v"
-alias md="mkdir"
-alias df="df -h"
-alias ls="lsd"
-alias la="lsd -a"
-alias ll="lsd -lh"
-
-alias python="python3"
-alias dockerdev="docker exec -it dev su sjet"
-
-alias mj="make -j"
-alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
-alias gdb="gdb -tui -q"
-
-alias grep="grep --color=auto"
-alias pid="ps aux | grep"
-alias port="netstat -nap | grep"
-alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
-alias gb2utf8="enca -L zh_CN -x UTF-8"
-
-alias gst="git status"
-alias gad="git add"
-alias gcm="git commit"
-alias gps="git push"
-alias gpl="git pull"
-alias gsw="git switch"
-alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-
-alias t="tmux"
-alias tl="tmux ls"
-alias ta="tmux attach -t"
-alias tk="tmux kill-session -t"
-alias tn="tmux new -s"
-
+# PKG update
 os_name=$(uname)
 if [[ $os_name == "Linux" ]]
 then
@@ -162,22 +148,65 @@ then
 	alias update="brew update && brew upgrade"
 fi
 
-# Functions
+# Edit zsh profile
+alias erc="vim $HOME/.zshrc"
+alias relrc="source $HOME/.zshrc"
+
+# General
+alias mkdir="mkdir -p -v"
+alias mv="mv -v"
+alias cp="cp -v"
+alias rm="rm -i -v"
+alias ln="ln -v"
+alias md="mkdir"
+alias df="df -h"
+alias ls="lsd"
+alias la="lsd -a"
+alias ll="lsd -lh"
 
 mc() { mkdir "$1"; cd "$1" }
 cl() { cd "$1"; ls }
 bak() { mv "$1" "$1".bak }
 
+# Environment
+alias python="python3"
+alias dockerdev="docker exec -it dev su sjet"
+
+# Build and debug
+alias mj="make -j"
+alias gdb="gdb -tui -q"
+alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
+
 mje() { make -j "$1" "$2" && ./"$2" }
 mjd() { make -j "$1" "$2" && gdb ./"$2" }
+
+# Utility
+alias grep="grep --color=auto"
+alias pid="ps aux | grep"
+alias port="netstat -nap | grep"
+alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
+alias gb2utf8="enca -L zh_CN -x UTF-8"
 
 md5chk() { md5sum "$1" | grep -f "$1".md5 }
 tg() { tar -czf "$1".tar.gz "$1" }
 te() { tar -xzf "$1" }
+plsh() { pls show "$1" | less }
+
+# Git
+alias gst="git status"
+alias gad="git add"
+alias gcm="git commit"
+alias gps="git push"
+alias gpl="git pull"
+alias gsw="git switch"
+alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 gtc() { git clone "http://github.com/$1" }
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# Tmux
+alias t="tmux"
+alias tl="tmux ls"
+alias ta="tmux attach -t"
+alias tk="tmux kill-session -t"
+alias tn="tmux new -s"
+
