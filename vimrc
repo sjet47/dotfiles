@@ -61,7 +61,7 @@ map <C-a> ggvG$
 map <C-h> ^
 map <C-l> $
 
-noremap `` i`<Esc>ea`<Esc>b
+noremap `` ciw`<Esc>pa`<Esc>
 
 noremap 1 !
 noremap 2 @
