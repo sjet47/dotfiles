@@ -191,6 +191,7 @@ md5chk() { md5sum "$1" | grep -f "$1".md5 }
 tg() { tar -czf "$1".tar.gz "$1" }
 te() { tar -xzf "$1" }
 plsh() { pls show "$1" | less }
+h2m() { curl "$1" | html2text > "$2.md" }
 
 # Git
 alias gst="git status"
