@@ -43,7 +43,7 @@ if [[ ! -e $HOME/.vimdir ]]; then
 fi
 
 ## install necessary tools
-source install.sh
+source download.sh
 
 # Install powerlevel10k
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
