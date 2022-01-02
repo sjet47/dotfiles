@@ -34,6 +34,11 @@ if [[ ! -e $HOME/.lib ]]; then
 	mkdir -p -v $HOME/.lib
 fi
 
+# User log
+if [[ ! -e $HOME/.log ]]; then
+	mkdir -p -v $HOME/.log/update
+fi
+
 # vimdir
 if [[ ! -e $HOME/.vimdir ]]; then
 	mkdir -p -v $HOME/.vimdir
