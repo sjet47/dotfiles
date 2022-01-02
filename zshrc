@@ -17,6 +17,8 @@ export NVM_DIR="$HOME/.nvm"
 # Dotfile symbol link
 export DOTFILE_DIR="$HOME/dotfiles"
 
+export UPDATE_LOG="$HOME/.log/update"
+
 # You may need to manually set your language environment
 #export LANG=en_US.UTF-8
 
@@ -139,13 +141,24 @@ fi
 
 if [[ $disv == "Arch" ]]
 then
-	alias update="yay -Syyu --noconfirm"
+	update() {
+		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
+		yay -Syyu --noconfirm | tee $logname
+	}
 elif [[ $disv == "Ubuntu" ]]
 then
-	alias update="sudo apt update && sudo apt upgrade -y"
+	update() {
+		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
+		sudo apt update | tee $logname
+		sudo apt upgrade -y | tee -a $logname
+	}
 elif [[ $disv == "macOS" ]]
 then
-	alias update="brew update && brew upgrade"
+	update() {
+		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
+		brew update | tee $logname
+		brew upgrade | tee -a $logname
+	}
 fi
 
 # Edit zsh profile
@@ -177,8 +190,8 @@ alias mj="make -j"
 alias gdb="gdb -tui -q"
 alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
 
-mje() { make -j "$1" "$2" && ./"$2" }
-mjd() { make -j "$1" "$2" && gdb ./"$2" }
+mje() { make -j "$1" "$2"; ./"$2" }
+mjd() { make -j "$1" "$2"; gdb ./"$2" }
 
 # Utility
 alias grep="grep --color=auto"
