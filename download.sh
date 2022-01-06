@@ -12,24 +12,16 @@ then
 fi
 if [[ $disv == "Arch" ]]
 then
-	yay -Syyu --noconfirm zsh lsd bat enca wget
-	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_linux_amd64 -O $HOME/.bin/pls
+	yay -Syyu --noconfirm zsh lsd wget
 elif [[ $disv == "Ubuntu" ]]
 then
 	sudo apt update
 	sudo apt upgrade -y
-	sudo apt install -y zsh lsd bat enca
-	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_linux_amd64 -O $HOME/.bin/pls
+	sudo apt install -y zsh lsd
 elif [[ $disv == "macOS" ]]
 
 then
 	brew update
 	brew upgrade
-	brew install zsh lsd bat enca
-	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_darwin_amd64 -O $HOME/.bin/pls
+	brew install zsh lsd
 fi
-chmod +x $HOME/.bin/pls
-$HOME/.bin/pls upgrade
-
-## Download with pip
-#pip install html2text --user
