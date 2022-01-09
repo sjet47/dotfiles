@@ -214,6 +214,7 @@ alias gps="git push"
 alias gpl="git pull"
 alias gsw="git switch"
 alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gsq="git rebase -i"
 
 gtc() { git clone "http://github.com/$1" }
 

@@ -17,11 +17,11 @@ elif [[ $disv == "Ubuntu" ]]
 then
 	sudo apt update
 	sudo apt upgrade -y
-	sudo apt install -y zsh lsd
+	sudo apt install -y zsh lsd wget
 elif [[ $disv == "macOS" ]]
 
 then
 	brew update
 	brew upgrade
-	brew install zsh lsd
+	brew install zsh lsd wget
 fi
