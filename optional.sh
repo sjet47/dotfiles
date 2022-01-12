@@ -12,20 +12,20 @@ then
 fi
 if [[ $disv == "Arch" ]]
 then
-	yay -Syyu --noconfirm enca bat tmux
+	yay -Syyu --noconfirm enca bat tmux moreutils
 	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_linux_amd64 -O $HOME/.bin/pls
 elif [[ $disv == "Ubuntu" ]]
 then
 	sudo apt update
 	sudo apt upgrade -y
-	sudo apt install -y enca bat tmux
+	sudo apt install -y enca bat tmux moreutils
 	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_linux_amd64 -O $HOME/.bin/pls
 elif [[ $disv == "macOS" ]]
 
 then
 	brew update
 	brew upgrade
-	brew install enca bat tmux
+	brew install enca bat tmux moreutils
 	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_darwin_amd64 -O $HOME/.bin/pls
 fi
 chmod +x $HOME/.bin/pls
