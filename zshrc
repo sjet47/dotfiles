@@ -180,6 +180,7 @@ alias ll="lsd -lh"
 mc() { mkdir "$1"; cd "$1" }
 cl() { cd $1; ls }
 bak() { mv "$1" "$1".bak }
+ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
 
 # Environment
 alias python="python3"
