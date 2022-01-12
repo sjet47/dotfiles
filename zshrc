@@ -178,7 +178,7 @@ alias la="lsd -a"
 alias ll="lsd -lh"
 
 mc() { mkdir "$1"; cd "$1" }
-cl() { cd "$1"; ls }
+cl() { cd $1; ls }
 bak() { mv "$1" "$1".bak }
 
 # Environment
@@ -205,6 +205,7 @@ tg() { tar -czf "$1".tar.gz "$1" }
 te() { tar -xzf "$1" }
 plsh() { pls show "$1" | less }
 h2m() { curl "$1" | html2text > "$2.md" }
+llog() { latest=$(ls "$1" | sort | tail -n 1); less $1/$latest }
 
 # Git
 alias gst="git status"
