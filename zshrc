@@ -143,7 +143,7 @@ if [[ $disv == "Arch" ]]
 then
 	update() {
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		yay -Syyu --noconfirm | tee $logname
+		sudo pacman -Syyu --noconfirm | tee $logname
 	}
 elif [[ $disv == "Ubuntu" ]]
 then
@@ -215,6 +215,7 @@ alias gcm="git commit"
 alias gps="git push"
 alias gpl="git pull"
 alias gsw="git switch"
+alias gdf="git diff"
 alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gsq="git rebase -i"
 
