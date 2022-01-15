@@ -143,21 +143,21 @@ if [[ $disv == "Arch" ]]
 then
 	update() {
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		sudo pacman -Syyu --noconfirm | tee $logname
+		sudo pacman -Syyu --noconfirm | ts | tee $logname
 	}
 elif [[ $disv == "Ubuntu" ]]
 then
 	update() {
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		sudo apt update | tee $logname
-		sudo apt upgrade -y | tee -a $logname
+		sudo apt update | ts | tee $logname
+		sudo apt upgrade -y | ts | tee -a $logname
 	}
 elif [[ $disv == "macOS" ]]
 then
 	update() {
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		brew update | tee $logname
-		brew upgrade | tee -a $logname
+		brew update | ts | tee $logname
+		brew upgrade | ts | tee -a $logname
 	}
 fi
 
