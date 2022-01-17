@@ -156,8 +156,8 @@ elif [[ $disv == "macOS" ]]
 then
 	update() {
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		brew update | ts | tee $logname
-		brew upgrade | ts | tee -a $logname
+		brew update | tee $logname
+		brew upgrade | tee -a $logname
 	}
 fi
 
