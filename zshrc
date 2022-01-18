@@ -187,6 +187,7 @@ alias python="python3"
 alias dockerdev="docker exec -it dev su sjet"
 
 # Build and debug
+alias cm="cmake"
 alias mj="make -j"
 alias gdb="gdb -tui -q"
 alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
@@ -196,11 +197,11 @@ mjd() { make -j "$1" "$2"; gdb ./"$2" }
 
 # Utility
 alias grep="grep --color=auto"
-alias pid="ps aux | grep"
-alias port="netstat -nap | grep"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gb2utf8="enca -L zh_CN -x UTF-8"
 
+pid() { ps aux | grep "$1" | less }
+port() { ss -nap | grep "$1" | less }
 md5chk() { md5sum "$1" | grep -f "$1".md5 }
 tg() { tar -czf "$1".tar.gz "$1" }
 te() { tar -xzf "$1" }
