@@ -21,7 +21,7 @@ touch $HOME/.profile
 
 # User binary
 if [[ ! -e $HOME/.bin ]]; then
-	mkdir -p -v $HOME/.bin
+	mkdir -p -v $HOME/.local/bin
 fi
 
 # User script
