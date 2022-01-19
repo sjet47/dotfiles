@@ -6,7 +6,7 @@
 ## Environment Variable
 
 # PATH export PATH=$PATH:$NEWPATH
-export PATH=$PATH:$HOME/.bin:$HOME/.script
+export PATH=$PATH:$HOME/.local/bin:$HOME/.script
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -184,7 +184,6 @@ ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
 
 # Environment
 alias python="python3"
-alias dockerdev="docker exec -it dev su sjet"
 
 # Build and debug
 alias cm="cmake"
@@ -229,3 +228,7 @@ alias ta="tmux attach -t"
 alias tk="tmux kill-session -t"
 alias tn="tmux new -s"
 
+# Docker
+alias dk="docker"
+
+dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
