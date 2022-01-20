@@ -16,11 +16,12 @@ mklnk vimrc
 mklnk zshrc
 mklnk gdbinit
 
-# User profile
+# local profile
 touch $HOME/.profile
 
 # User binary
-if [[ ! -e $HOME/.bin ]]; then
+if [[ ! -e $HOME/.local ]]; then
+	mkdir -p -v $HOME/.local/
 	mkdir -p -v $HOME/.local/bin
 fi
 
@@ -37,6 +38,11 @@ fi
 # User log
 if [[ ! -e $HOME/.log ]]; then
 	mkdir -p -v $HOME/.log/update
+fi
+
+# User backup
+if [[ ! -e $HOME/.backup ]]; then
+	mkdir -p -v $HOME/.backup
 fi
 
 # vimdir

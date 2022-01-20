@@ -171,16 +171,19 @@ alias mv="mv -v"
 alias cp="cp -v"
 alias rm="rm -i -v"
 alias ln="ln -v"
-alias md="mkdir"
+alias md="mkdir -v"
 alias df="df -h"
 alias ls="lsd"
 alias la="lsd -a"
 alias ll="lsd -lh"
+alias rs="rsync -avz"
+alias tar="tar -v"
 
 mc() { mkdir "$1"; cd "$1" }
 cl() { cd $1; ls }
 bak() { mv "$1" "$1".bak }
 ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
+mkbak() { rsync -av "$1" $HOME/.backup/$1 }
 
 # Environment
 alias python="python3"
@@ -202,8 +205,8 @@ alias gb2utf8="enca -L zh_CN -x UTF-8"
 pid() { ps aux | grep "$1" | less }
 port() { ss -nap | grep "$1" | less }
 md5chk() { md5sum "$1" | grep -f "$1".md5 }
-tg() { tar -czf "$1".tar.gz "$1" }
-te() { tar -xzf "$1" }
+tg() { tar -vczf "$1".tar.gz "$1" }
+te() { tar -vxzf "$1" }
 plsh() { pls show "$1" | less }
 h2m() { curl "$1" | html2text > "$2.md" }
 llog() { latest=$(ls "$1" | sort | tail -n 1); less $1/$latest }
