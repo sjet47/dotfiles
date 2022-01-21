@@ -191,11 +191,14 @@ alias python="python3"
 # Build and debug
 alias cm="cmake"
 alias mj="make -j"
+alias nj="ninja -j"
 alias gdb="gdb -tui -q"
 alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
 
 mje() { make -j "$1" "$2"; ./"$2" }
 mjd() { make -j "$1" "$2"; gdb ./"$2" }
+nje() { ninja -j "$1" "$2"; ./"$2" }
+njd() { ninja -j "$1" "$2"; gdb ./"$2" }
 
 # Utility
 alias grep="grep --color=auto"
