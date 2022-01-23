@@ -211,7 +211,7 @@ md5chk() { md5sum "$1" | grep -f "$1".md5 }
 tg() { tar -vczf "$1".tar.gz "$1" }
 te() { tar -vxzf "$1" }
 plsh() { pls show "$1" | less }
-h2m() { curl "$1" | html2text > "$2.md" }
+h2m() { curl "$1" | html2text --mark-code > "$2.md" }
 llog() { latest=$(ls "$1" | sort | tail -n 1); less $1/$latest }
 
 # Git
