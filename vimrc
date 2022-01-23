@@ -60,8 +60,11 @@ set backupdir=~/.vimdir/bak/
 map <C-a> ggvG$
 map <C-h> ^
 map <C-l> $
+map <C-s> :w<Enter>
 
 noremap `` ciw`<Esc>pa`<Esc>
+
+inoremap jj <Esc>
 
 "noremap 1 !
 "noremap 2 @
@@ -112,4 +115,3 @@ noremap `` ciw`<Esc>pa`<Esc>
 "inoremap ( 9
 "inoremap ) 0
 "inoremap _ -
-inoremap jj <Esc>
