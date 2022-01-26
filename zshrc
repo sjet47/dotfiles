@@ -187,9 +187,11 @@ mkbak() { rsync -av "$1" $HOME/.backup/$1 }
 
 # Environment
 alias python="python3"
+alias pip="python3 -m pip"
 
 # Build and debug
-alias cm="cmake"
+alias cmm="cmake"
+alias cmn="cmake -GNinja"
 alias mj="make -j"
 alias nj="ninja -j"
 alias gdb="gdb -tui -q"
@@ -237,4 +239,6 @@ alias tn="tmux new -s"
 # Docker
 alias dk="docker"
 
+dkrd() { docker run -d $1 }
+dkrt() { docker run -it $1 /bin/bash }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
