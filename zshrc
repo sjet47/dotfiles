@@ -230,6 +230,7 @@ alias gsq="git rebase -i"
 gtc() { git clone "http://github.com/$1" }
 
 # Tmux
+alias etc="vim $HOME/.tmux.conf"
 alias t="tmux"
 alias tl="tmux ls"
 alias ta="tmux attach -t"

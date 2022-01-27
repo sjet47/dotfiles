@@ -4,6 +4,7 @@
 
 lbp=$HOME/.local/bin
 os_name=$(uname)
+arch=$(uname -m)
 if [[ $os_name == "Linux" ]]
 then
 	issue=($(cat /etc/issue))
@@ -14,24 +15,27 @@ then
 fi
 if [[ $disv == "Arch" ]]
 then
-	yay -Syyu --noconfirm enca bat tmux moreutils python3 python-pip
-	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_linux_amd64 -O $lbp/pls
+	yay -Syyu --noconfirm enca bat python3 python-pip
 elif [[ $disv == "Ubuntu" ]]
 then
 	sudo apt update
 	sudo apt upgrade -y
-	sudo apt install -y enca bat tmux moreutils python3 python-pip
-	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_linux_amd64 -O $lbp/pls
+	sudo apt install -y enca bat python3 python-pip
 elif [[ $disv == "macOS" ]]
 
 then
 	brew update
 	brew upgrade
-	brew install enca bat tmux moreutils python3 python-pip
-	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_darwin_amd64 -O $lbp/pls
+	brew install enca bat python3 python-pip
 fi
-chmod +x $HOME/.bin/pls
-$lbp/pls upgrade
+
+# Install pls
+if [[ $arch == "x86_64" ]]
+then
+	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_darwin_amd64 -O $lbp/pls
+	chmod +x $HOME/.bin/pls
+	$lbp/pls upgrade
+fi
 
 ## Download with pip
 pip install html2text --user

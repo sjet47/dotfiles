@@ -15,6 +15,7 @@ mklnk vim
 mklnk vimrc
 mklnk zshrc
 mklnk gdbinit
+mklnk tmux.conf
 
 # local profile
 touch $HOME/.profile
@@ -53,12 +54,16 @@ if [[ ! -e $HOME/.vimdir ]]; then
 	mkdir -p -v $HOME/.vimdir/undo
 fi
 
-## install necessary tools
+## install necessary packages
 source download.sh
 
 # Install powerlevel10k
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 git clone --depth=1 git://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# Download and install Tmux Plugin Manager
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+tmux source $HOME/.tmux.conf
 
 chsh -s /bin/zsh
 

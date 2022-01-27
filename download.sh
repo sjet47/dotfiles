@@ -12,16 +12,16 @@ then
 fi
 if [[ $disv == "Arch" ]]
 then
-	yay -Syyu --noconfirm zsh lsd wget
+	yay -Syyu --noconfirm zsh lsd wget tmux moreutils
 elif [[ $disv == "Ubuntu" ]]
 then
 	sudo apt update
 	sudo apt upgrade -y
-	sudo apt install -y zsh lsd wget
+	sudo apt install -y zsh lsd wget tmux moreutils
 elif [[ $disv == "macOS" ]]
 
 then
 	brew update
 	brew upgrade
-	brew install zsh lsd wget
+	brew install zsh lsd wget tmux moreutils
 fi
