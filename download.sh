@@ -1,15 +1,7 @@
 #!/bin/bash
 
-## Download with package manager
-os_name=$(uname)
-if [[ $os_name == "Linux" ]]
-then
-	issue=($(cat /etc/issue))
-	disv=$issue
-elif [[ $os_name == "Darwin" ]]
-then
-	disv="macOS"
-fi
+source ./lib.sh
+
 if [[ $disv == "Arch" ]]
 then
 	yay -Syyu --noconfirm zsh lsd wget tmux moreutils diff-so-fancy
@@ -17,10 +9,13 @@ elif [[ $disv == "Ubuntu" ]]
 then
 	sudo apt update
 	sudo apt upgrade -y
-	sudo apt install -y zsh lsd wget tmux moreutils 
-	wget https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.2/diff-so-fancy -O $HOME/.local/bin
-elif [[ $disv == "macOS" ]]
+	sudo apt install -y zsh lsd wget tmux moreutils
+if [[ $ARCH == "x86_64" ]]
+then
+	getbin https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.2/diff-so-fancy diff-so-fancy
+fi
 
+elif [[ $disv == "macOS" ]]
 then
 	brew update
 	brew upgrade

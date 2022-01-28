@@ -1,18 +1,8 @@
 #!/bin/bash
 
-## Download with package manager
+source ./lib.sh
 
-lbp=$HOME/.local/bin
-os_name=$(uname)
-arch=$(uname -m)
-if [[ $os_name == "Linux" ]]
-then
-	issue=($(cat /etc/issue))
-	disv=$issue
-elif [[ $os_name == "Darwin" ]]
-then
-	disv="macOS"
-fi
+## Download with package manager
 if [[ $disv == "Arch" ]]
 then
 	yay -Syyu --noconfirm enca bat python3 python-pip
@@ -32,10 +22,9 @@ fi
 # Install pls
 if [[ $arch == "x86_64" ]]
 then
-	wget https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_darwin_amd64 -O $lbp/pls
-	chmod +x $HOME/.bin/pls
+	getbin https://github.com/chenjiandongx/pls/releases/download/v0.1.4/pls_darwin_amd64 /pls
 	$lbp/pls upgrade
 fi
 
 ## Download with pip
-pip install html2text --user
+python3 -m pip install html2text
