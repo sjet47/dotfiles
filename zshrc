@@ -111,6 +111,9 @@ plugins=(git)
 # Oh my zsh
 source $ZSH/oh-my-zsh.sh
 
+## McFly plugin for C-r
+source $DOTFILE_DIR/mcfly.sh
+
 # Powerline10k
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -129,15 +132,7 @@ source $HOME/.profile
 # For a full list of active aliases, run `alias`.
 
 # PKG update
-os_name=$(uname)
-if [[ $os_name == "Linux" ]]
-then
-	issue=($(cat /etc/issue))
-	disv=$issue[1]
-elif [[ $os_name == "Darwin" ]]
-then
-	disv="macOS"
-fi
+source $DOTFILE_DIR/lib.sh
 
 if [[ $disv == "Arch" ]]
 then
