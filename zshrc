@@ -19,6 +19,9 @@ export DOTFILE_DIR="$HOME/dotfiles"
 
 export UPDATE_LOG="$HOME/.log/update"
 
+# Go PATH
+export GOPATH="$HOME/.local/go"
+
 # You may need to manually set your language environment
 #export LANG=en_US.UTF-8
 
@@ -111,15 +114,14 @@ plugins=(git)
 # Oh my zsh
 source $ZSH/oh-my-zsh.sh
 
-## McFly plugin for C-r
-source $DOTFILE_DIR/mcfly.sh
-
 # Powerline10k
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # NVM
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+source /usr/share/nvm/init-nvm.sh
+# Mirror source from TaoBao for NVM
+NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
 
 # Local profile
 source $HOME/.profile
@@ -201,6 +203,7 @@ njd() { ninja -j "$1" "$2"; gdb ./"$2" }
 alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gb2utf8="enca -L zh_CN -x UTF-8"
+alias weather="curl wttr.in"
 
 pid() { ps aux | grep "$1" | less }
 port() { ss -nap | grep "$1" | less }
