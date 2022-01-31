@@ -51,6 +51,8 @@ if has('syntax') && has('eval')
   packadd! matchit
 endif
 
+set noesckeys
+
 set colorcolumn=80
 
 set undodir=~/.vimdir/undo/
