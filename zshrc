@@ -141,6 +141,8 @@ then
 	update() {
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
 		sudo pacman -Syyu --noconfirm | ts | tee $logname
+		python3 -m pip install --upgrade pip | ts | tee -a $logname
+		omz update
 	}
 elif [[ $disv == "Ubuntu" ]]
 then
@@ -148,6 +150,8 @@ then
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
 		sudo apt update | ts | tee $logname
 		sudo apt upgrade -y | ts | tee -a $logname
+		python3 -m pip install --upgrade pip | ts | tee -a $logname
+		omz update
 	}
 elif [[ $disv == "macOS" ]]
 then
@@ -155,6 +159,8 @@ then
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
 		brew update | tee $logname
 		brew upgrade | tee -a $logname
+		python3 -m pip install --upgrade pip | tee -a $logname
+		omz update
 	}
 fi
 
