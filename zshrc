@@ -22,6 +22,9 @@ export UPDATE_LOG="$HOME/.log/update"
 # Go PATH
 export GOPATH="$HOME/.local/go"
 
+# Mirror source from TaoBao for NVM
+export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
+
 # You may need to manually set your language environment
 #export LANG=en_US.UTF-8
 
@@ -108,21 +111,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-
-## Other profiles need to load
-
 # Oh my zsh
 source $ZSH/oh-my-zsh.sh
-
-# Powerline10k
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Mirror source from TaoBao for NVM
-NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
-
-# Local profile
-source $HOME/.profile
 
 
 ## User alias and function
@@ -187,8 +177,7 @@ ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
 mkbak() { rsync -av "$1" $HOME/.backup/$1 }
 
 # Environment
-alias python="python3"
-alias pip="python3 -m pip"
+alias pip="python -m pip"
 
 # Build and debug
 alias cmm="cmake"
@@ -245,3 +234,34 @@ alias dk="docker"
 dkrd() { docker run -d $1 }
 dkrt() { docker run -it $1 /bin/bash }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
+
+
+## Other profiles need to load
+
+# Local profile
+source $HOME/.profile
+
+# Powerline10k
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# pyenv
+export PYENV_SHELL=zsh
+export PATH=$(pyenv root)/shims:$PATH
+command pyenv rehash 2>/dev/null
+pyenv() {
+  local command
+  command="${1:-}"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  rehash|shell)
+    eval "$(pyenv "sh-$command" "$@")"
+    ;;
+  *)
+    command pyenv "$command" "$@"
+    ;;
+  esac
+}
