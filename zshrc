@@ -17,13 +17,17 @@ export NVM_DIR="$HOME/.nvm"
 # Dotfile symbol link
 export DOTFILE_DIR="$HOME/dotfiles"
 
-export UPDATE_LOG="$HOME/.log/update"
+export UPDATE_LOG="$HOME/.local/log/update"
 
 # Go PATH
 export GOPATH="$HOME/.local/go"
 
 # Mirror source from TaoBao for NVM
 export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
+
+# Pyenv
+export PYENV_SHELL=zsh
+export PATH=$(pyenv root)/shims:$PATH
 
 # You may need to manually set your language environment
 #export LANG=en_US.UTF-8
@@ -41,6 +45,8 @@ fi
 # Compilation flags
 #export ARCHFLAGS="-arch x86_64"
 
+# Local binary path
+export LBP=$HOME/.local/bin
 
 ## ZSH Configuration
 
@@ -121,14 +127,22 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-# PKG update
-source $DOTFILE_DIR/lib.sh
+# Get distribution name
+os_name=$(uname)
+if [[ $os_name == "Linux" ]]
+then
+  disv=$(cat /etc/issue | awk '{print $1}')
+elif [[ $os_name == "Darwin" ]]
+then
+  disv="macOS"
+fi
 
+# PKG update
 if [[ $disv == "Arch" ]]
 then
 	update() {
 		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		sudo pacman -Syyu --noconfirm | ts | tee $logname
+		yay -Syyu | ts | tee $logname
 		python3 -m pip install --upgrade pip | ts | tee -a $logname
 		omz update
 	}
@@ -206,6 +220,7 @@ te() { tar -vxzf "$1" }
 plsh() { pls show "$1" | less }
 h2m() { curl "$1" | html2text --mark-code > "$2.md" }
 llog() { latest=$(ls "$1" | sort | tail -n 1); less $1/$latest }
+getbin() { wget "$1" -O "$LBP/$2"; chmod +x "$LBP/$2" }
 
 # Git
 alias gst="git status"
@@ -238,16 +253,14 @@ dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 
 ## Other profiles need to load
 
-# Local profile
-source $HOME/.profile
-
 # Powerline10k
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Local profile
+source $HOME/.profile
+
 # pyenv
-export PYENV_SHELL=zsh
-export PATH=$(pyenv root)/shims:$PATH
 command pyenv rehash 2>/dev/null
 pyenv() {
   local command

@@ -1,23 +1,12 @@
 #!/bin/bash
 
-source ./lib.sh
+LBP=$HOME/.local/bin
+ARCH=$(uname -m)
 
-## Download with package manager
-if [[ $disv == "Arch" ]]
-then
-	yay -Syyu --noconfirm enca bat python3 python-pip
-elif [[ $disv == "Ubuntu" ]]
-then
-	sudo apt update
-	sudo apt upgrade -y
-	sudo apt install -y enca bat python3 python-pip
-elif [[ $disv == "macOS" ]]
-
-then
-	brew update
-	brew upgrade
-	brew install enca bat python3 python-pip
-fi
+getbin() {
+  wget "$1" -O $LBP/$2
+  chmod +x $LBP/$2
+}
 
 # Install pls
 if [[ $arch == "x86_64" ]]
@@ -27,4 +16,4 @@ then
 fi
 
 ## Download with pip
-python3 -m pip install html2text
+python -m pip install html2text --user
