@@ -26,7 +26,10 @@ touch $HOME/.profile
 
 mkd .local/bin
 mkd .local/lib
-mkd .local/log/update
+mkd .local/log/update/pip
+mkd .local/log/update/yay
+mkd .local/log/update/apt
+mkd .local/log/update/brew
 mkd .backup
 mkd .vimdir/swp
 mkd .vimdir/bak

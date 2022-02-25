@@ -138,33 +138,32 @@ then
 fi
 
 # PKG update
+
 if [[ $disv == "Arch" ]]
 then
-	update() {
-		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		yay -Syyu | ts | tee $logname
-		python3 -m pip install --upgrade pip | ts | tee -a $logname
-		omz update
+	pkgupdate() {
+		yay -Syyu --logfile $UPDATE_LOG/yay/$1
 	}
 elif [[ $disv == "Ubuntu" ]]
 then
-	update() {
-		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		sudo apt update | ts | tee $logname
-		sudo apt upgrade -y | ts | tee -a $logname
-		python3 -m pip install --upgrade pip | ts | tee -a $logname
-		omz update
+	pkgupdate() {
+		sudo apt update | ts | tee $UPDATE_LOG/apt/$1
+		sudo apt upgrade -y | ts | tee -a $UPDATE_LOG/apt/$1
 	}
 elif [[ $disv == "macOS" ]]
 then
-	update() {
-		logname=$UPDATE_LOG/$(date "+%Y%m%d_%H%M%S").log
-		brew update | tee $logname
-		brew upgrade | tee -a $logname
-		python3 -m pip install --upgrade pip | tee -a $logname
-		omz update
+	pkgupdate() {
+		brew update | tee $UPDATE_LOG/brew/$1
+		brew upgrade | tee -a $UPDATE_LOG/brew/$1
 	}
 fi
+
+update() {
+		logname=$(date "+%Y%m%d_%H%M%S").log
+		pkgupdate $logname
+		python3 -m pip --log $UPDATE_LOG/pip/$logname install --upgrade pip
+		omz update
+}
 
 # Edit zsh profile
 alias erc="vim $HOME/.zshrc"
@@ -210,7 +209,7 @@ njd() { ninja -j "$1" "$2"; gdb ./"$2" }
 alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gb2utf8="enca -L zh_CN -x UTF-8"
-alias weather="curl wttr.in"
+alias weather="curl --noproxy '*' wttr.in"
 
 pid() { ps aux | grep "$1" | less }
 port() { ss -nap | grep "$1" | less }
