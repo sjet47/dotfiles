@@ -30,6 +30,11 @@ then
 if [[ $ARCH == "x86_64" ]]
 then
 	getbin https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.2/diff-so-fancy diff-so-fancy
+
+	git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
+	cd $HOME/.pyenv && src/configure && make -C src
+	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> $HOME/.profile
+	echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> $HOME/.profile
 fi
 elif [[ $disv == "macOS" ]]
 then

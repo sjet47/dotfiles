@@ -27,7 +27,6 @@ export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
 
 # Pyenv
 export PYENV_SHELL=zsh
-export PATH=$(pyenv root)/shims:$PATH
 
 # You may need to manually set your language environment
 #export LANG=en_US.UTF-8
@@ -260,20 +259,5 @@ dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 source $HOME/.profile
 
 # pyenv
-command pyenv rehash 2>/dev/null
-pyenv() {
-  local command
-  command="${1:-}"
-  if [ "$#" -gt 0 ]; then
-    shift
-  fi
-
-  case "$command" in
-  rehash|shell)
-    eval "$(pyenv "sh-$command" "$@")"
-    ;;
-  *)
-    command pyenv "$command" "$@"
-    ;;
-  esac
-}
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
