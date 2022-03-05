@@ -105,6 +105,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -198,6 +199,11 @@ alias mj="make -j"
 alias nj="ninja -j"
 alias gdb="gdb -tui -q"
 alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
+alias rc="rustc"
+alias co="cargo"
+alias coc="cargo check"
+alias cor="cargo run"
+alias cob="cargo build"
 
 mje() { make -j "$1" "$2"; ./"$2" }
 mjd() { make -j "$1" "$2"; gdb ./"$2" }
@@ -257,6 +263,9 @@ dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 
 # Local profile
 source $HOME/.profile
+
+# Rustup
+source $HOME/.cargo/env
 
 # pyenv
 eval "$(pyenv init --path)"
