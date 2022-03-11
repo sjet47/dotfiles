@@ -163,6 +163,7 @@ update() {
 		pkgupdate $logname
 		python3 -m pip --log $UPDATE_LOG/pip/$logname install --upgrade pip
 		omz update
+		rustup update
 }
 
 # Edit zsh profile
