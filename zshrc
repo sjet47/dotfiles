@@ -183,6 +183,7 @@ alias la="lsd -a"
 alias ll="lsd -lh"
 alias rs="rsync -avz"
 alias tar="tar -v"
+alias cat="bat -p"
 
 mc() { mkdir "$1"; cd "$1" }
 cl() { cd $1; ls }
@@ -212,6 +213,8 @@ nje() { ninja -j "$1" "$2"; ./"$2" }
 njd() { ninja -j "$1" "$2"; gdb ./"$2" }
 
 # Utility
+alias v="vim"
+alias vm="vifm"
 alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gb2utf8="enca -L zh_CN -x UTF-8"
@@ -225,7 +228,8 @@ te() { tar -vxzf "$1" }
 plsh() { pls show "$1" | less }
 h2m() { curl "$1" | html2text --mark-code > "$2.md" }
 llog() { latest=$(ls "$1" | sort | tail -n 1); less $1/$latest }
-getbin() { wget "$1" -O "$LBP/$2"; chmod +x "$LBP/$2" }
+wgetbin() { wget "$1" -O "$LBP/$2"; chmod +x "$LBP/$2" }
+cvh264() { ffmpeg -hwaccel cuvid -c:v h264_cuvid -i "$2" -c:v h264_nvenc -crf "$1" -c:a copy "$3" }
 
 # Git
 alias gst="git status"
