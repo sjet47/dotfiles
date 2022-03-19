@@ -44,8 +44,8 @@ then
 fi
 
 # Install powerlevel10k
-git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-git clone --depth=1 git://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # Install Tmux Plugin Manager
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
