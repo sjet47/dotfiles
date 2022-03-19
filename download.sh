@@ -21,12 +21,24 @@ fi
 # Install necessary packages
 if [[ $disv == "Arch" ]]
 then
+	if [[ $(whoami) == "root" ]]
+	then
+	pacman -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca
+	else
 	yay -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca
+	fi
 elif [[ $disv == "Ubuntu" ]]
 then
+	if [[ $(whoami) == "root" ]]
+	then
+		apt update
+		apt upgrade -y
+		apt install -y zsh lsd wget tmux moreutils pyenv enca
+	else
 	sudo apt update
 	sudo apt upgrade -y
 	sudo apt install -y zsh lsd wget tmux moreutils pyenv enca
+	fi
 if [[ $ARCH == "x86_64" ]]
 then
 	getbin https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.2/diff-so-fancy diff-so-fancy
