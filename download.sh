@@ -8,7 +8,7 @@ getbin() {
   chmod +x $LBP/$2
 }
 
-# Get distribution name
+## Get distribution name
 os_name=$(uname)
 if [[ $os_name == "Linux" ]]
 then
@@ -18,7 +18,7 @@ then
   disv="macOS"
 fi
 
-# Install necessary packages
+## Install necessary packages
 if [[ $disv == "Arch" ]]
 then
 	if [[ $(whoami) == "root" ]]
@@ -55,10 +55,26 @@ then
 	brew install zsh lsd wget tmux moreutils diff-so-fancy pyenv enca
 fi
 
-# Install powerlevel10k
-git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+## Zsh
 
-# Install Tmux Plugin Manager
+# oh-my-zsh
+git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+# zsh-completions
+git clone https://github.com/zsh-users/zsh-completions $HOME/.oh-my-zsh/plugins/zsh-completions
+# zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
+# zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
+
+
+## Install other packages
+
+# Powerlevel10k
+#git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# Starship
+curl -sS https://starship.rs/install.sh | sh
+
+# Tmux Plugin Manager
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 tmux source $HOME/.tmux.conf

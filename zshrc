@@ -3,6 +3,7 @@
 ###########################################################
 
 
+
 ## Environment Variable
 
 # PATH export PATH=$PATH:$NEWPATH
@@ -14,13 +15,17 @@ export ZSH=$HOME/.oh-my-zsh
 # NVM path
 export NVM_DIR="$HOME/.nvm"
 
-# Dotfile symbol link
+# Go path
+export GOPATH="$HOME/.local/go"
+
+# Dotfile path
 export DOTFILE_DIR="$HOME/dotfiles"
 
+# Pkg manager update log path
 export UPDATE_LOG="$HOME/.local/log/update"
 
-# Go PATH
-export GOPATH="$HOME/.local/go"
+# Local executable path
+export LBP=$HOME/.local/bin
 
 # Mirror source from TaoBao for NVM
 export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
@@ -28,24 +33,25 @@ export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
 # Pyenv
 export PYENV_SHELL=zsh
 
+# Starship
+STARSHIP_CONFIG="$HOME/.config/starship.toml"
+
+# Preferred editor
+export EDITOR='vim'
+
+
+# !Disactived!
+
 # You may need to manually set your language environment
 #export LANG=en_US.UTF-8
 
 # Manual page path
 #export MANPATH="/usr/local/man:$MANPATH"
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='vim'
-fi
-
 # Compilation flags
 #export ARCHFLAGS="-arch x86_64"
 
-# Local binary path
-export LBP=$HOME/.local/bin
+
 
 ## ZSH Configuration
 
@@ -54,7 +60,7 @@ export LBP=$HOME/.local/bin
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+#ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -82,7 +88,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
- DISABLE_LS_COLORS="true"
+# DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -115,10 +121,34 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting sudo web-search)
+
+
+
+## Other profiles need to load
 
 # Oh my zsh
 source $ZSH/oh-my-zsh.sh
+
+# zsh-autosuggestions bindkey
+bindkey '`' autosuggest-accept
+
+# Powerline10k
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Rustup
+source $HOME/.cargo/env
+
+# pyenv
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
+# starship prompt
+eval "$(starship init zsh)"
+
+# Local profile
+source $HOME/.profile
 
 
 ## User alias and function
@@ -171,6 +201,7 @@ alias erc="vim $HOME/.zshrc"
 alias relrc="source $HOME/.zshrc"
 
 # General
+alias ..="cl .."
 alias mkdir="mkdir -p -v"
 alias mv="mv -v"
 alias cp="cp -v"
@@ -206,6 +237,8 @@ alias co="cargo"
 alias coc="cargo check"
 alias cor="cargo run"
 alias cob="cargo build"
+alias py="python"
+alias py3="python3"
 
 mje() { make -j "$1" "$2"; ./"$2" }
 mjd() { make -j "$1" "$2"; gdb ./"$2" }
@@ -259,19 +292,4 @@ dkrd() { docker run -d $1 }
 dkrt() { docker run -it $1 /bin/bash }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 
-
-## Other profiles need to load
-
-# Powerline10k
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Local profile
-source $HOME/.profile
-
-# Rustup
-source $HOME/.cargo/env
-
-# pyenv
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+cl
