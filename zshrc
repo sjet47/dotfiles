@@ -211,15 +211,16 @@ alias rm="rm -i -v"
 alias ln="ln -v"
 alias md="mkdir -v"
 alias df="df -h"
-alias ls="lsd"
+alias l="lsd"
 alias la="lsd -a"
 alias ll="lsd -lh"
+alias lla="lsd -lha"
 alias rs="rsync -avz"
 alias tar="tar -v"
 alias cat="bat -p"
 
 mc() { mkdir "$1"; cd "$1" }
-cl() { cd $1; ls }
+cl() { cd $1; lsd }
 bak() { mv "$1" "$1".bak }
 ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
 mkbak() { rsync -av "$1" $HOME/.backup/$1 }
