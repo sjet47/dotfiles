@@ -182,6 +182,7 @@ then
 	}
 elif [[ $disv == "macOS" ]]
 then
+	alias uname="guname"
 	pkgupdate() {
 		brew update | tee $UPDATE_LOG/brew/$1
 		brew upgrade | tee -a $UPDATE_LOG/brew/$1
@@ -221,6 +222,13 @@ cl() { cd $1; ls }
 bak() { mv "$1" "$1".bak }
 ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
 mkbak() { rsync -av "$1" $HOME/.backup/$1 }
+
+welcome() {
+echo "$(uname -o) $(uname -r) $(uname -m)
+Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
+System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -p 5 -F 0.5
+	 cl
+}
 
 # Environment
 alias pip="python -m pip"
@@ -292,4 +300,11 @@ dkrd() { docker run -d $1 }
 dkrt() { docker run -it $1 /bin/bash }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 
-cl
+
+
+## Pre-execute command
+if [[ -z $RELOAD ]]
+then
+	welcome
+	RELOAD=1
+fi

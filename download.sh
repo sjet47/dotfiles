@@ -23,9 +23,9 @@ if [[ $disv == "Arch" ]]
 then
 	if [[ $(whoami) == "root" ]]
 	then
-	pacman -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca
+	pacman -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca lolcat
 	else
-	yay -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca
+	yay -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca lolcat
 	fi
 elif [[ $disv == "Ubuntu" ]]
 then
@@ -33,11 +33,11 @@ then
 	then
 		apt update
 		apt upgrade -y
-		apt install -y zsh lsd wget tmux moreutils pyenv enca
+		apt install -y zsh lsd wget tmux moreutils pyenv enca lolcat
 	else
 	sudo apt update
 	sudo apt upgrade -y
-	sudo apt install -y zsh lsd wget tmux moreutils pyenv enca
+	sudo apt install -y zsh lsd wget tmux moreutils pyenv enca lolcat
 	fi
 if [[ $ARCH == "x86_64" ]]
 then
@@ -52,7 +52,7 @@ elif [[ $disv == "macOS" ]]
 then
 	brew update
 	brew upgrade
-	brew install zsh lsd wget tmux moreutils diff-so-fancy pyenv enca
+	brew install zsh lsd wget tmux moreutils diff-so-fancy pyenv enca lolcat
 fi
 
 ## Zsh
