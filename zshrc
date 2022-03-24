@@ -127,6 +127,9 @@ plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting sudo web-se
 
 ## Other profiles need to load
 
+# Local profile
+source $HOME/.profile
+
 # Oh my zsh
 source $ZSH/oh-my-zsh.sh
 
@@ -147,8 +150,6 @@ eval "$(pyenv init -)"
 # starship prompt
 eval "$(starship init zsh)"
 
-# Local profile
-source $HOME/.profile
 
 
 ## User alias and function
