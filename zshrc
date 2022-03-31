@@ -282,6 +282,7 @@ alias gps="git push"
 alias gpl="git pull"
 alias gsw="git switch"
 alias gdf="git diff"
+alias gcl="git clone"
 alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gsq="git rebase -i"
 
@@ -301,6 +302,9 @@ alias dk="docker"
 dkrd() { docker run -d $1 }
 dkrt() { docker run -it $1 /bin/bash }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
+
+# Rclone
+alias rcs="rclone sync -P"
 
 
 
