@@ -194,10 +194,10 @@ update() {
 		logname=$(date "+%Y%m%d_%H%M%S").log
 		pkgupdate $logname
 		python3 -m pip --log $UPDATE_LOG/pip/$logname install --upgrade pip
-		omz update
 		rustup update
 		cd $HOME/dotfiles
 		git pull origin main
+		omz update
 		source $HOME/.zshrc
 }
 
