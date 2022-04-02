@@ -307,7 +307,7 @@ dkrt() { docker run -it $1 /bin/bash }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 
 # Rclone
-alias rcs="rclone sync -P"
+alias rcs="rclone sync -P --multi-thread-streams 12"
 
 
 
