@@ -191,6 +191,7 @@ then
 fi
 
 update() {
+		workpath=$(pwd)
 		logname=$(date "+%Y%m%d_%H%M%S").log
 		pkgupdate $logname
 		python3 -m pip --log $UPDATE_LOG/pip/$logname install --upgrade pip
@@ -199,6 +200,7 @@ update() {
 		git pull origin main
 		omz update
 		source $HOME/.zshrc
+		cd $workpath
 }
 
 # Edit zsh profile
@@ -232,7 +234,7 @@ welcome() {
 echo "$(uname -o) $(uname -r) $(uname -m)
 Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
 System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -p 5 -F 0.5
-	 cl
+	 lsd
 }
 
 # Environment
