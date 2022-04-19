@@ -23,9 +23,9 @@ if [[ $disv == "Arch" ]]
 then
 	if [[ $(whoami) == "root" ]]
 	then
-	pacman -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca lolcat
+	pacman -Syyu zsh lsd wget tmux moreutils pyenv enca lolcat
 	else
-	yay -Syyu zsh lsd wget tmux moreutils diff-so-fancy pyenv enca lolcat
+	yay -Syyu zsh lsd wget tmux moreutils pyenv enca lolcat
 	fi
 elif [[ $disv == "Ubuntu" ]]
 then
@@ -41,8 +41,6 @@ then
 	fi
 if [[ $ARCH == "x86_64" ]]
 then
-	getbin https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.2/diff-so-fancy diff-so-fancy
-
 	git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
 	cd $HOME/.pyenv && src/configure && make -C src
 	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> $HOME/.profile
@@ -52,7 +50,7 @@ elif [[ $disv == "macOS" ]]
 then
 	brew update
 	brew upgrade
-	brew install zsh lsd wget tmux moreutils diff-so-fancy pyenv enca lolcat
+	brew install zsh lsd wget tmux moreutils pyenv enca lolcat
 fi
 
 ## Zsh
