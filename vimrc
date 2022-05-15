@@ -117,3 +117,5 @@ inoremap jj <Esc>
 "inoremap ( 9
 "inoremap ) 0
 "inoremap _ -
+
+set clipboard+=nonamedplus
