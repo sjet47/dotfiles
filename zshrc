@@ -187,6 +187,7 @@ then
 	pkgupdate() {
 		brew update | tee $UPDATE_LOG/brew/$1
 		brew upgrade | tee -a $UPDATE_LOG/brew/$1
+		brew upgrade --cask --greedy | tee -a $UPDATE_LOG/brew/$1
 	}
 fi
 
