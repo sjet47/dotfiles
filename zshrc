@@ -292,7 +292,8 @@ alias gcl="git clone"
 alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gsq="git rebase -i"
 
-ghc() { git clone "https://github.com/$1" }
+ghc() { git clone "https://github.com/$1.git" }
+ghcs() { git clone "git@github.com:$1.git" }
 
 # Tmux
 alias etc="vim $HOME/.tmux.conf"
