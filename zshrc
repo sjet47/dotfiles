@@ -268,6 +268,7 @@ alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gb2utf8="enca -L zh_CN -x UTF-8"
 alias weather="curl --noproxy '*' wttr.in"
+alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
 
 pid() { ps aux | grep "$1" | less }
 port() { ss -nap | grep "$1" | less }
