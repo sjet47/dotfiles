@@ -4,8 +4,8 @@
 	pager = delta
 [user]
 # Please adapt and uncomment the following lines:
-	name = ASjet
-	email = Aryan.ITFS@iCloud.com
+	name = Aryan Sjet
+	email = Aryan.ITFS@Gmail.com
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
