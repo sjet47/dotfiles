@@ -7,7 +7,7 @@
 ## Environment Variable
 
 # PATH export PATH=$PATH:$NEWPATH
-export PATH=$PATH:$HOME/.local/bin:$HOME/.script
+export PATH=$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -306,9 +306,12 @@ alias tn="tmux new -s"
 
 # Docker
 alias dk="docker"
+alias dkc="docker-compose"
+alias dki="docker image"
 
 dkrd() { docker run -d $1 }
 dkrt() { docker run -it $1 /bin/bash }
+dke() { docker exec -itu root -w / $1 /bin/sh }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 
 # Rclone
