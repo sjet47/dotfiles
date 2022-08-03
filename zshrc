@@ -7,7 +7,7 @@
 ## Environment Variable
 
 # PATH export PATH=$PATH:$NEWPATH
-export PATH=$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims
+export PATH=$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims:$HOME/.local/go/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -38,7 +38,6 @@ STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
 # Preferred editor
 export EDITOR='vim'
-
 
 # !Disactived!
 
@@ -124,33 +123,43 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting sudo web-search)
 
 
+## Other profiles & shell setup
 
-## Other profiles need to load
+# Load once
+if [[ ! $LOAD_ONCE ]]
+then
+  # oh-my-zsh
+  source $ZSH/oh-my-zsh.sh
 
-# Local profile
-source $HOME/.profile
+  # zsh-autosuggestions bindkey
+  bindkey '`' autosuggest-accept
 
-# Oh my zsh
-source $ZSH/oh-my-zsh.sh
+  # Rustup
+  source $HOME/.cargo/env
 
-# zsh-autosuggestions bindkey
-bindkey '`' autosuggest-accept
+  # pyenv
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
 
-# Powerline10k
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+  # nvm
+  source /usr/share/nvm/init-nvm.sh
 
-# Rustup
-source $HOME/.cargo/env
+  # starship prompt
+  eval "$(starship init zsh)"
 
-# pyenv
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+  # Get distribution name
+  os_name=$(uname)
+  if [[ $os_name == "Linux" ]]
+  then
+    disv=$(cat /etc/issue | awk '{print $1}')
+  elif [[ $os_name == "Darwin" ]]
+  then
+    disv="macOS"
+  fi
 
-# starship prompt
-eval "$(starship init zsh)"
-
-
+  # Set flag
+  LOAD_ONCE=true
+fi
 
 ## User alias and function
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
@@ -158,18 +167,7 @@ eval "$(starship init zsh)"
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-# Get distribution name
-os_name=$(uname)
-if [[ $os_name == "Linux" ]]
-then
-  disv=$(cat /etc/issue | awk '{print $1}')
-elif [[ $os_name == "Darwin" ]]
-then
-  disv="macOS"
-fi
-
 # PKG update
-
 if [[ $disv == "Arch" ]]
 then
 	pkgupdate() {
@@ -232,10 +230,10 @@ ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
 mkbak() { rsync -av "$1" $HOME/.backup/$1 }
 
 welcome() {
-echo "$(uname -o) $(uname -r) $(uname -m)
+  echo "$(uname -o) $(uname -r) $(uname -m)
 Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
 System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -p 5 -F 0.5
-	 lsd
+  lsd
 }
 
 # Environment
@@ -269,6 +267,7 @@ alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias gb2utf8="enca -L zh_CN -x UTF-8"
 alias weather="curl --noproxy '*' wttr.in"
 alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
+alias wordmatch="cat /usr/share/dict/words | rg"
 
 pid() { ps aux | grep "$1" | less }
 port() { ss -nap | grep "$1" | less }
@@ -303,6 +302,7 @@ alias tl="tmux ls"
 alias ta="tmux attach -t"
 alias tk="tmux kill-session -t"
 alias tn="tmux new -s"
+alias td="tmux detach"
 
 # Docker
 alias dk="docker"
@@ -317,7 +317,8 @@ dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
 # Rclone
 alias rcs="rclone sync -P --multi-thread-streams 12"
 
-
+# Local profile
+source $HOME/.profile
 
 ## Pre-execute command
 if [[ -z $RELOAD ]]
@@ -325,3 +326,4 @@ then
 	welcome
 	RELOAD=1
 fi
+
