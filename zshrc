@@ -239,6 +239,10 @@ System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -p 5 -F 
 # Environment
 alias pip="python -m pip"
 
+function rmDS_Store() {
+	fd .DS_Store "$1" -H | sed "s/\(.*\)/\"\1\"/" | xargs rm -v
+}
+
 # Build and debug
 alias cmm="cmake"
 alias cmn="cmake -GNinja"
