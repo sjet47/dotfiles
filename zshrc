@@ -6,38 +6,50 @@
 
 ## Environment Variable
 
+# Export
 # PATH export PATH=$PATH:$NEWPATH
 export PATH=$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims:$HOME/.local/go/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-# NVM path
-export NVM_DIR="$HOME/.nvm"
-
 # Go path
 export GOPATH="$HOME/.local/go"
 
-# Dotfile path
-export DOTFILE_DIR="$HOME/dotfiles"
+# Preferred editor
+export EDITOR='vim'
 
-# Pkg manager update log path
-export UPDATE_LOG="$HOME/.local/log/update"
 
-# Local executable path
-export LBP=$HOME/.local/bin
+
+# Local
+
+# NVM path
+NVM_DIR="$HOME/.nvm"
 
 # Mirror source from TaoBao for NVM
-export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
+NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
 
 # Pyenv
-export PYENV_SHELL=zsh
+PYENV_SHELL=zsh
 
 # Starship
 STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
-# Preferred editor
-export EDITOR='vim'
+# Dotfile path
+DOTFILE_DIR="$HOME/dotfiles"
+
+# Pkg manager update log path
+UPDATE_LOG="$HOME/.local/log/update"
+
+# Local executable path
+LBP=$HOME/.local/bin
+
+# Backup path
+BACKUP_DIR=$HOME/.backup
+
+# Archive path
+ARCHIVE_DIR=$HOME/.backup
+
 
 # !Disactived!
 
@@ -141,9 +153,6 @@ then
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
 
-  # nvm
-  source /usr/share/nvm/init-nvm.sh
-
   # starship prompt
   eval "$(starship init zsh)"
 
@@ -227,7 +236,12 @@ mc() { mkdir "$1"; cd "$1" }
 cl() { cd $1; lsd }
 bak() { mv "$1" "$1".bak }
 ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
-mkbak() { rsync -av "$1" $HOME/.backup/$1 }
+mkbak() { rsync -av "$1" $BACKUP_DIR/$1 }
+arc() {
+	7z a "$1".7z ${@:2}
+	mv "$1".7z $ARCHIVE_DIR/
+	rm -rf ${@:2}
+}
 
 welcome() {
   echo "$(uname -o) $(uname -r) $(uname -m)
@@ -239,7 +253,7 @@ System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -p 5 -F 
 # Environment
 alias pip="python -m pip"
 
-function rmDS_Store() {
+rmDS_Store() {
 	fd .DS_Store "$1" -H | sed "s/\(.*\)/\"\1\"/" | xargs rm -v
 }
 
