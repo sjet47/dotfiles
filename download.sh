@@ -23,9 +23,9 @@ if [[ $disv == "Arch" ]]
 then
 	if [[ $(whoami) == "root" ]]
 	then
-	pacman -Syyu zsh lsd wget tmux moreutils pyenv enca lolcat
+	pacman -Syyu zsh lsd wget tmux tmuxinator moreutils pyenv nvm enca lolcat
 	else
-	yay -Syyu zsh lsd wget tmux moreutils pyenv enca lolcat
+	yay -Syyu zsh lsd wget tmux tmuxinator moreutils pyenv nvm enca lolcat
 	fi
 elif [[ $disv == "Ubuntu" ]]
 then
@@ -66,9 +66,6 @@ git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/cust
 
 
 ## Install other packages
-
-# Powerlevel10k
-#git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # Starship
 curl -sS https://starship.rs/install.sh | sudo sh

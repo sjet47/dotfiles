@@ -322,6 +322,9 @@ alias tk="tmux kill-session -t"
 alias tn="tmux new -s"
 alias td="tmux detach"
 
+alias tnc="tmuxinator start cloud"
+alias tnd="tmuxinator start dropdown"
+
 # Docker
 alias dk="docker"
 alias dkc="docker-compose"
