@@ -143,8 +143,11 @@ then
   # oh-my-zsh
   source $ZSH/oh-my-zsh.sh
 
-  # zsh-autosuggestions bindkey
+  # zsh-autosuggestions-plugin bindkey
   bindkey '`' autosuggest-accept
+
+	# zsh-mcfly plugin
+	eval "$(mcfly init zsh)"
 
   # Rustup
   source $HOME/.cargo/env
@@ -286,6 +289,7 @@ alias gb2utf8="enca -L zh_CN -x UTF-8"
 alias weather="curl --noproxy '*' wttr.in"
 alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
 alias wordmatch="cat /usr/share/dict/words | rg"
+alias curtime='date "+%Y-%m-%dT%H:%M:%S%:z"'
 
 pid() { ps aux | grep "$1" | less }
 port() { ss -nap | grep "$1" | less }
@@ -297,6 +301,10 @@ h2m() { curl "$1" | html2text --mark-code > "$2.md" }
 llog() { latest=$(ls "$1" | sort | tail -n 1); less $1/$latest }
 wgetbin() { wget "$1" -O "$LBP/$2"; chmod +x "$LBP/$2" }
 cvh264() { ffmpeg -hwaccel cuvid -c:v h264_cuvid -i "$2" -c:v h264_nvenc -crf "$1" -c:a copy "$3" }
+timestamp() {
+	date "+%Y-%m-%dT%H:%M:%S%:z" > /var/tmp/timestamp
+	xclip -i /var/tmp/timestamp
+}
 
 # Git
 alias gst="git status"
