@@ -207,8 +207,15 @@ update() {
 		pkgupdate $logname
 		python3 -m pip --log $UPDATE_LOG/pip/$logname install --upgrade pip
 		rustup update
+		# Update dotfile
 		cd $HOME/dotfiles
 		git pull origin main
+		# Update zsh plugin
+		cd $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions && git pull
+		cd $HOME/.oh-my-zsh/custom/plugins/zsh-completions && git pull
+		cd $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && git pull
+		# Update oh-my-zsh
+		cd $HOME
 		omz update
 		source $HOME/.zshrc
 		cd $workpath
@@ -332,6 +339,7 @@ alias td="tmux detach"
 
 alias tnc="tmuxinator start cloud"
 alias tnd="tmuxinator start dropdown"
+alias tnb="tmuxinator start bot"
 
 # Docker
 alias dk="docker"
