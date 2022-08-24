@@ -209,10 +209,14 @@ update() {
 		rustup update
 		# Update dotfile
 		cd $HOME/dotfiles
+		echo Pulling dotfiles
 		git pull origin main
 		# Update zsh plugin
+		echo Pulling zsh-autosuggestions
 		cd $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions && git pull
+		echo Pulling zsh-completions
 		cd $HOME/.oh-my-zsh/custom/plugins/zsh-completions && git pull
+		echo Pulling zsh-highlighting
 		cd $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && git pull
 		# Update oh-my-zsh
 		cd $HOME
