@@ -122,6 +122,7 @@ ARCHIVE_DIR=$HOME/.backup
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
+HISTFILE=$HOME/.zsh_history
 HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
