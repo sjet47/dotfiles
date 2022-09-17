@@ -7,8 +7,6 @@
 ## Environment Variable
 
 # Export
-# PATH export PATH=$PATH:$NEWPATH
-export PATH=$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims:$HOME/.local/go/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -16,10 +14,8 @@ export ZSH=$HOME/.oh-my-zsh
 # Go path
 export GOPATH="$HOME/.local/go"
 
-# Preferred editor
-export EDITOR='vim'
-
-
+# PATH export PATH=$PATH:$NEWPATH
+export PATH=$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims:$GOPATH/bin
 
 # Local
 
@@ -50,6 +46,8 @@ BACKUP_DIR=$HOME/.backup
 # Archive path
 ARCHIVE_DIR=$HOME/.backup
 
+# Preferred editor
+export EDITOR='vim'
 
 # !Disactived!
 
