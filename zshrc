@@ -353,6 +353,9 @@ dkrd() { docker run -d $1 }
 dkrt() { docker run -it $1 /bin/bash }
 dke() { docker exec -itu root -w / $1 /bin/sh }
 dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
+dktgali() { docker tag $1 registry.cn-hangzhou.aliyuncs.com/sjet/$2:$3 }
+dkpsali() { docker push registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2 }
+dkplali() { docker pull registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2 }
 
 # Rclone
 alias rcs="rclone sync -P --multi-thread-streams 12"
