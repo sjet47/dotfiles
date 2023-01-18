@@ -3,7 +3,7 @@
 # DO NOT RUN AS ROOT
 
 tlog() {
-    echo $(date "+%Y-%m-%dT%H:%M:%S%:z")'|'"$1"
+    echo $(date "+%Y-%m-%dT%H:%M:%S%:z")'|'"$@"
 }
 
 # Required packages, will be install via system package manager
@@ -21,8 +21,7 @@ if [ "$1" == "-o" ]; then
     required_spec+=(${optional_spec[@]})
 fi
 
-tlog "The following packages will be installed"
-tlog "${required_common[@]}" "${required_spec[@]}"
+tlog "The following packages will be installed:" "${required_common[@]}" "${required_spec[@]}"
 
 ## Get distribution name
 os_name=$(uname)
@@ -32,7 +31,7 @@ elif [[ $os_name == "Darwin" ]]; then
     disv="macOS"
 fi
 
-tlog Detected distribution $disv
+tlog "Detected distribution: $disv"
 
 # Make symbol link and dir at first
 tlog "make symbol link"

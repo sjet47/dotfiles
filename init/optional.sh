@@ -3,7 +3,7 @@
 # DO NOT RUN AS ROOT
 
 tlog() {
-    echo $(date "+%Y-%m-%dT%H:%M:%S%:z")'|'"$1"
+    echo $(date "+%Y-%m-%dT%H:%M:%S%:z")'|'"$@"
 }
 
 # Optional packages, use "-o" to install via system package manager
@@ -11,8 +11,7 @@ optional_common=(vifm xclip enca rclone ffmpeg rsync p7zip html2text)
 # Optional packages, need to install in different ways on different OS
 optional_spec=(ninja)
 
-tlog "The following packages will be installed"
-tlog "${optional_common[@]}" "${optional_spec[@]}"
+tlog "The following packages will be installed:" "${optional_common[@]}" "${optional_spec[@]}"
 
 ## Get distribution name
 os_name=$(uname)
@@ -22,7 +21,7 @@ elif [[ $os_name == "Darwin" ]]; then
     disv="macOS"
 fi
 
-tlog Detected distribution $disv
+tlog "Detected distribution: $disv"
 
 # Install on ArchLinux
 if [[ $disv == "Arch" ]]; then
