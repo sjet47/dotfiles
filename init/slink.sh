@@ -32,6 +32,7 @@ mkd .local/log/update/yay
 mkd .local/log/update/apt
 mkd .local/log/update/brew
 mkd .backup
+mkd .config
 mkd .vimdir/swp
 mkd .vimdir/bak
 mkd .vimdir/undo

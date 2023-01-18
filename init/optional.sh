@@ -37,8 +37,9 @@ elif [[ $disv == "Ubuntu" ]]; then
     }
     # ninja
     tlog "Install ninja"
-    wget https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-linux.zip -O /tmp/ninja.zip
-    cd .local/bin && unzip /tmp/ninja.zip
+    cd /tmp && wget https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-linux.zip
+    unzip ninja-linux.zip
+    sudo cp ninja /usr/local/bin/ninja
 elif [[ $disv == "macOS" ]]; then
     brew update
     brew upgrade

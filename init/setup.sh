@@ -60,11 +60,11 @@ elif [[ $disv == "Ubuntu" ]]; then
 
     # mcfly
     tlog "Install mcfly"
-    curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly
+    curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sudo sh -s -- --git cantino/mcfly
 
     # Starship
     tlog "Install Starship"
-    curl -sS https://starship.rs/install.sh | sh
+    curl -sS https://starship.rs/install.sh | sudo sh
 
     # pyenv
     tlog "Install pyenv"
@@ -73,8 +73,9 @@ elif [[ $disv == "Ubuntu" ]]; then
     if [ "$1" == "-o" ]; then
         # ninja
         tlog "Install ninja"
-        wget https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-linux.zip -O /tmp/ninja.zip
-        cd .local/bin && unzip /tmp/ninja.zip
+        cd /tmp && wget https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-linux.zip
+        unzip ninja-linux.zip
+        sudo cp ninja /usr/local/bin/ninja
     fi
 
     # Still have rust to install
