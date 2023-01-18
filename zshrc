@@ -1,68 +1,57 @@
 ###########################################################
-#                   ZSH User Profile                      #
+#                  Environment Variables                  #
 ###########################################################
 
+## Exported
 
+# PATH export PATH=$PATH:$NEWPATH
+export PATH="$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims:$GOPATH/bin"
 
-## Environment Variable
+# You may need to manually set your language environment
+export LANG="en_US.UTF-8"
 
-# Export
+# Preferred editor
+export EDITOR="vim"
 
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+# Dotfile path
+export DOTFILE_DIR="$HOME/dotfiles"
+
+# Starship DISABLE for now
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
 # Go path
 export GOPATH="$HOME/.local/go"
 
-# PATH export PATH=$PATH:$NEWPATH
-export PATH=$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims:$GOPATH/bin
-
-# Local
+# Pyenv
+export PYENV_SHELL="zsh"
 
 # NVM path
-NVM_DIR="$HOME/.nvm"
+export NVM_DIR="$HOME/.nvm"
 
 # Mirror source from TaoBao for NVM
-NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node/
+export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
 
-# Pyenv
-PYENV_SHELL=zsh
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM="$ZSH/custom"
 
-# Starship
-STARSHIP_CONFIG="$HOME/.config/starship.toml"
-
-# Dotfile path
-DOTFILE_DIR="$HOME/dotfiles"
+## Internal
 
 # Pkg manager update log path
 UPDATE_LOG="$HOME/.local/log/update"
 
 # Local executable path
-LBP=$HOME/.local/bin
+LBP="$HOME/.local/bin"
 
 # Backup path
-BACKUP_DIR=$HOME/.backup
+BACKUP_DIR="$HOME/.backup"
 
 # Archive path
-ARCHIVE_DIR=$HOME/.backup
+ARCHIVE_DIR="$HOME/.backup"
 
-# Preferred editor
-export EDITOR='vim'
-
-# !Disactived!
-
-# You may need to manually set your language environment
-#export LANG=en_US.UTF-8
-
-# Manual page path
-#export MANPATH="/usr/local/man:$MANPATH"
-
-# Compilation flags
-#export ARCHFLAGS="-arch x86_64"
-
-
-
-## ZSH Configuration
+###########################################################
+#                    Zsh Configuration                    #
+###########################################################
 
 # Theme
 # Set name of the theme to load --- if set to "random", it will
@@ -120,8 +109,9 @@ export EDITOR='vim'
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
-HISTFILE=$HOME/.zsh_history
 HIST_STAMPS="yyyy-mm-dd"
+
+HISTFILE="$HOME/.zsh_history"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -133,38 +123,43 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting sudo web-search)
 
+###########################################################
+#               Third-party  Configuration                #
+###########################################################
 
-## Other profiles & shell setup
+sourceExist() {
+  [ -f "$1" ] && source "$1"
+}
 
-# Load once
-if [[ ! $LOAD_ONCE ]]
-then
+# Load once, should only have non-user-defined configuration
+if [[ ! $LOAD_ONCE ]]; then
   # oh-my-zsh
-  source $ZSH/oh-my-zsh.sh
+  sourceExist "$ZSH/oh-my-zsh.sh"
 
   # zsh-autosuggestions-plugin bindkey
   bindkey '`' autosuggest-accept
 
-	# zsh-mcfly plugin
-	eval "$(mcfly init zsh)"
-
-  # Rustup
-  source $HOME/.cargo/env
-
-  # pyenv
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
+  # zsh-mcfly plugin
+  eval "$(mcfly init zsh)"
 
   # starship prompt
   eval "$(starship init zsh)"
 
+  # Rust Cargo
+  sourceExist "$HOME/.cargo/env"
+
+  # Haskell Ghcup
+  sourceExist "$HOME/.ghcup/env"
+
+  # Python pyenv
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+
   # Get distribution name
   os_name=$(uname)
-  if [[ $os_name == "Linux" ]]
-  then
+  if [[ $os_name == "Linux" ]]; then
     disv=$(cat /etc/issue | awk '{print $1}')
-  elif [[ $os_name == "Darwin" ]]
-  then
+  elif [[ $os_name == "Darwin" ]]; then
     disv="macOS"
   fi
 
@@ -172,61 +167,61 @@ then
   LOAD_ONCE=true
 fi
 
-## User alias and function
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
+###########################################################
+#                    User  Definitions                    #
+###########################################################
 
-# PKG update
-if [[ $disv == "Arch" ]]
-then
-	pkgupdate() {
-		yay -Syyu --logfile $UPDATE_LOG/yay/$1
-	}
-elif [[ $disv == "Ubuntu" ]]
-then
-	pkgupdate() {
-		sudo apt update | ts | tee $UPDATE_LOG/apt/$1
-		sudo apt upgrade -y | ts | tee -a $UPDATE_LOG/apt/$1
-	}
-elif [[ $disv == "macOS" ]]
-then
-	alias uname="guname"
-	pkgupdate() {
-		brew update | tee $UPDATE_LOG/brew/$1
-		brew upgrade | tee -a $UPDATE_LOG/brew/$1
-		brew upgrade --cask --greedy | tee -a $UPDATE_LOG/brew/$1
-	}
+# PKG update base on OS
+if [[ $disv == "Arch" ]]; then
+  pkgupdate() {
+    yay -Syyu --logfile "$UPDATE_LOG/yay/$1"
+  }
+elif [[ $disv == "Ubuntu" ]]; then
+  pkgupdate() {
+    sudo apt update | ts | tee "$UPDATE_LOG/apt/$1"
+    sudo apt upgrade -y | ts | "tee -a $UPDATE_LOG/apt/$1"
+  }
+elif [[ $disv == "macOS" ]]; then
+  alias uname="guname"
+  pkgupdate() {
+    brew update | tee "$UPDATE_LOG/brew/$1"
+    brew upgrade | tee -a "$UPDATE_LOG/brew/$1"
+    brew upgrade --cask --greedy | tee -a "$UPDATE_LOG/brew/$1"
+  }
 fi
 
+# Full update
 update() {
-		workpath=$(pwd)
-		logname=$(date "+%Y%m%d_%H%M%S").log
-		pkgupdate $logname
-		python3 -m pip --log $UPDATE_LOG/pip/$logname install --upgrade pip
-		rustup update
-		# Update dotfile
-		cd $HOME/dotfiles
-		echo Pulling dotfiles
-		git pull origin main
-		# Update zsh plugin
-		echo Pulling zsh-autosuggestions
-		cd $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions && git pull
-		echo Pulling zsh-completions
-		cd $HOME/.oh-my-zsh/custom/plugins/zsh-completions && git pull
-		echo Pulling zsh-highlighting
-		cd $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && git pull
-		# Update oh-my-zsh
-		cd $HOME
-		omz update
-		source $HOME/.zshrc
-		cd $workpath
+  workpath=$(pwd)
+  logname=$(date "+%Y%m%d_%H%M%S").log
+
+  # Update with system package manager
+  pkgupdate "$logname"
+  # Update with pip(Python)
+  python3 -m pip --log "$UPDATE_LOG/pip/$logname" install --upgrade pip
+  # Update with rustup(Rust)
+  rustup update
+
+  # Pull latest dotfiles
+  echo Pulling dotfiles
+  cd "$HOME/dotfiles" && git pull origin main
+  # Update zsh plugin
+  echo Pulling zsh-autosuggestions
+  cd "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" && git pull
+  echo Pulling zsh-completions
+  cd "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" && git pull
+  echo Pulling zsh-highlighting
+  cd "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" && git pull
+
+  # Update oh-my-zsh
+  cd "$HOME" && omz update
+  sourceExist "$HOME/.zshrc"
+  cd "$workpath" || return
 }
 
 # Edit zsh profile
-alias erc="vim $HOME/.zshrc"
-alias relrc="source $HOME/.zshrc"
+alias erc='nvim $HOME/.zshrc'
+alias relrc='source $HOME/.zshrc'
 
 # General
 alias ..="cl .."
@@ -245,15 +240,64 @@ alias rs="rsync -avz"
 alias tar="tar -v"
 alias cat="bat -p"
 
-mc() { mkdir "$1"; cd "$1" }
-cl() { cd $1; lsd }
-bak() { mv "$1" "$1".bak }
-ubak() { file=$(echo $1 | sed "s/\.bak//"); mv $1 $file }
-mkbak() { rsync -av "$1" $BACKUP_DIR/$1 }
+mc() {
+  mkdir "$1"
+  cd "$1" || return
+}
+cl() {
+  cd $1 || return
+  lsd
+}
+
+# Utility
+alias v="vim"
+alias nv="nvim"
+alias vm="vifm"
+alias grep="grep --color=auto"
+alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
+alias weather="curl --noproxy '*' wttr.in"
+alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
+alias wordmatch="cat /usr/share/dict/words | rg"
+alias curtime='date "+%Y-%m-%dT%H:%M:%S%:z"'
+
+bak() { mv "$1" "$1".bak; }
+ubak() {
+  file=${1/\.bak/}
+  mv "$1" "$file"
+}
+rmDS_Store() {
+  fd .DS_Store "$1" -H | sed "s/\(.*\)/\"\1\"/" | xargs rm -v
+}
+
+port() { ss -nap | grep "$1" | less; }
+
+md5verify() { md5sum "$1" | grep -f "$1".md5; }
+timestamp() {
+  date "+%Y-%m-%dT%H:%M:%S%:z" >/tmp/timestamp
+  xclip -i /tmp/timestamp
+}
+llog() {
+  latest=$(ls "$1" | sort | tail -n 1)
+  less "$1/$latest"
+}
+wgetbin() {
+  wget "$1" -O "$LBP/$2"
+  chmod +x "$LBP/$2"
+}
+
+# Tool wrapper
+alias gb2utf8="enca -L zh_CN -x UTF-8"
+alias rcs="rclone sync -P --multi-thread-streams 12"
+te() { tar -vxzf "$1"; }
+tg() { tar -vczf "$1".tar.gz "$1"; }
+h2m() { curl "$1" | html2text --mark-code >"$2.md"; }
+plsh() { pls show "$1" | bat; }
+cvh264() { ffmpeg -hwaccel cuvid -c:v h264_cuvid -i "$2" -c:v h264_nvenc -crf "$1" -c:a copy "$3"; }
+mkbak() { rsync -av "$1" $BACKUP_DIR/$1; }
 arc() {
-	7z a "$1".7z ${@:2}
-	mv "$1".7z $ARCHIVE_DIR/
-	rm -rf ${@:2}
+  7z a "$1".7z "${@:2}"
+  mv "$1".7z "$ARCHIVE_DIR/"
+  rm -rf "${@:2}"
 }
 
 welcome() {
@@ -263,58 +307,45 @@ System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -p 5 -F 
   lsd
 }
 
-# Environment
-alias pip="python -m pip"
-
-rmDS_Store() {
-	fd .DS_Store "$1" -H | sed "s/\(.*\)/\"\1\"/" | xargs rm -v
-}
-
 # Build and debug
 alias cmm="cmake"
 alias cmn="cmake -GNinja"
 alias mj="make -j"
 alias nj="ninja -j"
-alias gdb="gdb -tui -q"
-alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
+
 alias rc="rustc"
 alias co="cargo"
 alias coc="cargo check"
 alias cor="cargo run"
 alias cob="cargo build"
+
 alias py="python"
 alias py3="python3"
+alias pip="python -m pip"
 
-mje() { make -j "$1" "$2"; ./"$2" }
-mjd() { make -j "$1" "$2"; gdb ./"$2" }
-nje() { ninja -j "$1" "$2"; ./"$2" }
-njd() { ninja -j "$1" "$2"; gdb ./"$2" }
+alias gdb="gdb -tui -q"
+alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
 
-# Utility
-alias v="vim"
-alias vm="vifm"
-alias grep="grep --color=auto"
-alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
-alias gb2utf8="enca -L zh_CN -x UTF-8"
-alias weather="curl --noproxy '*' wttr.in"
-alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
-alias wordmatch="cat /usr/share/dict/words | rg"
-alias curtime='date "+%Y-%m-%dT%H:%M:%S%:z"'
-
-pid() { ps aux | grep "$1" | less }
-port() { ss -nap | grep "$1" | less }
-md5chk() { md5sum "$1" | grep -f "$1".md5 }
-tg() { tar -vczf "$1".tar.gz "$1" }
-te() { tar -vxzf "$1" }
-plsh() { pls show "$1" | bat }
-h2m() { curl "$1" | html2text --mark-code > "$2.md" }
-llog() { latest=$(ls "$1" | sort | tail -n 1); less $1/$latest }
-wgetbin() { wget "$1" -O "$LBP/$2"; chmod +x "$LBP/$2" }
-cvh264() { ffmpeg -hwaccel cuvid -c:v h264_cuvid -i "$2" -c:v h264_nvenc -crf "$1" -c:a copy "$3" }
-timestamp() {
-	date "+%Y-%m-%dT%H:%M:%S%:z" > /var/tmp/timestamp
-	xclip -i /var/tmp/timestamp
+mje() {
+  make -j "$1" "$2"
+  ./"$2"
 }
+mjd() {
+  make -j "$1" "$2"
+  gdb ./"$2"
+}
+nje() {
+  ninja -j "$1" "$2"
+  ./"$2"
+}
+njd() {
+  ninja -j "$1" "$2"
+  gdb ./"$2"
+}
+
+# Wezterm
+alias wt="wezterm"
+alias ewt='nvim $HOME/.wezterm.lua'
 
 # Git
 alias gst="git status"
@@ -328,11 +359,11 @@ alias gcl="git clone"
 alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gsq="git rebase -i"
 
-ghc() { git clone --recurse-submodules "https://github.com/$1.git" }
-ghcs() { git clone --recurse-submodules "git@github.com:$1.git" }
+ghc() { git clone --recurse-submodules "https://github.com/$1.git"; }
+ghcs() { git clone --recurse-submodules "git@github.com:$1.git"; }
 
 # Tmux
-alias etc="vim $HOME/.tmux.conf"
+alias etc='vim $HOME/.tmux.conf'
 alias t="tmux"
 alias tl="tmux ls"
 alias ta="tmux attach -t"
@@ -340,33 +371,23 @@ alias tk="tmux kill-session -t"
 alias tn="tmux new -s"
 alias td="tmux detach"
 
-alias tnc="tmuxinator start cloud"
-alias tnd="tmuxinator start dropdown"
-alias tnb="tmuxinator start bot"
-
 # Docker
 alias dk="docker"
 alias dkc="docker-compose"
 alias dki="docker image"
 
-dkrd() { docker run -d $1 }
-dkrt() { docker run -it $1 /bin/bash }
-dke() { docker exec -itu root -w / $1 /bin/sh }
-dkeu() { docker exec -itu $2 -w /home/$2 $1 /bin/zsh }
-dktgali() { docker tag $1 registry.cn-hangzhou.aliyuncs.com/sjet/$2:$3 }
-dkpsali() { docker push registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2 }
-dkplali() { docker pull registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2 }
-
-# Rclone
-alias rcs="rclone sync -P --multi-thread-streams 12"
+dke() { docker exec -it "$2" bash; }
+dkrd() { docker run -d "$1"; }
+dkrt() { docker run -it "$1" /bin/bash; }
+dktgali() { docker tag "$1" "registry.cn-hangzhou.aliyuncs.com/sjet/$2:$3"; }
+dkpsali() { docker push "registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2"; }
+dkplali() { docker pull "registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2"; }
 
 # Local profile
-source $HOME/.profile
+sourceExist "$HOME/.profile"
 
 ## Pre-execute command
-if [[ -z $RELOAD ]]
-then
-	welcome
-	RELOAD=1
+if [[ -z $RELOAD ]]; then
+  welcome
+  RELOAD=1
 fi
-
