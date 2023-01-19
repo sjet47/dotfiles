@@ -4,9 +4,6 @@
 
 ## Exported
 
-# PATH export PATH=$PATH:$NEWPATH
-export PATH="$PATH:$HOME/.local/bin:$HOME/.script:$HOME/.pyenv/shims:$GOPATH/bin"
-
 # You may need to manually set your language environment
 export LANG="en_US.UTF-8"
 
@@ -24,6 +21,7 @@ export GOPATH="$HOME/.local/go"
 
 # Pyenv
 export PYENV_SHELL="zsh"
+export PYENV_PATH="$HOME/.pyenv"
 
 # NVM path
 export NVM_DIR="$HOME/.nvm"
@@ -34,6 +32,14 @@ export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_CUSTOM="$ZSH/custom"
+
+# PATH
+# PATH=$PATH:$NEWPATH
+PATH="$PATH:$HOME/.local/bin"
+PATH="$PATH:$PYENV_PATH/bin"
+PATH="$PATH:$PYENV_PATH/shims"
+PATH="$PATH:$GOPATH/bin"
+export PATH
 
 ## Internal
 
