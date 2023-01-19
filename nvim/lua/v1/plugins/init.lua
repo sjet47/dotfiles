@@ -361,8 +361,11 @@ return {
   -- A format runner for Neovim
   ---@see https://github.com/mhartington/formatter.nvim
   { "mhartington/formatter.nvim",
-    config = require("v1.format"),
-    requires = { "jose-elias-alvarez/null-ls.nvim" } },
+    requires = { "jose-elias-alvarez/null-ls.nvim" },
+    config = function()
+      require("null-ls").setup(require("v1.format"))
+    end,
+  },
 
   ----------------------------------------------------------------------
   --                   Debug Adapter Protocol(DAP)                    --
