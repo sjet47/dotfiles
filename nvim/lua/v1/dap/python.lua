@@ -1,0 +1,1 @@
+-- require("dap-python").setup("/rs/nn/.local/share/nvim/mason/bin/debugpy")

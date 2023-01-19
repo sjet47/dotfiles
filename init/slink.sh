@@ -36,3 +36,6 @@ mkd .config
 mkd .vimdir/swp
 mkd .vimdir/bak
 mkd .vimdir/undo
+
+# Link neovim
+ln -s "$HOME/dotfiles/$1" "$HOME/.config/nvim"
