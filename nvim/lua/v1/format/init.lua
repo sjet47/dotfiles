@@ -1,4 +1,4 @@
-return {
+require("null-ls").setup({
     debug = false,
     sources = require("v1.format.config"),
     -- #{m}: message
@@ -11,4 +11,4 @@ return {
         --   vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
         -- end
     end,
-}
+})

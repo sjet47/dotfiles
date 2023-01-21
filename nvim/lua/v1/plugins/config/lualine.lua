@@ -1,4 +1,4 @@
-return {
+require("lualine").setup({
   options = {
     -- https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md
     theme = require("v1.config").colorscheme or "tokyonight",
@@ -41,4 +41,4 @@ return {
       "filetype",
     },
   },
-}
+})

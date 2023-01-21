@@ -21,5 +21,3 @@ vim.keymap.set("n", cfg.keys.toggle, function()
     vim.b.venn_enabled = nil
   end
 end, { noremap = true, silent = true })
-
-return {}

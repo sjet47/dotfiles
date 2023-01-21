@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-return {
+require("mkdnflow").setup({
   modules = {
     maps = false,
   },
@@ -35,4 +35,4 @@ return {
       return text
     end,
   },
-}
+})

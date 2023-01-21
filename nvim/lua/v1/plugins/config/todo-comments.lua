@@ -1,4 +1,4 @@
-return {
+require("todo-comments").setup({
   keywords = {
     FIX = {
       icon = " ", -- icon used for the sign, and in search results
@@ -13,4 +13,4 @@ return {
     NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
     TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
   },
-}
+})

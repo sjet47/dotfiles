@@ -2,7 +2,7 @@ local cfg = require("v1.config").plugin.zen
 
 vim.keymap.set("n", cfg.keys.toggle, "<CMD>ZenMode<CR>")
 
-return {
+require("zen-mode").setup({
   window = {
     backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
     -- height and width can be:
@@ -39,4 +39,4 @@ return {
   on_open = function(win) end,
   -- callback where you can add custom code when the Zen window closes
   on_close = function() end,
-}
+})

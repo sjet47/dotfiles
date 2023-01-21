@@ -5,7 +5,8 @@ vim.keymap.set("n", cfg.keys.live_grep, ":<CMD>Telescope live_grep<CR>")
 vim.keymap.set("n", cfg.keys.live_grep_args, ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
 
 -- local actions = require("telescope.actions")
-return {
+local telescope = require("telescope")
+telescope.setup({
   defaults = {
     initial_mode = "insert",
     -- vertical , center , cursor
@@ -47,4 +48,8 @@ return {
       -- },
     },
   },
-}
+})
+
+telescope.load_extension("env")
+telescope.load_extension("ui-select")
+telescope.load_extension("live_grep_args")

@@ -47,7 +47,7 @@ local list_keys = {
 local output = vim.fn.systemlist("uname -r")
 local iswsl = not not string.find(output[1] or "", "WSL")
 
-return {
+require("nvim-tree").setup({
   --automatically open the tree when running setup if startup buffer is a directory
   open_on_setup = true,
   disable_netrw = true,
@@ -104,4 +104,9 @@ return {
       git_placement = "after",
     },
   },
-}
+})
+
+local api = require("nvim-tree.api")
+api.events.subscribe(api.events.Event.FileCreated, function(file)
+  vim.cmd("edit " .. file.fname)
+end)

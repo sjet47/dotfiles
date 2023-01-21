@@ -1,6 +1,6 @@
 local cfg = require("v1.config").plugin.comment
 
-return {
+require("comment").setup({
   mappings = {
     -- disable extra keys
     extra = false,
@@ -19,5 +19,5 @@ return {
 
   -- context_commentstring
   -- also see treesitter.lua
-  pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-}
+  -- pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+})

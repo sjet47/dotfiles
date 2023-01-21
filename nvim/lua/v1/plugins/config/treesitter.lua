@@ -58,7 +58,7 @@ for key, _ in pairs(parserSet) do
   table.insert(ensure_installed, key)
 end
 
-return {
+require("nvim-treesitter.configs").setup({
   sync_install = false,
   -- :TSInstallInfo
   -- ensure_installed = "maintained",
@@ -177,4 +177,6 @@ return {
       },
     },
   },
-}
+})
+
+require("nvim-treesitter.install").prefer_git = true

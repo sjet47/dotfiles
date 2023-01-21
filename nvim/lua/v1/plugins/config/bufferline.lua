@@ -10,7 +10,7 @@ vim.keymap.set("n", cfg.keys.close_right, ":BufferLineCloseRight<CR>")
 vim.keymap.set("n", cfg.keys.close_others, ":BufferLineCloseRight<CR>:BufferLineCloseLeft<CR>")
 vim.keymap.set("n", cfg.keys.close_pick, ":BufferLinePickClose<CR>")
 
-return {
+require("bufferline").setup({
   options = {
     close_command = "Bdelete! %d",
     right_mouse_command = "Bdelete! %d",
@@ -34,4 +34,4 @@ return {
       return s
     end,
   },
-}
+})

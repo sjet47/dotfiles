@@ -1,1 +1,1 @@
-require("v1").setup({})
+require("v1").setup(true)

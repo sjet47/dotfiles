@@ -1,6 +1,6 @@
 local cfg = require("v1.config").plugin.surround
 
-return {
+require("nvim-surround").setup({
   keymaps = vim.tbl_deep_extend("force", {
     -- you surround
     normal = "ys",
@@ -20,4 +20,4 @@ return {
     -- you surround line with delimiter
     normal_cur_line = false,
   }, cfg.keys),
-}
+})

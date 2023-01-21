@@ -56,7 +56,7 @@ local gitsigns_on_attach = function(bufnr)
   mapkey({ "o", "x" }, "ig", ":<C-U>Gitsigns select_hunk<CR>")
 end
 
-return {
+require("gitsigns").setup({
   --  A for add
   --  C for change
   --  D for delete
@@ -106,4 +106,4 @@ return {
   },
   -- I'm not gona remember these keys for now, let's use code action
   -- on_attach = gitsigns_on_attach,
-}
+})

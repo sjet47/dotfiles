@@ -19,6 +19,9 @@ local C = {
     ----------------------------------------------------------------------
 
     plugin = {
+        enable_appearance = true,
+
+
         packer = {
             max_jobs = nil,
             -- Relative to nvim path
@@ -300,9 +303,6 @@ local C = {
     ----------------------------------------------------------------------
     --                               Misc                               --
     ----------------------------------------------------------------------
-
-    -- lock plugin commit snapshots by default for stability
-    lock_plugin_commit = true,
 
     -- disable code hightlight on big file for performance
     max_highlight_line_count = 10000,

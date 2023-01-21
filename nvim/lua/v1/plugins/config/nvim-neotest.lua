@@ -2,12 +2,12 @@ local neotest = require("neotest")
 local cfg = require("v1.config").plugin.neotest
 local lsp = require("v1.config").lsp.singular
 
-vim.keymap.set("n", cfg.toggle, neotest.summary.toggle())
-vim.keymap.set("n", cfg.run, neotest.run.run())
-vim.keymap.set("n", cfg.run_dap, neotest.run.run({ strategy = "dap" }))
-vim.keymap.set("n", cfg.run_file, neotest.run.run(vim.fn.expand("%")))
-vim.keymap.set("n", cfg.run_stop, neotest.run.stop())
-vim.keymap.set("n", cfg.output_open, neotest.output.open({ enter = true }))
+-- vim.keymap.set("n", cfg.toggle, neotest.summary.toggle())
+-- vim.keymap.set("n", cfg.run, neotest.run.run())
+-- vim.keymap.set("n", cfg.run_dap, neotest.run.run({ strategy = "dap" }))
+-- vim.keymap.set("n", cfg.run_file, neotest.run.run(vim.fn.expand("%")))
+-- vim.keymap.set("n", cfg.run_stop, neotest.run.stop())
+-- vim.keymap.set("n", cfg.output_open, neotest.output.open({ enter = true }))
 
 local adapters = {}
 if lsp.golang.enable then
@@ -33,7 +33,7 @@ vim.diagnostic.config({
   },
 }, neotest_ns)
 
-return {
+require("neotest").setup({
   adapters = adapters,
 
   summary = {
@@ -64,4 +64,4 @@ return {
     signs = false,
     virtual_text = true,
   },
-}
+})

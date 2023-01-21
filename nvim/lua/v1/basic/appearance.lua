@@ -47,4 +47,4 @@ vim.o.scrolloff = 8
 vim.o.sidescrolloff = 8
 
 -- Use terminal color as neovim color
-vim.o.termguicolors = false
+vim.o.termguicolors = true

@@ -1,4 +1,4 @@
-return {
+require("fidget").setup({
   text = {
     spinner = "dots_pulse", -- animation shown when tasks are ongoing
     done = "✔", -- character shown when all tasks are complete
@@ -10,4 +10,4 @@ return {
       ignore = true,
     },
   },
-}
+})
