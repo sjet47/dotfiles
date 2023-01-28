@@ -184,12 +184,12 @@ return {
 
     -- Smart and Powerful commenting plugin for neovim
     ---@see https://github.com/numToStr/Comment.nvim
-    {
-      "numToStr/Comment.nvim",
-      config = function()
-        require("v1.plugins.config.comment")
-      end
-    },
+    -- {
+    --   "numToStr/Comment.nvim",
+    --   config = function()
+    --     require("v1.plugins.config.comment")
+    --   end
+    -- },
 
     -- A Tree-Like File Explorer For Neovim Written In Lua
     ---@see https://github.com/nvim-tree/nvim-tree.lua
