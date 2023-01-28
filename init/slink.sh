@@ -15,7 +15,6 @@ function mkd() {
 mklnk gitconfig
 mklnk npmrc
 mklnk pip
-mklnk vim
 mklnk vimrc
 mklnk zshrc
 mklnk gdbinit
@@ -33,9 +32,6 @@ mkd .local/log/update/apt
 mkd .local/log/update/brew
 mkd .backup
 mkd .config
-mkd .vimdir/swp
-mkd .vimdir/bak
-mkd .vimdir/undo
 
 # Link neovim
 ln -s "$HOME/dotfiles/$1" "$HOME/.config/nvim"
