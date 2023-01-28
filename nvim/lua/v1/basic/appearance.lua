@@ -30,6 +30,9 @@ vim.o.cmdheight = 1
 vim.o.wrap = false
 vim.o.whichwrap = "<,>,[,]"
 
+-- Disable line wrap
+vim.o.textwidth = 0
+
 -- Display invisible characters
 vim.o.list = false
 vim.o.listchars = "space:·,tab:··"
@@ -48,3 +51,13 @@ vim.o.sidescrolloff = 8
 
 -- Use terminal color as neovim color
 vim.o.termguicolors = true
+
+-- Display matched brackets
+vim.o.showmatch = true
+
+-- Display line ruler
+vim.o.ruler = true
+
+-- Always display status line
+vim.o.laststatus = 2
+

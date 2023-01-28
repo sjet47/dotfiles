@@ -49,3 +49,7 @@ vim.o.swapfile = false
 
 -- Auto reload file when edited outside
 vim.o.autoread = true
+
+
+-- Disable vi-compatible to make vim behave in a more useful way
+vim.o.compatible = false
