@@ -145,6 +145,9 @@ set noundofile
 " 显示设置
 "----------------------------------------------------------------------
 
+" syntax highlight
+syntax on
+
 set colorcolumn=80
 
 " 总是显示状态栏
@@ -184,36 +187,3 @@ set statusline+=\ %y                            " 文件类型
 
 " 最右边显示文件编码和行号等信息，并且固定在一个 group 中，优先占位
 set statusline+=\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %v:%l/%L%)
-
-"----------------------------------------------------------------------
-" 更改样式
-"----------------------------------------------------------------------
-
-" 更清晰的错误标注：默认一片红色背景，语法高亮都被搞没了
-" 只显示红色或者蓝色下划线或者波浪线
-hi! clear SpellBad
-hi! clear SpellCap
-hi! clear SpellRare
-hi! clear SpellLocal
-if has('gui_running')
-	hi! SpellBad gui=undercurl guisp=red
-	hi! SpellCap gui=undercurl guisp=blue
-	hi! SpellRare gui=undercurl guisp=magenta
-	hi! SpellRare gui=undercurl guisp=cyan
-else
-	hi! SpellBad term=standout ctermfg=1 term=underline cterm=underline
-	hi! SpellCap term=underline cterm=underline
-	hi! SpellRare term=underline cterm=underline
-	hi! SpellLocal term=underline cterm=underline
-endif
-
-" 去掉 sign column 的白色背景
-hi! SignColumn guibg=NONE ctermbg=NONE
-
-" 修改行号为浅灰色，默认主题的黄色行号很难看，换主题可以仿照修改
-highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE
-	\ gui=NONE guifg=DarkGrey guibg=NONE
-
-" 修正补全目录的色彩：默认太难看
-hi! Pmenu guibg=gray guifg=black ctermbg=gray ctermfg=black
-hi! PmenuSel guibg=gray guifg=brown ctermbg=brown ctermfg=gray
