@@ -109,7 +109,7 @@ return {
   colors = {
     compose_cursor = 'orange',
   },
-  color_scheme = "Snazzy (Gogh)",
+  color_scheme = "Galaxy",
 
   font_size = 11.5,
   font = wezterm.font_with_fallback {
@@ -117,7 +117,6 @@ return {
     'Apple Color Emoji',
     'Noto Sans CJK SC',
   },
-  
 
   quick_select_patterns = {
     -- match things that look like sha1 hashes
