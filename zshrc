@@ -161,6 +161,12 @@ if [[ ! $LOAD_ONCE ]]; then
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
 
+  # Nodejs nvm
+  [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
+  source /usr/share/nvm/nvm.sh
+  source /usr/share/nvm/bash_completion
+  source /usr/share/nvm/install-nvm-exec
+
   # Get distribution name
   os_name=$(uname)
   if [[ $os_name == "Linux" ]]; then
