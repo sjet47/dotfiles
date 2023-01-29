@@ -9,7 +9,7 @@ tlog() {
 # Required packages, will be install via system package manager
 required_common=(zsh lsd bat vim neovim make cmake gdb tmux docker valgrind moreutils)
 # Required packages, need to install in different ways on different OS
-required_spec=(mcfly starship pyenv rustup)
+required_spec=(mcfly starship pyenv rustup nvm)
 
 # Optional packages, use "-o" to install via system package manager
 optional_common=(vifm xclip enca rclone ffmpeg rsync p7zip html2text)
@@ -43,7 +43,7 @@ if [[ $disv == "Arch" ]]; then
         yay -Syyu $@
     }
 
-    installPkg mcfly starship pyenv
+    installPkg mcfly starship pyenv nvm
 
     if [ "$1" == "-o" ]; then
         installPkg ninja
@@ -70,6 +70,9 @@ elif [[ $disv == "Ubuntu" ]]; then
     tlog "Install pyenv"
     curl https://pyenv.run | bash
 
+    # nvm
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
     if [ "$1" == "-o" ]; then
         # ninja
         tlog "Install ninja"
@@ -87,7 +90,7 @@ elif [[ $disv == "macOS" ]]; then
         brew install $@
     }
 
-    installPkg mcfly starship pyenv
+    installPkg mcfly starship pyenv nvm
 
     if [ "$1" == "-o" ]; then
         installPkg ninja
