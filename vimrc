@@ -1,9 +1,12 @@
-noremap "<C-a>" "gg0vG$"
-noremap "<C-h>" "^"
-noremap "<C-l>" "$"
-noremap "<C-s>" "<cmd>:w<cr>"
-noremap "``" "ciw`<Esc>pa`<Esc>"
-inoremap "jj" "<Esc>"
+noremap <C-a> gg0vG$
+noremap <C-h> ^
+noremap <C-l> $
+noremap <C-s> <cmd>:w<cr>
+noremap `` ciw``<Esc>hp
+vnoremap `` s``<Esc>hp
+
+set scrolloff=8
+set sidescrolloff=8
 
 "----------------------------------------------------------------------
 " 默认缩进模式
@@ -56,9 +59,6 @@ set ignorecase
 
 " 智能搜索大小写判断，默认忽略大小写，除非搜索内容包含大写字母
 set smartcase
-
-" 高亮搜索内容
-set hlsearch
 
 " 查找输入时动态增量显示查找结果
 set incsearch
