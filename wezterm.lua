@@ -40,6 +40,8 @@ local keys = {
   { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up' },
   { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down' },
 
+  { key = 'w', mods = 'LEADER', action = act.CloseCurrentPane { confirm = true }, },
+
   {
     key = 'c',
     mods = 'LEADER',
