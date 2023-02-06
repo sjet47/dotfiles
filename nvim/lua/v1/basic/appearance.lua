@@ -20,8 +20,8 @@ vim.o.tabstop = 4
 -- Show Matching
 vim.o.showmatch = true
 
--- Highlight search result
-vim.o.hlsearch = true
+-- Highlight recent search result
+vim.o.hlsearch = false
 
 -- Command-line height
 vim.o.cmdheight = 1
@@ -44,7 +44,7 @@ vim.o.showmode = true
 vim.o.showtabline = 2
 
 -- How many line should around the cursor at least
-vim.o.scrolloff = 8
+vim.o.scrolloff = 16
 
 -- How many column should around the cursor at least
 vim.o.sidescrolloff = 8

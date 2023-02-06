@@ -18,7 +18,8 @@ vim.keymap.set("", "<C-l>", "$")
 vim.keymap.set("n", "<C-s>", "<cmd>:w<cr>")
 
 -- Back quote
-vim.keymap.set("n", "``", "ciw`<Esc>pa`<Esc>")
+vim.keymap.set("n", "``", "ciw``<Esc>hp")
+vim.keymap.set("v", "``", "s``<Esc>hp")
 
 -- Use jj as Esc
 vim.keymap.set("i", "jj", "<Esc>")
