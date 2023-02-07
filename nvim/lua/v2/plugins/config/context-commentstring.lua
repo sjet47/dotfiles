@@ -1,0 +1,3 @@
+-- Setting the commentstring option based on the cursor location in the file
+---@see https://github.com/JoosepAlviste/nvim-ts-context-commentstring
+-- return { "JoosepAlviste/nvim-ts-context-commentstring" }
