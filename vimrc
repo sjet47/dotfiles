@@ -155,7 +155,8 @@ set laststatus=2
 
 " 总是显示行号
 set number
-set relativenumber
+" 显示相对行号(会有性能问题)
+"set relativenumber
 
 " 总是显示标签栏
 set showtabline=2

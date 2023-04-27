@@ -161,12 +161,6 @@ if [[ ! $LOAD_ONCE ]]; then
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
 
-  # Nodejs nvm
-  [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
-  source /usr/share/nvm/nvm.sh
-  source /usr/share/nvm/bash_completion
-  source /usr/share/nvm/install-nvm-exec
-
   # Get distribution name
   os_name=$(uname)
   if [[ $os_name == "Linux" ]]; then
@@ -315,7 +309,7 @@ arc() {
 welcome() {
   echo "$(uname -o) $(uname -r) $(uname -m)
 Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
-System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -p 5 -F 0.5
+System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -s 100 -p 5 -F 0.5
   lsd
 }
 
