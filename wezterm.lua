@@ -116,9 +116,11 @@ return {
   font_size = 11.5,
   font = wezterm.font_with_fallback {
     'JetBrainsMono Nerd Font',
+    'JetBrains Mono',
     'Apple Color Emoji',
     'Noto Sans CJK SC',
   },
+	warn_about_missing_glyphs = false,
 
   quick_select_patterns = {
     -- match things that look like sha1 hashes
