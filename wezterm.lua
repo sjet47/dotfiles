@@ -88,7 +88,7 @@ wezterm.on('update-right-status', function(window, pane)
   end
 
   window:set_right_status(wezterm.format {
-    { Text = leader .. ' ' .. bat .. ' ' .. wezterm.nerdfonts.mdi_clock .. ' ' .. date },
+    { Text = leader .. ' ' .. bat .. ' ' .. wezterm.nerdfonts.md_clock_outline .. ' ' .. date },
   })
 end)
 
