@@ -175,7 +175,7 @@ set splitright
 set t_Co=256
 
 set cursorline
-set cursorcolumn
+"set cursorcolumn
 
 "----------------------------------------------------------------------
 " 状态栏设置
