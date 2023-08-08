@@ -256,6 +256,7 @@ cl() {
 }
 
 # Utility
+alias nc="ncat"
 alias v="vim"
 alias nv="nvim"
 alias vm="vifm"
