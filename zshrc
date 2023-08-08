@@ -155,11 +155,11 @@ if [[ ! $LOAD_ONCE ]]; then
   sourceExist "$HOME/.cargo/env"
 
   # Haskell Ghcup
-  sourceExist "$HOME/.ghcup/env"
+  #sourceExist "$HOME/.ghcup/env"
 
   # Python pyenv
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
+  #eval "$(pyenv init --path)"
+  #eval "$(pyenv init -)"
 
   # Get distribution name
   os_name=$(uname)
