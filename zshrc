@@ -203,8 +203,10 @@ update() {
 
   # Update with system package manager
   pkgupdate "$logname"
+
   # Update with pip(Python)
-  #python3 -m pip --log "$UPDATE_LOG/pip/$logname" install --upgrade pip
+  python3 -m pip --log "$UPDATE_LOG/pip/$logname" install --upgrade pip --break-system
+
   # Update with rustup(Rust)
   rustup update
 
