@@ -386,9 +386,6 @@ alias dki="docker image"
 dke() { docker exec -it "$2" bash; }
 dkrd() { docker run -d "$1"; }
 dkrt() { docker run -it "$1" /bin/bash; }
-dktgali() { docker tag "$1" "registry.cn-hangzhou.aliyuncs.com/sjet/$2:$3"; }
-dkpsali() { docker push "registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2"; }
-dkplali() { docker pull "registry.cn-hangzhou.aliyuncs.com/sjet/$1:$2"; }
 
 # Local profile
 sourceExist "$HOME/.profile"
