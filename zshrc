@@ -390,6 +390,16 @@ alias dki="docker image"
 dke() { docker exec -it "$2" bash; }
 dkrd() { docker run -d "$1"; }
 dkrt() { docker run -it "$1" /bin/bash; }
+mkdki() {
+	docker build . -t $1:$2
+	docker save $1:$2 -o $1.$2.tar
+	docker image rm $1:$2
+}
+mkdkif() {
+	docker build . -t $1:$2 -f $3
+	docker save $1:$2 -o $1.$2.tar
+	docker image rm $1:$2
+}
 
 # Local profile
 sourceExist "$HOME/.profile"
