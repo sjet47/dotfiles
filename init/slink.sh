@@ -1,9 +1,12 @@
 #!/bin/bash
 
 function mklnk() {
-  if [[ ! -e $HOME/.$1 ]]; then
-    ln -s "$HOME/dotfiles/$1" "$HOME/.$1"
+	dst = "$HOME/.$1"
+  if [[ -e $dst ]]; then
+		echo $dst already exist, backup to $dst.bak
+		mv $dst $dst.bak
   fi
+	ln -s "$HOME/dotfiles/$1" $dst
 }
 
 function mkd() {
