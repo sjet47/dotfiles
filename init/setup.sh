@@ -36,6 +36,7 @@ tlog "Detected distribution: $disv"
 # Make symbol link and dir at first
 tlog "make symbol link"
 source slink.sh
+touch $HOME/.zsh_history
 
 # Install on ArchLinux
 if [[ $disv == "Arch" ]]; then
