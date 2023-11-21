@@ -391,14 +391,11 @@ dke() { docker exec -it "$2" bash; }
 dkrd() { docker run -d "$1"; }
 dkrt() { docker run -it "$1" /bin/bash; }
 mkdki() {
-	docker build . -t $1:$2
-	docker save $1:$2 -o $1.$2.tar
-	docker image rm $1:$2
-}
-mkdkif() {
-	docker build . -t $1:$2 -f $3
-	docker save $1:$2 -o $1.$2.tar
-	docker image rm $1:$2
+	if [ -z "$3" ]; then
+		docker build . -t $1:$2 --output type=tar,dest=$1.$2.tar
+	else
+		docker build . -t $1:$2 --output type=tar,dest=$1.$2.tar -f $3
+	fi
 }
 
 # Local profile
