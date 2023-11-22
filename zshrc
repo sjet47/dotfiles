@@ -398,6 +398,9 @@ mkdki() {
 	fi
 }
 
+# Kubernetes
+alias kc="kubectl"
+
 # Local profile
 sourceExist "$HOME/.profile"
 
