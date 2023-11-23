@@ -285,7 +285,11 @@ timestamp() {
   xclip -i /tmp/timestamp
 }
 llog() {
-  latest=$(ls "$1" | sort | tail -n 1)
+	if [ -z $2 ]; then
+		latest=$(ls "$1" | sort | tail -n 1)
+	else
+		latest=$(ls "$1" | sort | tail -n $2 | head -n 1)
+	fi
   less "$1/$latest"
 }
 wgetbin() {
@@ -400,6 +404,8 @@ mkdki() {
 
 # Kubernetes
 alias kc="kubectl"
+alias kcg="kubectl get"
+alias kcc="kubectl create"
 
 # Local profile
 sourceExist "$HOME/.profile"
