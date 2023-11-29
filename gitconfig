@@ -5,7 +5,7 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Aryan Sjet
-	email = Aryan.ITFS@Gmail.com
+	email = sjet@asjet.dev
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
