@@ -7,3 +7,9 @@
 [submodule "nvim/lazy/plugins/onedarkpro.nvim"]
 	path = nvim/lazy/plugins/onedarkpro.nvim
 	url = https://github.com/olimorris/onedarkpro.nvim.git
+[submodule "nvim/lazy/plugins/nvim-tree.lua"]
+	path = nvim/lazy/plugins/nvim-tree.lua
+	url = https://github.com/nvim-tree/nvim-tree.lua.git
+[submodule "nvim/lazy/plugins/nvim-web-devicons"]
+	path = nvim/lazy/plugins/nvim-web-devicons
+	url = https://github.com/nvim-tree/nvim-web-devicons.git
