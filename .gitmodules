@@ -1,3 +1,6 @@
 [submodule "vim/pack/vendor/start/vim-copy-as-rtf"]
 	path = vim/pack/vendor/start/vim-copy-as-rtf
 	url = https://github.com/zerowidth/vim-copy-as-rtf.git
+[submodule "nvim/lazy/lazy.nvim"]
+	path = nvim/lazy/lazy.nvim
+	url = https://github.com/folke/lazy.nvim.git
