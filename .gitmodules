@@ -1,0 +1,3 @@
+[submodule "vim/pack/vendor/start/vim-copy-as-rtf"]
+	path = vim/pack/vendor/start/vim-copy-as-rtf
+	url = https://github.com/zerowidth/vim-copy-as-rtf.git
