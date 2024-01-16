@@ -64,8 +64,6 @@ return {
         config = function(LazyPlugin, opts)
             require("nvim-tree").setup({
                 hijack_cursor = true,
-                open_on_setup = true,
-                open_on_setup_file = true,
                 sync_root_with_cwd = true,
 
                 sort = {
