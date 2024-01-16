@@ -63,15 +63,33 @@ return {
         end,
         config = function(LazyPlugin, opts)
             require("nvim-tree").setup({
+                hijack_cursor = true,
+                open_on_setup = true,
+                open_on_setup_file = true,
+                sync_root_with_cwd = true,
+
                 sort = {
                     sorter = "case_sensitive",
                 },
                 view = {
+                    adaptive_size = false,
                     width = 24,
                     cursorline = true,
                 },
                 renderer = {
+                    full_name = true,
                     group_empty = true,
+                    full_name = true,
+                    special_files = {},
+                    symlink_destination = false,
+                    indent_markers = {
+                        enable = true,
+                    },
+                },
+                update_focused_file = {
+                    enable = true,
+                    update_root = true,
+                    ignore_list = { "help" },
                 },
                 filters = {
                     dotfiles = true,
