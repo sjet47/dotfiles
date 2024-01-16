@@ -1,8 +1,5 @@
-if vim.g.vscode then
-	-- VSCode extension
-	require("v1").setup(false)
-else
-	-- Neovim with plugins
-	require("v1").setup(true)
-end
+require("basic")
 
+if not vim.g.vscode then
+	require("v1").setup()
+end
