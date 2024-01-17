@@ -58,3 +58,6 @@
 [submodule "nvim/lazy/plugins/nvim-cmp"]
 	path = nvim/lazy/plugins/nvim-cmp
 	url = https://github.com/hrsh7th/nvim-cmp.git
+[submodule "nvim/lazy/plugins/gitsigns.nvim"]
+	path = nvim/lazy/plugins/gitsigns.nvim
+	url = https://github.com/lewis6991/gitsigns.nvim.git
