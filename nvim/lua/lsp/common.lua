@@ -8,9 +8,9 @@ return {
         -- vim.keymap.set("n", "gl", "<CMD>lua Telescope loclist<CR>")
 
         -- lsp
-        -- vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opt)
+        vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opt)
         -- vim.keymap.set("n", keys.declaration, vim.lsp.buf.declaration, opt)
-        -- vim.keymap.set("n", "gh", vim.lsp.buf.hover, opt)
+        vim.keymap.set("n", "gh", vim.lsp.buf.hover, opt)
         -- vim.keymap.set("n", keys.implementation, require("telescope.builtin").lsp_implementations, opt)
         -- vim.keymap.set("n", keys.references,
         --     "<CMD>lua require'telescope.builtin'.lsp_references(require('telescope.themes').get_ivy())<CR>", opt)
