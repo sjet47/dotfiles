@@ -13,3 +13,6 @@
 [submodule "nvim/lazy/plugins/nvim-web-devicons"]
 	path = nvim/lazy/plugins/nvim-web-devicons
 	url = https://github.com/nvim-tree/nvim-web-devicons.git
+[submodule "nvim/lazy/plugins/bufferline.nvim"]
+	path = nvim/lazy/plugins/bufferline.nvim
+	url = https://github.com/akinsho/bufferline.nvim.git
