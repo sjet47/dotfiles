@@ -34,3 +34,6 @@
 [submodule "nvim/lazy/plugins/lualine.nvim"]
 	path = nvim/lazy/plugins/lualine.nvim
 	url = https://github.com/nvim-lualine/lualine.nvim.git
+[submodule "nvim/lazy/plugins/nvim-surround"]
+	path = nvim/lazy/plugins/nvim-surround
+	url = https://github.com/kylechui/nvim-surround.git
