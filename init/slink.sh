@@ -37,4 +37,4 @@ mkd .backup
 mkd .config
 
 # Link neovim
-ln -s "$HOME/dotfiles/$1" "$HOME/.config/nvim"
+ln -s "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
