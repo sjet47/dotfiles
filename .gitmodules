@@ -16,3 +16,12 @@
 [submodule "nvim/lazy/plugins/bufferline.nvim"]
 	path = nvim/lazy/plugins/bufferline.nvim
 	url = https://github.com/akinsho/bufferline.nvim.git
+[submodule "nvim/lazy/plugins/mason-lspconfig.nvim"]
+	path = nvim/lazy/plugins/mason-lspconfig.nvim
+	url = https://github.com/williamboman/mason-lspconfig.nvim.git
+[submodule "nvim/lazy/plugins/mason.nvim"]
+	path = nvim/lazy/plugins/mason.nvim
+	url = https://github.com/williamboman/mason.nvim.git
+[submodule "nvim/lazy/plugins/nvim-lspconfig"]
+	path = nvim/lazy/plugins/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig.git
