@@ -1,5 +1,5 @@
 ---@type table<lang: string, lsp_config>
 return {
-    golang = require("lsp.go"),
+    go = require("lsp.go"),
     cpp = require("lsp.cpp")
 }
