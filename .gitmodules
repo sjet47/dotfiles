@@ -79,3 +79,21 @@
 [submodule "nvim/lazy/plugins/telescope.nvim"]
 	path = nvim/lazy/plugins/telescope.nvim
 	url = https://github.com/nvim-telescope/telescope.nvim.git
+[submodule "nvim/lazy/plugins/nvim-treesitter-endwise"]
+	path = nvim/lazy/plugins/nvim-treesitter-endwise
+	url = https://github.com/RRethy/nvim-treesitter-endwise.git
+[submodule "nvim/lazy/plugins/nvim-treesitter-refactor"]
+	path = nvim/lazy/plugins/nvim-treesitter-refactor
+	url = https://github.com/nvim-treesitter/nvim-treesitter-refactor.git
+[submodule "nvim/lazy/plugins/nvim-treesitter-textobjects"]
+	path = nvim/lazy/plugins/nvim-treesitter-textobjects
+	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
+[submodule "nvim/lazy/plugins/nvim-treesitter"]
+	path = nvim/lazy/plugins/nvim-treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+[submodule "nvim/lazy/plugins/nvim-ts-autotag"]
+	path = nvim/lazy/plugins/nvim-ts-autotag
+	url = https://github.com/windwp/nvim-ts-autotag.git
+[submodule "nvim/lazy/plugins/nvim-ts-rainbow"]
+	path = nvim/lazy/plugins/nvim-ts-rainbow
+	url = https://github.com/p00f/nvim-ts-rainbow.git
