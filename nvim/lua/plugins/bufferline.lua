@@ -1,4 +1,6 @@
 return {
+    -- A snazzy buffer line (with tabpage integration) for Neovim built using lua
+    ---@see https://github.com/akinsho/bufferline.nvim
     'akinsho/bufferline.nvim',
     version = "*",
     event = 'BufReadPre',

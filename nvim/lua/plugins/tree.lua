@@ -42,6 +42,8 @@ local function on_attach(bufnr)
 end
 
 return {
+    -- A Tree-Like File Explorer For Neovim Written In Lua
+    ---@see https://github.com/nvim-tree/nvim-tree.lua
     "nvim-tree/nvim-web-devicons",
     {
         "nvim-tree/nvim-tree.lua",

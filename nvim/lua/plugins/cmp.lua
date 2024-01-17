@@ -1,11 +1,18 @@
 return {
+    -- Completion source for nvim-cmp
+    ---@see https://github.com/saadparwaiz1/cmp_luasnip
     "saadparwaiz1/cmp_luasnip",
+
+    -- Completion sources
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lsp-signature-help" ,
+
     {
+        -- A completion engine plugin for neovim written in Lua
+        ---@see https://github.com/hrsh7th/nvim-cmp
         "hrsh7th/nvim-cmp",
         dependencies = {
             "saadparwaiz1/cmp_luasnip",
