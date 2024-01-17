@@ -28,3 +28,6 @@
 [submodule "nvim/lazy/plugins/nvim-autopairs"]
 	path = nvim/lazy/plugins/nvim-autopairs
 	url = https://github.com/windwp/nvim-autopairs.git
+[submodule "nvim/lazy/plugins/nvim-notify"]
+	path = nvim/lazy/plugins/nvim-notify
+	url = https://github.com/rcarriga/nvim-notify.git
