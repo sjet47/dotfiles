@@ -25,3 +25,6 @@
 [submodule "nvim/lazy/plugins/nvim-lspconfig"]
 	path = nvim/lazy/plugins/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule "nvim/lazy/plugins/nvim-autopairs"]
+	path = nvim/lazy/plugins/nvim-autopairs
+	url = https://github.com/windwp/nvim-autopairs.git
