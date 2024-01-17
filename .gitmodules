@@ -31,3 +31,6 @@
 [submodule "nvim/lazy/plugins/nvim-notify"]
 	path = nvim/lazy/plugins/nvim-notify
 	url = https://github.com/rcarriga/nvim-notify.git
+[submodule "nvim/lazy/plugins/lualine.nvim"]
+	path = nvim/lazy/plugins/lualine.nvim
+	url = https://github.com/nvim-lualine/lualine.nvim.git
