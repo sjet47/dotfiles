@@ -37,3 +37,24 @@
 [submodule "nvim/lazy/plugins/nvim-surround"]
 	path = nvim/lazy/plugins/nvim-surround
 	url = https://github.com/kylechui/nvim-surround.git
+[submodule "nvim/lazy/plugins/cmp-buffer"]
+	path = nvim/lazy/plugins/cmp-buffer
+	url = https://github.com/hrsh7th/cmp-buffer.git
+[submodule "nvim/lazy/plugins/cmp-cmdline"]
+	path = nvim/lazy/plugins/cmp-cmdline
+	url = https://github.com/hrsh7th/cmp-cmdline.git
+[submodule "nvim/lazy/plugins/cmp-nvim-lsp"]
+	path = nvim/lazy/plugins/cmp-nvim-lsp
+	url = https://github.com/hrsh7th/cmp-nvim-lsp.git
+[submodule "nvim/lazy/plugins/cmp-nvim-lsp-signature-help"]
+	path = nvim/lazy/plugins/cmp-nvim-lsp-signature-help
+	url = https://github.com/hrsh7th/cmp-nvim-lsp-signature-help.git
+[submodule "nvim/lazy/plugins/cmp-path"]
+	path = nvim/lazy/plugins/cmp-path
+	url = https://github.com/hrsh7th/cmp-path.git
+[submodule "nvim/lazy/plugins/cmp_luasnip"]
+	path = nvim/lazy/plugins/cmp_luasnip
+	url = https://github.com/saadparwaiz1/cmp_luasnip.git
+[submodule "nvim/lazy/plugins/nvim-cmp"]
+	path = nvim/lazy/plugins/nvim-cmp
+	url = https://github.com/hrsh7th/nvim-cmp.git
