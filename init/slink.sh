@@ -35,6 +35,3 @@ mkd .local/log/update/apt
 mkd .local/log/update/brew
 mkd .backup
 mkd .config
-
-# Link neovim
-ln -s "$HOME/dotfiles/$1" "$HOME/.config/nvim"
