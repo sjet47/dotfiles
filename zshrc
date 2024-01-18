@@ -374,8 +374,16 @@ alias grs="git restore"
 alias grb="git rebase"
 alias gmg="git merge"
 
+function get_repo_url() {
+    cd $1 && git remote -v | grep origin | head -n 1 | awk '{print $2}'
+}
 ghc() { git clone --recurse-submodules "https://github.com/$1.git"; }
 ghcs() { git clone --recurse-submodules "git@github.com:$1.git"; }
+gadsm() {
+  repo_path=$1
+  repo_url=$(get_repo_url $repo_path)
+  git submodule add $repo_url $repo_path
+}
 
 # Tmux
 alias etc='vim $HOME/.tmux.conf'
