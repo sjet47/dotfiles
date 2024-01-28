@@ -322,8 +322,8 @@ System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -s 100 -
 # Build and debug
 alias cmm="cmake"
 alias cmn="cmake -GNinja"
-alias mj="make -j"
-alias nj="ninja -j"
+alias mj="make -j $(nproc)"
+alias nj="ninja -j $(nproc)"
 
 alias rc="rustc"
 alias co="cargo"
