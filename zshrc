@@ -311,6 +311,14 @@ arc() {
   mv "$1".7z "$ARCHIVE_DIR/"
   rm -rf "${@:2}"
 }
+ya() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
 
 welcome() {
   echo "$(uname -o) $(uname -r) $(uname -m)
