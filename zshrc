@@ -261,6 +261,7 @@ cl() {
 alias v="vim"
 alias nv="nvim"
 alias vm="vifm"
+alias z="zellij"
 alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias weather="curl --noproxy '*' wttr.in"
