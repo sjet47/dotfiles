@@ -42,3 +42,5 @@
 	line-numbers-right-format = "|{np:^4}|"
 [push]
 	default = current
+[fetch]
+	writeCommitGraph = true
