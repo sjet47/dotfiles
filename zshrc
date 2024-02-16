@@ -35,6 +35,7 @@ export ZSH_CUSTOM="$ZSH/custom"
 
 # PATH
 # PATH=$PATH:$NEWPATH
+PATH="$PATH:$DOTFILE_DIR/scripts"
 PATH="$PATH:$HOME/.local/bin"
 PATH="$PATH:$PYENV_PATH/bin"
 PATH="$PATH:$PYENV_PATH/shims"
