@@ -16,10 +16,10 @@ from rich.progress import (
 )
 
 FRESH_RATE = 0.1
-
+TEST_TARGET = "./..."
 
 def get_test_names(pattern: str) -> Iterable[str]:
-    result = subprocess.run(["go", "test", "-list", pattern], capture_output=True)
+    result = subprocess.run(["go", "test", "-list", pattern, TEST_TARGET], capture_output=True)
     return filter(
         lambda line: line.startswith("Test"), result.stdout.decode("utf-8").split("\n")
     )
@@ -34,7 +34,7 @@ class Test:
             self.start()
 
     def start(self) -> Self:
-        cmd = ["go", "test", "-count=1", f"-timeout={self.timeout}", "-run", self.name]
+        cmd = ["go", "test", "-count=1", f"-timeout={self.timeout}", "-run", self.name, TEST_TARGET]
         self._proc = subprocess.Popen(
             cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
