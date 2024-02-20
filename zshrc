@@ -149,6 +149,9 @@ if [[ ! $LOAD_ONCE ]]; then
   # zsh-mcfly plugin
   eval "$(mcfly init zsh)"
 
+  # Zoxide
+  eval "$(zoxide init zsh)"
+
   # starship prompt
   eval "$(starship init zsh)"
 
@@ -254,7 +257,7 @@ mc() {
   cd "$1" || return
 }
 cl() {
-  cd $1 || return
+  z $1 || return
   lsd
 }
 
@@ -262,7 +265,8 @@ cl() {
 alias v="vim"
 alias nv="nvim"
 alias vm="vifm"
-alias z="zellij"
+alias zj="zellij"
+alias ci="zi"
 alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias weather="curl --noproxy '*' wttr.in"
