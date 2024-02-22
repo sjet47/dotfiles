@@ -344,6 +344,7 @@ alias co="cargo"
 alias coc="cargo check"
 alias cor="cargo run"
 alias cob="cargo build"
+alias cot="cargo test"
 
 alias py="python"
 alias py3="python3"
