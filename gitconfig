@@ -3,7 +3,6 @@
 	editor = vim
 	pager = delta
 [user]
-# Please adapt and uncomment the following lines:
 	name = Aryan Sjet
 	email = sjet@asjet.dev
 [filter "lfs"]
@@ -44,3 +43,5 @@
 	default = current
 [fetch]
 	writeCommitGraph = true
+[commit]
+	gpgsign = true
