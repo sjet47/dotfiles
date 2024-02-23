@@ -44,6 +44,7 @@
 	line-numbers-right-format = "|{np:^4}|"
 [push]
 	default = current
+	autoSetupRemote = true
 [fetch]
 	writeCommitGraph = true
 [commit]
