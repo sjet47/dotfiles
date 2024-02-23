@@ -29,11 +29,14 @@
 [merge]
 	ff = false
 	commit = true
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 [interactive]
 	diffFilter = delta --color-only
 [diff]
 	colorMoved = default
+	algorithm = histogram
+	submodule = log
+	colorMovedWS = allow-indentation-change
 [delta]
 	navigate = true
 	side-by-side = true
@@ -45,3 +48,15 @@
 	writeCommitGraph = true
 [commit]
 	gpgsign = true
+[rebase]
+	autostash = true
+[rerere]
+	enable = true
+[help]
+	autocorrect = prompt
+[submodule]
+	recurse = true
+[status]
+	submoduleSummary = true
+[log]
+	date = iso
