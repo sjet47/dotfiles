@@ -18,6 +18,7 @@
 [alias]
 	st = status
 	ck = checkout
+	pk = cherry-pick
 	br = branch
 	sw = switch
 	pl = pull
