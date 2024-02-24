@@ -9,7 +9,7 @@ tlog() {
 # Required packages, will be install via system package manager
 required_common=(zsh lsd bat vim neovim make cmake gdb tmux docker valgrind moreutils)
 # Required packages, need to install in different ways on different OS
-required_spec=(mcfly starship pyenv rustup nvm)
+required_spec=(atuin starship pyenv rustup nvm)
 
 # Optional packages, use "-o" to install via system package manager
 optional_common=(vifm xclip enca rclone ffmpeg rsync p7zip html2text)
@@ -44,7 +44,7 @@ if [[ $disv == "Arch" ]]; then
         yay -Syyu $@
     }
 
-    installPkg mcfly starship pyenv nvm
+    installPkg atuin starship pyenv nvm
 
     if [ "$1" == "-o" ]; then
         installPkg ninja
@@ -59,9 +59,9 @@ elif [[ $disv == "Ubuntu" ]]; then
         sudo apt install -y $@
     }
 
-    # mcfly
-    tlog "Install mcfly"
-    curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sudo sh -s -- --git cantino/mcfly
+    # Atuin
+		tlog "Install Atuin"
+		/bin/bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)"
 
     # Starship
     tlog "Install Starship"
@@ -91,7 +91,7 @@ elif [[ $disv == "macOS" ]]; then
         brew install $@
     }
 
-    installPkg mcfly starship pyenv nvm
+    installPkg atuin starship pyenv nvm
 
     if [ "$1" == "-o" ]; then
         installPkg ninja

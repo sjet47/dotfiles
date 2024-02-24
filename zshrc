@@ -146,8 +146,9 @@ if [[ ! $LOAD_ONCE ]]; then
   # zsh-autosuggestions-plugin bindkey
   bindkey '`' autosuggest-accept
 
-  # zsh-mcfly plugin
-  eval "$(mcfly init zsh)"
+  # zsh-atuin plugin
+  # to disable up arrow: https://docs.atuin.sh/configuration/key-binding/#custom-up-arrow-filter-mode
+  eval "$(atuin init zsh)"
 
   # Zoxide
   eval "$(zoxide init zsh)"
@@ -388,6 +389,7 @@ alias gsq="git rebase -i"
 alias grs="git restore"
 alias grb="git rebase"
 alias gmg="git merge"
+alias gpk="git cherry-pick"
 
 function get_repo_url() {
     cd $1 && git remote -v | grep origin | head -n 1 | awk '{print $2}'
