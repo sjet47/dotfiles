@@ -382,7 +382,9 @@ alias ewt='nvim $HOME/.wezterm.lua'
 # Git
 alias gst="git status"
 alias gad="git add"
-alias gcm="git commit"
+alias gcm="git commit -m"
+alias gam="git commit -am"
+alias gma="git commit --amend"
 alias gps="git push"
 alias gpl="git pull"
 alias gsw="git switch"
