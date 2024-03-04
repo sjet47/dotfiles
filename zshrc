@@ -159,6 +159,9 @@ if [[ ! $LOAD_ONCE ]]; then
   # Rust Cargo
   sourceExist "$HOME/.cargo/env"
 
+  # The Fuck
+  eval $(thefuck --alias)
+
   # Haskell Ghcup
   #sourceExist "$HOME/.ghcup/env"
 
@@ -268,6 +271,7 @@ alias nv="nvim"
 alias vm="vifm"
 alias zj="zellij"
 alias ci="zi"
+alias fk="fuck"
 alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias weather="curl --noproxy '*' wttr.in"
