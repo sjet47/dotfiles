@@ -1,4 +1,3 @@
-# This is Git's per-user configuration file.
 [core]
 	editor = vim
 	pager = delta
@@ -23,7 +22,8 @@
 	sw = switch
 	pl = pull
 	ps = push
-	cm = commit
+	cm = commit -m
+	ma = commit --amend
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	mg = merge
 	rb = rebase
