@@ -275,6 +275,7 @@ alias fk="fuck"
 alias grep="grep --color=auto"
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias weather="curl --noproxy '*' wttr.in"
+alias myip="curl -s ifconfig.me -w '\n' | nali"
 alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
 alias wordmatch="cat /usr/share/dict/words | rg"
 alias curtime='date "+%Y-%m-%dT%H:%M:%S%:z"'
