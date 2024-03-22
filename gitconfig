@@ -1,6 +1,8 @@
 [core]
 	editor = vim
-	pager = delta
+[pager]
+	diff = delta
+	difftool = true
 [user]
 	name = Aryan Sjet
 	email = sjet@asjet.dev
@@ -27,6 +29,7 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	mg = merge
 	rb = rebase
+	dft = difftool
 [merge]
 	ff = false
 	commit = true
@@ -34,10 +37,15 @@
 [interactive]
 	diffFilter = delta --color-only
 [diff]
+	tool = difftastic
 	colorMoved = default
 	algorithm = histogram
 	submodule = log
 	colorMovedWS = allow-indentation-change
+[difftool]
+	prompt = false
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
 [delta]
 	navigate = true
 	side-by-side = true
