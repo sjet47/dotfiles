@@ -32,14 +32,16 @@ arc() {
     rm -rf "${@:2}"
 }
 ya() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+    local tmp
+    tmp="$(mktemp -t "yazi-cwd.XXXXX")"
     yazi "$@" --cwd-file="$tmp"
     if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-        cd -- "$cwd"
+        cd -- "$cwd" || return
     fi
     rm -f -- "$tmp"
 }
-mnvenv() {
+mntenv() {
+    local target_dir
     for host in "$@"; do
         target_dir=$ENV_DIR/$host
         mkdir -p $target_dir
