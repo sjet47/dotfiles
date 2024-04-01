@@ -3,7 +3,7 @@
 set -eo pipefail
 
 # Update log directory
-LOG_DIR=${0:-$HOME/.local/log/update}
+LOG_DIR=${1:-$HOME/.local/log/update}
 
 # Update log name
 logname=$(date "+%Y%m%d_%H%M%S").log
