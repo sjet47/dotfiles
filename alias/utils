@@ -18,6 +18,7 @@ alias now='date "+%Y-%m-%dT%H:%M:%S%:z"'
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias weather="curl --noproxy '*' wttr.in"
 alias myip="curl -s ifconfig.me -w '\n' | nali"
+line() { sed -n "${1}p" $2; }
 h2m() { curl "$1" | html2text --mark-code >"$2.md"; }
 cvh264() { ffmpeg -hwaccel cuvid -c:v h264_cuvid -i "$2" -c:v h264_nvenc -crf "$1" -c:a copy "$3"; }
 mkbak() { rsync -av "$1" $BACKUP_DIR/$1; }
