@@ -1,0 +1,27 @@
+# Alias for Git
+alias gst="git status"
+alias gad="git add"
+alias gcm="git commit -m"
+alias gam="git commit -am"
+alias gma="git commit --amend"
+alias gps="git push"
+alias gpl="git pull"
+alias gsw="git switch"
+alias gdf="git diff"
+alias gdft="git difftool"
+alias gcl="git clone"
+alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gsq="git rebase -i"
+alias grs="git restore"
+alias grb="git rebase"
+alias gmg="git merge"
+alias gpk="git cherry-pick"
+
+ghc() { git clone --recurse-submodules "https://github.com/$1.git"; }
+ghcs() { git clone --recurse-submodules "git@github.com:$1.git"; }
+git_repo_url() { cd $1 && git remote -v | grep origin | head -n 1 | awk '{print $2}'; }
+gadsm() {
+    repo_path=$1
+    repo_url=$(git_repo_url $repo_path)
+    git submodule add $repo_url $repo_path
+}

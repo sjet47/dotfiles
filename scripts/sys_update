@@ -1,0 +1,68 @@
+#!/bin/bash
+# Full System Update
+set -eo pipefail
+
+# Update log directory
+LOG_DIR=${0:-$HOME/.local/log/update}
+
+# Update log name
+logname=$(date "+%Y%m%d_%H%M%S").log
+
+# Get OS name
+os_name=$(uname)
+if [[ $os_name == "Linux" ]]; then
+    disv=$(cat /etc/issue | awk '{print $1}')
+elif [[ $os_name == "Darwin" ]]; then
+    disv="macOS"
+fi
+
+pacman_update() {
+    yay -Syyu --logfile "$LOG_DIR/yay/$1"
+}
+
+apt_update() {
+    sudo apt update | ts | tee "$LOG_DIR/apt/$1"
+    sudo apt upgrade -y | ts | "tee -a $LOG_DIR/apt/$1"
+}
+
+brew_update() {
+    brew update | tee "$LOG_DIR/brew/$1"
+    brew upgrade | tee -a "$LOG_DIR/brew/$1"
+    brew upgrade --cask --greedy | tee -a "$LOG_DIR/brew/$1"
+}
+
+case $disv in
+"Arch")
+    pacman_update "$logname"
+    ;;
+"Ubuntu")
+    apt_update "$logname"
+    ;;
+"macOS")
+    brew_update "$logname"
+    ;;
+*)
+    echo "Unsupported OS/Distribution: $disv"
+    exit 0
+    ;;
+esac
+
+# Update with pip(Python)
+python3 -m pip --log "$LOG_DIR/pip/$logname" install --upgrade pip --break-system
+
+# Update with rustup(Rust)
+rustup update
+
+# Pull latest dotfiles
+echo Pulling dotfiles
+cd "$HOME/dotfiles" && git pull origin main
+# Update zsh plugin
+echo Pulling zsh-autosuggestions
+cd "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" && git pull
+echo Pulling zsh-completions
+cd "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" && git pull
+echo Pulling zsh-highlighting
+cd "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" && git pull
+
+# Update oh-my-zsh
+(cd $HOME && omz update)

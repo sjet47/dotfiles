@@ -1,0 +1,4 @@
+# Alias for Kubernetes
+alias kc="kubectl"
+alias kcg="kubectl get"
+alias kcc="kubectl create"

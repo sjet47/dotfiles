@@ -1,0 +1,40 @@
+# Alias for core function
+
+# Need to install: bat, lsd, zoxide, fzf, ripgrep, nvim, lolcat
+
+# Add additonal options
+alias mv="mv -v"
+alias cp="cp -v"
+alias ln="ln -v"
+alias rm="rm -v -i"
+alias tar="tar -v"
+alias df="df -h"
+alias grep="grep --color=auto"
+
+# Shortcuts
+alias erc='nvim $HOME/.zshrc'
+alias relrc='source $HOME/.zshrc'
+alias md="mkdir -pv"
+alias cat="bat -p"
+alias l="lsd"
+alias la="lsd -a"
+alias ll="lsd -lh"
+alias lla="lsd -lha"
+alias ci="zi"
+alias ..="cl .."
+cl() { z $1 && lsd; }
+mc() { mkdir "$1" && cd "$1" || return; }
+
+# Helpers
+te() { tar -vxzf "$1"; }
+tg() { tar -vczf "$1".tar.gz "$1"; }
+bak() { mv "$1" "$1".bak; }
+ubak() { mv $1 ${1%.bak}; }
+llog() { less "$1/$(ls "$1" | sort | tail -n ${2:-1} | head -n 1)"; }
+
+welcome() {
+    echo "$(uname -o) $(uname -r) $(uname -m)
+Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
+System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -s 100 -p 5 -F 0.5
+    lsd
+}
