@@ -173,6 +173,7 @@ fi
 
 update() {
   sys_update $UPDATE_LOG
+	omz update
   sourceExist "$HOME/.zshrc"
 }
 

@@ -55,14 +55,12 @@ rustup update
 
 # Pull latest dotfiles
 echo Pulling dotfiles
-cd "$HOME/dotfiles" && git pull origin main
+(cd "$HOME/dotfiles" && git pull origin main)
 # Update zsh plugin
 echo Pulling zsh-autosuggestions
-cd "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" && git pull
+(cd "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" && git pull)
 echo Pulling zsh-completions
-cd "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" && git pull
+(cd "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" && git pull)
 echo Pulling zsh-highlighting
-cd "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" && git pull
+(cd "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" && git pull)
 
-# Update oh-my-zsh
-(cd $HOME && omz update)
