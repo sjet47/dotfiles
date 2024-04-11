@@ -8,6 +8,7 @@ BACKUP_DIR=${BACKUP_DIR:-$HOME/.backup}
 alias rs="rsync -avz"
 alias zj="zellij"
 alias fk="fuck"
+alias ag="ast-grep"
 
 # Oneliners
 alias gb2utf8="enca -L zh_CN -x UTF-8"
