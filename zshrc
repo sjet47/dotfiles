@@ -144,6 +144,7 @@ if [[ ! $LOAD_ONCE ]]; then
     zoxide
     atuin
     fuck
+    carapace
     # pyenv
     # ghcup
   )
