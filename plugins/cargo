@@ -1,0 +1,2 @@
+# Rust Cargo
+sourceExist "$HOME/.cargo/env"

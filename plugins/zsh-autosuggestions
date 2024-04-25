@@ -1,0 +1,2 @@
+# zsh-autosuggestions-plugin bindkey
+bindkey '`' autosuggest-accept

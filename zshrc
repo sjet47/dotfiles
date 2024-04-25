@@ -135,34 +135,22 @@ sourceExist() {
 
 # Load once, should only have non-user-defined configuration
 if [[ ! $LOAD_ONCE ]]; then
-  # oh-my-zsh
-  sourceExist "$ZSH/oh-my-zsh.sh"
 
-  # zsh-autosuggestions-plugin bindkey
-  bindkey '`' autosuggest-accept
+  plugin_setups=(
+    oh-my-zsh
+    zsh-autosuggestions
+    starship
+    cargo
+    zoxide
+    atuin
+    fuck
+    # pyenv
+    # ghcup
+  )
 
-  # zsh-atuin plugin
-  # to disable up arrow: https://docs.atuin.sh/configuration/key-binding/#custom-up-arrow-filter-mode
-  eval "$(atuin init zsh)"
-
-  # Zoxide
-  eval "$(zoxide init zsh)"
-
-  # starship prompt
-  eval "$(starship init zsh)"
-
-  # The Fuck
-  eval "$(thefuck --alias)"
-
-  # Rust Cargo
-  sourceExist "$HOME/.cargo/env"
-
-  # GHCup is the main installer for Haskell
-  #sourceExist "$HOME/.ghcup/env"
-
-  # Python pyenv
-  #eval "$(pyenv init --path)"
-  #eval "$(pyenv init -)"
+  for setup in "${plugin_setups[@]}"; do
+    source "$DOTFILE_DIR/plugins/$setup"
+  done
 
   LOAD_ONCE=true
 fi
@@ -173,7 +161,7 @@ fi
 
 update() {
   sys_update $UPDATE_LOG
-	omz update
+  omz update
   sourceExist "$HOME/.zshrc"
 }
 
