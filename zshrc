@@ -173,8 +173,8 @@ alias_profiles=(
   git
   docker
   wezterm
+  kubernetes
   #tmux
-  #k8s
 )
 
 for profile in "${alias_profiles[@]}"; do
