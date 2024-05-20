@@ -1,0 +1,20 @@
+{:logseq-bullet-threading {:version "v1.1.4", :repo "pengx17/logseq-plugin-bullet-threading", :effect false, :theme false}
+ :logseq-journals-calendar {:version "v0.10.10", :repo "xyhp915/logseq-journals-calendar", :effect false, :theme false}
+ :logseq-tabs {:version "v1.19.3", :repo "pengx17/logseq-plugin-tabs", :effect true, :theme false}
+ :logseq-agenda {:version "v3.10.3", :repo "haydenull/logseq-plugin-agenda", :effect true, :theme false}
+ :logseq-todo-plugin {:version "v1.21.0", :repo "ahonn/logseq-plugin-todo", :effect true, :theme false}
+ :logseq-heatmap {:version "v2.4.3", :repo "pengx17/logseq-plugin-heatmap", :effect true, :theme false}
+ :logseq-link-preview {:version "v2.3.0", :repo "pengx17/logseq-plugin-link-preview", :effect true, :theme false}
+ :logseq-todo-master {:version "v1.10.3", :repo "pengx17/logseq-plugin-todo-master", :effect false, :theme false}
+ :logseq-bonofix-theme {:version "v3.10.4", :repo "sansui233/logseq-bonofix-theme", :effect false, :theme true}
+ :logseq-awesome-ui {:version "v2.4.0", :repo "yoyurec/logseq-awesome-ui", :effect true, :theme false}
+ :logseq-tags {:version "v0.1.2", :repo "gidongkwon/logseq-plugin-tags", :effect false, :theme false}
+ :logseq-vim-shortcuts {:version "v0.1.22", :repo "vipzhicheng/logseq-plugin-vim-shortcuts", :effect true, :theme false}
+ :logseq-awesome-links {:version "v1.15.16", :repo "yoyurec/logseq-awesome-links", :effect true, :theme false}
+ :logseq-copy-code-plugin {:version "v.1.2.0", :repo "vyleung/logseq-copy-code-plugin", :effect true, :theme false}
+ :logseq-git {:version "v1.5.5", :repo "haydenull/logseq-plugin-git", :effect true, :theme false}
+ :logseq-move-block {:version "v1.0.0", :repo "vipzhicheng/logseq-plugin-move-block", :effect true, :theme false}
+ :logseq-mark-map {:version "v0.4.3", :repo "vipzhicheng/logseq-plugin-mark-map", :effect false, :theme false}
+ :logseq-markdown-table {:version "v1.8.0", :repo "haydenull/logseq-plugin-markdown-table", :effect false, :theme false}
+ :logseq-block-to-page {:version "v1.3.0", :repo "hyrijk/logseq-plugin-block-to-page", :effect false, :theme false}
+ :logseq-file-manager {:version "v1.4.0", :repo "haydenull/logseq-plugin-file-manager", :effect true, :theme false}}

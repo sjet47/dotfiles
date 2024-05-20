@@ -1,0 +1,40 @@
+{
+  "theme": {
+    "name": "Bonofix Theme",
+    "url": "assets:///home/sjet/.logseq/plugins/logseq-bonofix-theme/custom.css",
+    "description": "A clean theme",
+    "pid": "logseq-bonofix-theme"
+  },
+  "themes": {
+    "mode": "dark",
+    "light": {
+      "name": "Bonofix Theme",
+      "url": "assets:///home/sjet/.logseq/plugins/logseq-bonofix-theme/custom.css",
+      "description": "A clean theme",
+      "pid": "logseq-bonofix-theme",
+      "group-first": true,
+      "group-desc": "light & dark themes",
+      "mode": "light",
+      "selected": false
+    },
+    "dark": {
+      "name": "Bonofix Theme",
+      "url": "assets:///home/sjet/.logseq/plugins/logseq-bonofix-theme/custom.css",
+      "description": "A clean theme",
+      "pid": "logseq-bonofix-theme",
+      "group-first": true,
+      "group-desc": "light & dark themes",
+      "mode": "dark",
+      "selected": false
+    }
+  },
+  "externals": [],
+  "pinnedToolbarItems": [
+    "logseq-journals-calendar:goto-today",
+    "logseq-todo-plugin:logseq-plugin-todo",
+    "logseq-agenda:Agenda3",
+    "logseq-heatmap:heatmap-plugin-open",
+    "logseq-tags:tags-plugin-open",
+    "logseq-git:git"
+  ]
+}
