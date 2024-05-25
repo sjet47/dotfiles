@@ -7,5 +7,5 @@
   "tabs:show-single-tab": true,
   "tabs:close-button-left": false,
   "tabs:hide-close-all-button": false,
-  "disabled": true
+  "disabled": false
 }

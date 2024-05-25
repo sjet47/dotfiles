@@ -10,5 +10,7 @@
   "checkWhenDBChanged": true,
   "autoCheckSynced": true,
   "autoPush": false,
+  "typeCommitMessage": "Default Message With Date",
+  "customCommitMessage": "",
   "disabled": false
 }
