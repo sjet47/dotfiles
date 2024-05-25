@@ -9,4 +9,5 @@
 ;;   {:shortcuts {:ui/toggle-theme "t z"
 ;;                :ui/toggle-brackets "t b"}}
 
-{}
+{:shortcuts {:plugin.logseq-git/logseq-plugin-git-commit ["ctrl+s"]
+ :plugin.logseq-git/logseq-plugin-git-commit&push []}}
