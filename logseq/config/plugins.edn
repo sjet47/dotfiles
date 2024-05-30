@@ -1,5 +1,5 @@
 {:logseq-bullet-threading {:version "v1.1.4", :repo "pengx17/logseq-plugin-bullet-threading", :effect false, :theme false}
- :logseq-tabs {:version "v1.19.3", :repo "pengx17/logseq-plugin-tabs", :effect true, :theme false}
+ :logseq-tabs {:version "v1.19.4", :repo "pengx17/logseq-plugin-tabs", :effect true, :theme false}
  :logseq-todo-plugin {:version "v1.21.0", :repo "ahonn/logseq-plugin-todo", :effect true, :theme false}
  :logseq-heatmap {:version "v2.4.3", :repo "pengx17/logseq-plugin-heatmap", :effect true, :theme false}
  :logseq-link-preview {:version "v2.3.0", :repo "pengx17/logseq-plugin-link-preview", :effect true, :theme false}
