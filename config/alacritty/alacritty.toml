@@ -1,0 +1,8 @@
+live_config_reload = true
+[window]
+	blur = true
+	opacity = 0.75
+[font]
+	normal = { family = "JetBrainsMono NF", style = "Regular" }
+[colors]
+	transparent_background_colors = true
