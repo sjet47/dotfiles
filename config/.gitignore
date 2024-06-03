@@ -1,0 +1,10 @@
+# White list
+/*
+
+# Directories
+!/alacritty/
+!/atuin/
+
+# Files
+!/okularpartrc
+!/krunnerrc
