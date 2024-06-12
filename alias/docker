@@ -8,7 +8,38 @@ dke() { docker exec -it "$2" bash; }
 dkrd() { docker run -d "$1"; }
 dkrt() { docker run -it "$1" /bin/bash; }
 mkdki() {
-    docker build . -t $1:$2 -f ${3:-Dockerfile}
-    docker save $1:$2 -o $1.$2.tar
-    docker image rm -f $1:$2
+    # Build docker image and save to local tar file.
+    local dockerfile=${3:-Dockerfile}
+    local image_name=$1
+    local image_tag=$2
+    docker build . -t $image_name:$image_tag -f $dockerfile
+    docker save $image_name:$image_tag -o $image_name.$image_tag.tar
+    docker image rm -f $image_name:$image_tag
+}
+ldki() {
+    # scp docker image to remote host and load it.
+    local host=$1
+    local image=$2
+    local save_path=${3:-~}/
+    scp $image $host:$save_path
+    ssh $host "docker load -i $save_path/$image"
+}
+dcud() {
+    # docker-compose up -d
+    local host=$1
+    local service=$2
+    local compose_path=$3
+    local compose_file=${4:-docker-compose.yml}
+    ssh $host "docker-compose -f $compose_path/$compose_file up --no-deps -d $service"
+}
+rdki() {
+    # Build docker image, save to local tar file, scp to remote host, load it and docker-compose up -d.
+    local host=$1
+    local compose_path=$2
+    local image_name=$3
+    local image_tag=$4
+    local dockerfile=${5:-Dockerfile}
+    mkdki $image_name $image_tag $dockerfile
+    ldki $host $image_name.$image_tag.tar $compose_path
+    dcud $host $image_name $compose_path
 }
