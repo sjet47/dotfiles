@@ -22,17 +22,17 @@ alias ll="lsd -lh"
 alias lla="lsd -lha"
 alias ci="zi"
 alias ..="cl .."
-cl() { z $1 && lsd; }
-mc() { mkdir "$1" && cd "$1" || return; }
+function cl() { z $1 && lsd; }
+function mc() { mkdir "$1" && cd "$1" || return; }
 
 # Helpers
-te() { tar -vxzf "$1"; }
-tg() { tar -vczf "$1".tar.gz "$1"; }
-bak() { mv "$1" "$1".bak; }
-ubak() { mv $1 ${1%.bak}; }
-llog() { less "$1/$(ls "$1" | sort | tail -n ${2:-1} | head -n 1)"; }
+function te() { tar -vxzf "$1"; }
+function tg() { tar -vczf "$1".tar.gz "$1"; }
+function bak() { mv "$1" "$1".bak; }
+function ubak() { mv $1 ${1%.bak}; }
+function llog() { less "$1/$(ls "$1" | sort | tail -n ${2:-1} | head -n 1)"; }
 
-welcome() {
+function welcome() {
     echo "$(uname -o) $(uname -r) $(uname -m)
 Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
 System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -s 100 -p 5 -F 0.5

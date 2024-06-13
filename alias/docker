@@ -4,10 +4,10 @@ alias dk="docker"
 alias dkc="docker-compose"
 alias dki="docker image"
 
-dke() { docker exec -it "$2" bash; }
-dkrd() { docker run -d "$1"; }
-dkrt() { docker run -it "$1" /bin/bash; }
-mkdki() {
+function dke() { docker exec -it "$2" bash; }
+function dkrd() { docker run -d "$1"; }
+function dkrt() { docker run -it "$1" /bin/bash; }
+function mkdki() {
     # Build docker image and save to local tar file.
     local dockerfile=${3:-Dockerfile}
     local image_name=$1
@@ -16,7 +16,7 @@ mkdki() {
     docker save $image_name:$image_tag -o $image_name.$image_tag.tar
     docker image rm -f $image_name:$image_tag
 }
-ldki() {
+function ldki() {
     # scp docker image to remote host and load it.
     local host=$1
     local image=$2
@@ -24,7 +24,7 @@ ldki() {
     scp $image $host:$save_path
     ssh $host "docker load -i $save_path/$image"
 }
-dcud() {
+function dcud() {
     # docker-compose up -d
     local host=$1
     local service=$2
@@ -32,7 +32,7 @@ dcud() {
     local compose_file=${4:-docker-compose.yml}
     ssh $host "docker-compose -f $compose_path/$compose_file up --no-deps -d $service"
 }
-rdki() {
+function rdki() {
     # Build docker image, save to local tar file, scp to remote host, load it and docker-compose up -d.
     local host=$1
     local compose_path=$2

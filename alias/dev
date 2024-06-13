@@ -2,11 +2,11 @@
 
 # Make
 alias mj="make -j \$(nproc)"
-mje() { mj "$1" && ./"$1"; }
+function mje() { mj "$1" && ./"$1"; }
 
 # Ninja
 alias nj="ninja -j \$(nproc)"
-nje() { nj "$1" && ./"$1"; }
+function nje() { nj "$1" && ./"$1"; }
 
 # CMake
 alias cmm="cmake"
@@ -15,8 +15,8 @@ alias cmn="cmake -GNinja"
 # Debug
 alias gdb="gdb -tui -q"
 alias leakchk="valgrind --tool=memcheck --leak-check=full --vgdb=no"
-mjd() { mj "$1" && gdb ./"$1"; }
-njd() { nj "$1" && gdb ./"$1"; }
+function mjd() { mj "$1" && gdb ./"$1"; }
+function njd() { nj "$1" && gdb ./"$1"; }
 
 # Cargo
 alias co="cargo"
