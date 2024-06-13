@@ -50,3 +50,11 @@ function mntenv() {
         sshfs -o allow_other,default_permissions $host:/ $target_dir
     done
 }
+function heifc() {
+    local src="$1"
+    local format="${2:-png}"
+    local rate="${3:-100}"
+    local dst_dir="${4:-.}"
+    local dst="$dst_dir/${src%.*}.$format"
+    heif-convert -q $rate "$src" "$dst"
+}
