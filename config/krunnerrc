@@ -2,4 +2,11 @@
 FreeFloating=true
 
 [Plugins]
-baloosearchEnabled=true
+baloosearchEnabled=false
+browserhistoryEnabled=false
+browsertabsEnabled=false
+krunner_katesessionsEnabled=false
+krunner_konsoleprofilesEnabled=false
+
+[Plugins][Favorites]
+plugins=krunner_services
