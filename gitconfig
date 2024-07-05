@@ -24,12 +24,17 @@
 	sw = switch
 	pl = pull
 	ps = push
+	pf = push -f
 	cm = commit -m
+	cam = commit -a -m
 	ma = commit --amend
+	man = commit --amend --no-edit
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	mg = merge
 	rb = rebase
 	dft = difftool
+	undo = reset --soft HEAD^
+	drop = reset --hard HEAD^
 [merge]
 	ff = false
 	commit = true
