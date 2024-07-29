@@ -188,3 +188,6 @@ set statusline+=\ %y                            " 文件类型
 
 " 最右边显示文件编码和行号等信息，并且固定在一个 group 中，优先占位
 set statusline+=\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %v:%l/%L%)
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
