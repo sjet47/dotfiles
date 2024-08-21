@@ -1,2 +1,6 @@
 # Alias for Kubernetes
 alias k="kubectl"
+alias ka="kubeadm"
+alias mk="minikube"
+alias kd="kind"
+alias h="helm"
