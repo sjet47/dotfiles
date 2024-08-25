@@ -17,7 +17,7 @@ elif [[ $os_name == "Darwin" ]]; then
 fi
 
 pacman_update() {
-    yay -Syyu --logfile "$LOG_DIR/yay/$1"
+    yes "" | yay -Syyu --logfile "$LOG_DIR/yay/$1"
 }
 
 apt_update() {
