@@ -30,6 +30,9 @@ export NVM_DIR="$HOME/.nvm"
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_CUSTOM="$ZSH/custom"
 
+# gpg-agent
+export GPG_TTY=$(tty)
+
 # PATH
 # PATH=$PATH:$NEWPATH
 PATH="$PATH:$DOTFILE_DIR/scripts"
