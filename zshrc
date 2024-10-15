@@ -147,6 +147,7 @@ if [[ ! $LOAD_ONCE ]]; then
     zoxide
     atuin
     fuck
+    terraform
     # carapace
     # pyenv
     # ghcup
@@ -177,6 +178,7 @@ alias_profiles=(
   docker
   wezterm
   kubernetes
+  terraform
   #tmux
 )
 
@@ -192,3 +194,4 @@ if [[ -z $RELOAD ]]; then
   welcome
   RELOAD=1
 fi
+
