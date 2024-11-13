@@ -40,7 +40,7 @@ function ya() {
     if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
         cd -- "$cwd" || return
     fi
-    rm -f -- "$tmp"
+    /bin/rm -f -- "$tmp"
 }
 function mntenv() {
     local target_dir
