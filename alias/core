@@ -7,7 +7,6 @@ alias mv="mv -v"
 alias cp="cp -v"
 alias ln="ln -v"
 alias rm="rm -v -i"
-alias tar="tar -v"
 alias df="df -h"
 alias grep="grep --color=auto"
 
@@ -26,8 +25,8 @@ function cl() { z $1 && lsd; }
 function mc() { mkdir "$1" && cd "$1" || return; }
 
 # Helpers
-function te() { tar -vxzf "$1"; }
-function tg() { tar -vczf "$1".tar.gz "$1"; }
+function te() { pv -cN source "$1" | gzip -cd - | pv -cN extract | tar -x; }
+function tg() { tar -cf - "$1" | pv -cN source -s $(du -sb "$1" | awk '{print $1}') | gzip | pv -cN compress > "$1".tar.gz; }
 function bak() { mv "$1" "$1".bak; }
 function ubak() { mv $1 ${1%.bak}; }
 function llog() { less "$1/$(ls "$1" | sort | tail -n ${2:-1} | head -n 1)"; }
@@ -38,3 +37,4 @@ Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
 System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -s 100 -p 5 -F 0.5
     lsd
 }
+
