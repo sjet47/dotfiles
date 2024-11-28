@@ -4,7 +4,7 @@
 	diff = delta
 	difftool = true
 [user]
-	name = Aryan Sjet
+	name = Sjet
 	email = sjet@asjet.dev
 [filter "lfs"]
 	clean = git-lfs clean -- %f
