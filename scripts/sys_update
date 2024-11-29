@@ -9,12 +9,13 @@ LOG_DIR=${1:-$HOME/.local/log/update}
 logname=$(date "+%Y%m%d_%H%M%S").log
 
 # Get OS name
-os_name=$(uname)
-if [[ $os_name == "Linux" ]]; then
-    disv=$(cat /etc/issue | awk '{print $1}')
-elif [[ $os_name == "Darwin" ]]; then
-    disv="macOS"
-fi
+get_os_id() {
+    if [ -f /etc/os-release ]; then
+        grep -oP '^ID=\K.*' /etc/os-release | tr -d '"'
+    else
+        echo "macOS"
+    fi
+}
 
 pacman_update() {
     yes "" | yay -Syyu --logfile "$LOG_DIR/yay/$1"
@@ -31,18 +32,18 @@ brew_update() {
     brew upgrade --cask --greedy | tee -a "$LOG_DIR/brew/$1"
 }
 
-case $disv in
-"Arch")
+case $(get_os_id) in
+arch)
     pacman_update "$logname"
     ;;
-"Ubuntu")
+ubuntu)
     apt_update "$logname"
     ;;
-"macOS")
+macOS)
     brew_update "$logname"
     ;;
 *)
-    echo "Unsupported OS/Distribution: $disv"
+    echo "Unsupported OS/Distribution: $(get_os_id)"
     exit 0
     ;;
 esac
