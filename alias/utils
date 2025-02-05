@@ -12,7 +12,7 @@ alias ag="ast-grep"
 
 # Oneliners
 alias gb2utf8="enca -L zh_CN -x UTF-8"
-alias rcs="rclone sync -P --multi-thread-streams $(nproc)"
+alias rcs="rclone sync -P --multi-thread-streams 8"
 alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
 alias wordmatch="cat /usr/share/dict/words | rg"
 alias now='date "+%Y-%m-%dT%H:%M:%S%:z"'
