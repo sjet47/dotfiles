@@ -136,6 +136,9 @@ sourceExist() {
   [ -f "$1" ] && source "$1"
 }
 
+# Load Local profile
+sourceExist "$HOME/.profile"
+
 # Load once, should only have non-user-defined configuration
 if [[ ! $LOAD_ONCE ]]; then
 
@@ -185,9 +188,6 @@ alias_profiles=(
 for profile in "${alias_profiles[@]}"; do
   source "$DOTFILE_DIR/alias/$profile"
 done
-
-# Load Local profile
-sourceExist "$HOME/.profile"
 
 ## Pre-execute command
 if [[ -z $RELOAD ]]; then
