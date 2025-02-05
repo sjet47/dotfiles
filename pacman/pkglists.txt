@@ -39,3 +39,4 @@ imgcat
 jnv-bin
 nali-go-bin
 qrcp
+tig
