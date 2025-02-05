@@ -1,0 +1,6 @@
+#!/bin/bash
+
+list=$1
+amount=$(wc -l $1 | awk '{ print $1 }')
+
+cat $list | xargs -n 1 -P $amount yt-dlp
