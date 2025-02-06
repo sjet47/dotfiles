@@ -75,3 +75,5 @@
 	submoduleSummary = true
 [log]
 	date = iso
+[include]
+	path = ~/.config/git/config
