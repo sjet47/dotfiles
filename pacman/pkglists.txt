@@ -41,3 +41,4 @@ nali-go-bin
 qrcp
 tig
 protonhax
+nekoray
