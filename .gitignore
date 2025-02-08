@@ -1,3 +1,14 @@
 .DS_Store
 vim/.netrwhist
 nvim/plugin
+
+# White list
+config/*
+
+# Directories
+!config/alacritty/
+!config/atuin/
+
+# Files
+!config/okularpartrc
+!config/krunnerrc
