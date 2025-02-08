@@ -1,3 +1,4 @@
 # zsh-atuin plugin
 # to disable up arrow: https://docs.atuin.sh/configuration/key-binding/#custom-up-arrow-filter-mode
+sourceExist $HOME/.atuin/bin/env
 eval "$(atuin init zsh)"
