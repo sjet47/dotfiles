@@ -31,10 +31,3 @@ function bak() { mv "$1" "$1".bak; }
 function ubak() { mv $1 ${1%.bak}; }
 function llog() { less "$1/$(ls "$1" | sort | tail -n ${2:-1} | head -n 1)"; }
 
-function welcome() {
-    echo "$(uname -o) $(uname -r) $(uname -m)
-Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
-System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -s 100 -p 5 -F 0.5
-    lsd
-}
-
