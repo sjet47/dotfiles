@@ -64,7 +64,7 @@
 
 ## the maximum number of lines the interface should take up
 ## set it to 0 to always go full screen
-# inline_height = 0
+inline_height = 0
 
 ## Invert the UI - put the search bar at the top , Default to `false`
 # invert = false
@@ -75,7 +75,7 @@
 
 ## what to do when the escape key is pressed when searching
 ## possible values: return-original, return-query
-# exit_mode = "return-original"
+exit_mode = "return-original"
 
 ## possible values: emacs, subl
 # word_jump_mode = "emacs"
