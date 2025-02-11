@@ -4,8 +4,8 @@
 	diff = delta
 	difftool = true
 [user]
-	name = Sjet
-	email = sjet@asjet.dev
+	name = sjet47
+	email = contact@asjet.dev
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
