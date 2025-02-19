@@ -4,8 +4,7 @@ set -eo pipefail
 
 source "$(dirname $0)/common.sh"
 
-pkg_list=(
-    zsh
+PKG=(
     lsd
     bat
     vim
@@ -52,15 +51,15 @@ function install_pkgs() {
     case "$disv" in
     Arch)
         # shellcheck disable=SC2068
-        install_pkgs_arch ${pkg_list[@]}
+        install_pkgs_arch ${PKG[@]}
         ;;
     Ubuntu)
         # shellcheck disable=SC2068
-        install_pkgs_ubuntu ${pkg_list[@]}
+        install_pkgs_ubuntu ${PKG[@]}
         ;;
     macOS)
         # shellcheck disable=SC2068
-        install_pkgs_macos ${pkg_list[@]}
+        install_pkgs_macos ${PKG[@]}
         ;;
     *)
         fatal "Unsupported OS: $disv"
