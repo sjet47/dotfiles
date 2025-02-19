@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-source steps/common.sh
+source "$(dirname $0)/common.sh"
 
 pkg_list=(
     zsh
@@ -26,18 +26,21 @@ function read_os() {
 }
 
 function install_pkgs_arch() {
+    # shellcheck disable=SC2068
     yay -Syyu --needed --noconfirm $@
 }
 
 function install_pkgs_ubuntu() {
     sudo apt update
     sudo apt upgrade -y
+    # shellcheck disable=SC2068
     sudo apt install $@
 }
 
 function install_pkgs_macos() {
     brew update
     brew upgrade
+    # shellcheck disable=SC2068
     brew install $@
 }
 
@@ -48,12 +51,15 @@ function install_pkgs() {
 
     case "$disv" in
     Arch)
+        # shellcheck disable=SC2068
         install_pkgs_arch ${pkg_list[@]}
         ;;
     Ubuntu)
+        # shellcheck disable=SC2068
         install_pkgs_ubuntu ${pkg_list[@]}
         ;;
     macOS)
+        # shellcheck disable=SC2068
         install_pkgs_macos ${pkg_list[@]}
         ;;
     *)

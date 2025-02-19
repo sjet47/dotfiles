@@ -2,10 +2,12 @@
 
 set -eo pipefail
 
+init_dir=$(dirname $0)
+
 steps=(
-    steps/1-layout.sh
-    steps/2-basepkg.sh
-    steps/3-plugins.sh
+    "$init_dir/steps/1-layout.sh"
+    "$init_dir/steps/2-shell.sh"
+    "$init_dir/steps/3-pkgs.sh"
 )
 
 function main() {

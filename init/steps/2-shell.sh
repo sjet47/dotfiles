@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-source steps/common.sh
+source "$(dirname $0)/common.sh"
 
 OMZ="$HOME/.oh-my-zsh"
 ZSH_CUSTOM="$OMZ/custom"
@@ -15,7 +15,7 @@ function clone_repo() {
     git clone $repo_url $path
 }
 
-function clone_repos() {
+function main() {
     info "install zsh plugins"
 
     # oh-my-zsh
@@ -31,10 +31,6 @@ function clone_repos() {
     clone_repo "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
     ok "zsh plugins installed"
-}
-
-function main() {
-    clone_repos
 }
 
 main

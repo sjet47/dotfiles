@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-source steps/common.sh
+source "$(dirname $0)/common.sh"
 
 mkdir_targets=(
     .local/bin
