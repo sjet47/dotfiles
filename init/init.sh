@@ -20,7 +20,36 @@ BIN=(
     zsh
     git
     curl
+    cc
 )
+
+function print_usage() {
+    echo "Usage: init.sh [OPTION]"
+    echo "Options:"
+    echo "  -h | --help    print help"
+    echo "  -u | --user    init for user only, default is system wide"
+}
+
+function validate_args() {
+    while true; do
+        case "$1" in
+        -h | --help)
+            print_usage
+            exit 0
+            ;;
+        -u | --user) ;;
+        *)
+            if [[ -z $1 ]]; then
+                break
+            fi
+            echo "Unknown option $1"
+            print_usage
+            exit 1
+            ;;
+        esac
+        shift 1
+    done
+}
 
 function check_env() {
     for __var__ in "${VAR[@]}"; do
@@ -36,9 +65,14 @@ function check_env() {
 }
 
 function main() {
+    # shellcheck disable=SC2068
+    validate_args $@
+
     check_env
+
     for step in "${STEPS[@]}"; do
-        sh $step
+        # shellcheck disable=SC2068
+        sh $step $@
     done
 
     chsh -s /bin/zsh
@@ -46,4 +80,5 @@ function main() {
     zsh
 }
 
-main
+# shellcheck disable=SC2068
+main $@

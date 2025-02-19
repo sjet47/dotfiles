@@ -7,11 +7,26 @@ source "$(dirname $0)/common.sh"
 PKG=(
     lsd
     bat
-    vim
-    lolcat
     atuin
     starship
 )
+
+function read_flag_user() {
+    while true; do
+        case "$1" in
+        -u | --user)
+            return 0
+            ;;
+        *)
+            if [[ -z $1 ]]; then
+                break
+            fi
+            ;;
+        esac
+        shift 1
+    done
+    return 1
+}
 
 function read_os() {
     ## Get distribution name
@@ -43,7 +58,7 @@ function install_pkgs_macos() {
     brew install $@
 }
 
-function install_pkgs() {
+function install_system() {
     local disv
     disv=$(read_os)
     info "Detected distribution: $disv" 0 '*'
@@ -67,8 +82,29 @@ function install_pkgs() {
     esac
 }
 
-function main() {
-    install_pkgs
+function install_user() {
+    # Most tools can be installed with cargo install, so install it first
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source $HOME/.cargo/env
+
+    # shellcheck disable=SC2068
+    cargo install lsd bat
+
+    # Install starship
+    curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
+
+    # Install atuin
+    curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 }
 
-main
+function main() {
+    # shellcheck disable=SC2068
+    if read_flag_user $@; then
+        install_user
+    else
+        install_system
+    fi
+}
+
+# shellcheck disable=SC2068
+main $@
