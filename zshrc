@@ -132,6 +132,10 @@ plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting sudo web-se
 #               Third-party  Configuration                #
 ###########################################################
 
+autoload -Uz compinit
+compinit
+
+
 sourceExist() {
   [ -f "$1" ] && source "$1"
 }
