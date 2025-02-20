@@ -17,6 +17,7 @@ VAR=(
 )
 
 BIN=(
+    bash
     zsh
     git
     curl
@@ -72,7 +73,7 @@ function main() {
 
     for step in "${STEPS[@]}"; do
         # shellcheck disable=SC2068
-        sh $step $@
+        bash $step $@
     done
 
     chsh -s /bin/zsh
