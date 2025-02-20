@@ -94,7 +94,7 @@ function install_user() {
     curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
 
     # Install atuin
-    curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+    curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
 }
 
 function main() {
