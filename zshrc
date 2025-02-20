@@ -153,8 +153,8 @@ if [[ ! $LOAD_ONCE ]]; then
     cargo
     zoxide
     atuin
-    fuck
     terraform
+    # fuck
     # carapace
     # pyenv
     # ghcup
