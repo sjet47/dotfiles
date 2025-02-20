@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eo pipefail
+set -e
 
 init_dir=$(dirname $0)
 

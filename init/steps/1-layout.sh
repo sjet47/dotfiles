@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eo pipefail
+set -e
 
 source "$(dirname $0)/common.sh"
 
