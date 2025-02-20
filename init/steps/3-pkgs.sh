@@ -88,7 +88,7 @@ function install_user() {
     source $HOME/.cargo/env
 
     # shellcheck disable=SC2068
-    cargo install lsd bat
+    cargo install lsd bat zoxide lolcat
 
     # Install starship
     curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
