@@ -19,7 +19,7 @@ function main() {
     info "install zsh plugins"
 
     # oh-my-zsh
-    clone_repo "oh-my-zsh" "https://github.com/ohmyzsh/ohmyzsh.git" "$ZSH"
+    clone_repo "oh-my-zsh" "https://github.com/ohmyzsh/ohmyzsh.git" "$OMZ"
 
     # zsh-completions
     clone_repo "zsh-completions" "https://github.com/zsh-users/zsh-completions" "$ZSH_CUSTOM/plugins/zsh-completions"
