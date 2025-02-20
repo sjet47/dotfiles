@@ -9,6 +9,8 @@ PKG=(
     bat
     atuin
     starship
+    zoxide
+    lolcat
 )
 
 function read_flag_user() {
@@ -77,24 +79,32 @@ function install_system() {
         install_pkgs_macos ${PKG[@]}
         ;;
     *)
-        fatal "Unsupported OS: $disv"
+        fatal "unsupported OS: $disv"
         ;;
     esac
 }
 
 function install_user() {
+    info "install pkgs for user"
+
+    info "installing Cargo" 3 '*'
     # Most tools can be installed with cargo install, so install it first
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     source $HOME/.cargo/env
 
+    info "installing package {lsd, bat, zoxide, lolcat} with Cargo " 3 '*'
     # shellcheck disable=SC2068
     cargo install lsd bat zoxide lolcat
 
+    info "installing starship " 3 '*'
     # Install starship
     curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
 
+    info "installing atuin " 3 '*'
     # Install atuin
     curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
+
+    ok "all pkgs installed"
 }
 
 function main() {

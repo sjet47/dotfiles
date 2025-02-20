@@ -11,7 +11,7 @@ function clone_repo() {
     local name=$1
     local repo_url=$2
     local path=$3
-    info "Cloning $name" 3 '*'
+    info "cloning $name" 3 '*'
     git clone $repo_url $path
 }
 
