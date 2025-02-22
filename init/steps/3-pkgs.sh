@@ -11,6 +11,7 @@ PKG=(
     starship
     zoxide
     lolcat
+		pv
 )
 
 function read_flag_user() {
@@ -94,7 +95,7 @@ function install_user() {
 
     info "installing package {lsd, bat, zoxide, lolcat} with Cargo " 3 '*'
     # shellcheck disable=SC2068
-    cargo install lsd bat zoxide lolcat
+    cargo install lsd bat zoxide lolcat pv
 
     info "installing starship " 3 '*'
     # Install starship
