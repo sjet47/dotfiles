@@ -154,6 +154,7 @@ if [[ ! $LOAD_ONCE ]]; then
     zoxide
     atuin
     terraform
+    kubernetes
     # fuck
     # carapace
     # pyenv
