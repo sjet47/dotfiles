@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "$(uname -o) $(uname -r) $(uname -m)
-Hello, $(whoami)! Now is $(date "+%Y-%m-%d %H:%M:%S%z")
-System $(uptime)\nCurrent in [$(uname -n)]$(pwd)" | lolcat -ad 1 -S 128 -s 100 -p 5 -F 0.5
+echo -e "$(uname -o) $(uname -r) $(uname -m) \e[34m$(date '+%Y-%m-%d %H:%M:%S%z')\e[0m"
+echo "$(uptime)"
+echo -e "welcome, \e[36m$(whoami)\e[0m! current dir [\e[33m$(uname -n)\e[0m]$(pwd)"
 lsd
