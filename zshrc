@@ -135,7 +135,6 @@ plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting sudo web-se
 autoload -Uz compinit
 compinit
 
-
 sourceExist() {
   [ -f "$1" ] && source "$1"
 }
@@ -153,8 +152,8 @@ if [[ ! $LOAD_ONCE ]]; then
     cargo
     zoxide
     atuin
-    terraform
     kubernetes
+    # terraform
     # fuck
     # carapace
     # pyenv
@@ -184,10 +183,10 @@ alias_profiles=(
   dev
   git
   docker
-  wezterm
   kubernetes
-  terraform
-  #tmux
+  # wezterm
+  # terraform
+  # tmux
 )
 
 for profile in "${alias_profiles[@]}"; do
@@ -199,4 +198,3 @@ if [[ -z $RELOAD ]]; then
   welcome
   RELOAD=1
 fi
-

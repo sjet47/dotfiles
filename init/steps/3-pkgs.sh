@@ -11,7 +11,7 @@ PKG=(
     starship
     zoxide
     lolcat
-		pv
+    pv
 )
 
 function read_flag_user() {

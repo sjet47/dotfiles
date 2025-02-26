@@ -25,9 +25,9 @@ function cl() { z $1 && lsd; }
 function mc() { mkdir "$1" && cd "$1" || return; }
 
 # Helpers
-function te() { pv -cN source "$1" | gzip -cd - | pv -cN extract | tar -x; }
+function te() { pv -N source "$1" | gzip -cd - | pv -N extract | tar -x; }
 # shellcheck disable=SC2046
-function tg() { tar -cf - "$1" | pv -cN source -s $(du -sb "$1" | awk '{print $1}') | gzip | pv -cN compress >"$1".tar.gz; }
+function tg() { tar -cf - "$1" | pv -N source -s $(du -sb "$1" | awk '{print $1}') | gzip | pv -N compress >"$1".tar.gz; }
 function bak() { mv "$1" "$1".bak; }
 # shellcheck disable=SC2086
 function ubak() { mv $1 ${1%.bak}; }
