@@ -1,10 +1,12 @@
 # Alias for build system tools
 
 # Make
+alias m=make
 alias mj="make -j \$(nproc)"
 function mje() { mj "$1" && ./"$1"; }
 
 # Ninja
+alias n=ninja
 alias nj="ninja -j \$(nproc)"
 function nje() { nj "$1" && ./"$1"; }
 
