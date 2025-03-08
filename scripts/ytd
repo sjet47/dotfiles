@@ -1,6 +1,6 @@
 #!/bin/bash
 
 list=$1
-amount=$(wc -l $1 | awk '{ print $1 }')
+amount=$(wc -l <(cat $list | sort | uniq) | awk '{ print $1 }')
 
-cat $list | xargs -n 1 -P $amount yt-dlp
+cat $list | sort | uniq | xargs -n 1 -P $amount yt-dlp
