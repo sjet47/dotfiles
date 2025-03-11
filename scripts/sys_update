@@ -18,18 +18,18 @@ get_os_id() {
 }
 
 pacman_update() {
-    yes "" | yay -Syyu --logfile "$LOG_DIR/yay/$1"
+    yes "" | yay -Syyu --logfile "$LOG_DIR/yay/$1" || true
 }
 
 apt_update() {
     sudo apt update | ts | tee "$LOG_DIR/apt/$1"
-    sudo apt upgrade -y | ts | "tee -a $LOG_DIR/apt/$1"
+    sudo apt upgrade -y | ts | "tee -a $LOG_DIR/apt/$1" || true
 }
 
 brew_update() {
     brew update | tee "$LOG_DIR/brew/$1"
     brew upgrade | tee -a "$LOG_DIR/brew/$1"
-    brew upgrade --cask --greedy | tee -a "$LOG_DIR/brew/$1"
+    brew upgrade --cask --greedy | tee -a "$LOG_DIR/brew/$1" || true
 }
 
 case $(get_os_id) in
