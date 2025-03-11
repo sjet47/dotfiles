@@ -91,10 +91,11 @@ function install_user() {
     # Most tools can be installed with cargo install, so install it first
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     source $HOME/.cargo/env
+    cargo install cargo-binstall
 
     info "installing package {lsd, bat, zoxide, pv} with Cargo " 3 '*'
     # shellcheck disable=SC2068
-    cargo install lsd bat zoxide pv
+    cargo binstall --strategies crate-meta-data lsd bat zoxide pv
 
     info "installing starship " 3 '*'
     # Install starship
