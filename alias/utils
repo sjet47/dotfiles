@@ -40,14 +40,6 @@ function ya() {
     fi
     /bin/rm -f -- "$tmp"
 }
-function mntenv() {
-    local target_dir
-    for host in "$@"; do
-        target_dir=$ENV_DIR/$host
-        mkdir -p $target_dir
-        sshfs -o allow_other,default_permissions $host:~/ $target_dir
-    done
-}
 function heifc() {
     local src="$1"
     local format="${2:-png}"
