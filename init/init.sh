@@ -72,6 +72,7 @@ function main() {
     check_env
 
     for step in "${STEPS[@]}"; do
+        tlog "running step: $step"
         # shellcheck disable=SC2068
         bash $step $@
     done
