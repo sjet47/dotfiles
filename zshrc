@@ -152,7 +152,7 @@ if [[ ! $LOAD_ONCE ]]; then
     cargo
     zoxide
     atuin
-    kubernetes
+    # kubernetes
     # terraform
     # fuck
     # carapace
