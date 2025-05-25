@@ -49,7 +49,7 @@ macOS)
 esac
 
 # Update with pip(Python)
-python3 -m pip --log "$LOG_DIR/pip/$logname" install --upgrade pip --break-system
+#python3 -m pip --log "$LOG_DIR/pip/$logname" install --upgrade pip --break-system
 
 # Update with rustup(Rust)
 rustup update
@@ -64,4 +64,3 @@ echo Pulling zsh-completions
 (cd "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" && git pull)
 echo Pulling zsh-highlighting
 (cd "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" && git pull)
-
