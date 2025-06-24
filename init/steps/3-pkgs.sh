@@ -91,19 +91,23 @@ function install_user() {
     # Most tools can be installed with cargo install, so install it first
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     source $HOME/.cargo/env
-    cargo install cargo-binstall
 
-    info "installing package {lsd, bat, zoxide, pv} with Cargo " 3 '*'
-    # shellcheck disable=SC2068
-    cargo binstall --strategies crate-meta-data lsd bat zoxide pv
+    info "installing package {lsd, bat, zoxide, pv, starship, atuin} with Cargo " 3 '*'
 
-    info "installing starship " 3 '*'
-    # Install starship
-    curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
+    cargo install lsd bat zoxide pv starship atuin
 
-    info "installing atuin " 3 '*'
-    # Install atuin
-    curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
+    #cargo install cargo-binstall
+
+    ## shellcheck disable=SC2068
+    #cargo binstall --strategies crate-meta-data lsd bat zoxide pv
+
+    #info "installing starship " 3 '*'
+    ## Install starship
+    #curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
+
+    #info "installing atuin " 3 '*'
+    ## Install atuin
+    #curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
 
     ok "all pkgs installed"
 }
