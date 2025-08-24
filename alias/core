@@ -1,4 +1,4 @@
-# Alias for core function
+# Wrappers for core function
 
 # Need to install: bat, lsd, zoxide, fzf, ripgrep, nvim, lolcat
 

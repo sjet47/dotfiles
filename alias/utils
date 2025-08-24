@@ -13,7 +13,8 @@ alias gb2utf8="enca -L zh_CN -x UTF-8"
 alias rcs="rclone sync -P --multi-thread-streams 8"
 alias wrapQuote='sed "s/\(.*\)/\"\1\"/"'
 alias wordmatch="cat /usr/share/dict/words | rg"
-alias now='date "+%Y-%m-%dT%H:%M:%S%:z"'
+alias now='date "+%Y-%m-%dT%H:%M:%S%:z"' # current time in RFC 3339 format
+alias uts='date +%s -d' # convert time str to unix epoch
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias weather="curl --noproxy '*' wttr.in"
 alias myip="curl -s ifconfig.me -w '\n' | nali"
@@ -24,6 +25,8 @@ function mkbak() { rsync -av "$1" $BACKUP_DIR/$1; }
 function rmDS_Store() { fd .DS_Store "$1" -H | sed "s/\(.*\)/\"\1\"/" | xargs rm -v; }
 function port() { ss -nap | grep "$1" | less; }
 function md5verify() { md5sum "$1" | grep -f "$1".md5; }
+function pts() { date -d @"$1"; } # parse UNIX timestamp to human-readable format
+function nowts() { echo $[$(date +%s) + "${1:-0}"]; } # get current UNIX timestamp + offset
 
 # Helpers
 function arc() {
