@@ -6,5 +6,5 @@ MOUNT_DIR=${MOUNT_DIR:-$HOME}
 for host in "$@"; do
     target_dir=$ENV_DIR/$host
     mkdir -p $target_dir
-    sshfs -o allow_other,default_permissions $host:$MOUNT_DIR $target_dir
+    sshfs $host:$MOUNT_DIR $target_dir
 done
