@@ -18,6 +18,7 @@ alias uts='date +%s -d' # convert time str to unix epoch
 alias busy="cat /dev/urandom | hexdump -C | grep 'ca fe'"
 alias weather="curl --noproxy '*' wttr.in"
 alias myip="curl -s ifconfig.me -w '\n' | nali"
+alias explain="gh copilot explain"
 function line() { sed -n "${1}p" $2; }
 function h2m() { curl "$1" | html2text --mark-code >"$2.md"; }
 function cvh264() { ffmpeg -hwaccel cuvid -c:v h264_cuvid -i "$2" -c:v h264_nvenc -crf "$1" -c:a copy "$3"; }
