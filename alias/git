@@ -27,3 +27,15 @@ function gadsm() {
     repo_url=$(git_repo_url $repo_path)
     git submodule add $repo_url $repo_path
 }
+function gpw() {
+    local worktree=$1
+    local main_branch=${2:-master}
+    # Assume $PWD in work-tree dir
+    (
+        cd .. || return
+        git pull origin $main_branch
+        git switch -C $worktree && git switch $main_branch
+        cd $worktree || return
+        git switch $worktree
+    )
+}
