@@ -31,11 +31,20 @@ function gpw() {
     local worktree=$1
     local main_branch=${2:-master}
     # Assume $PWD in work-tree dir
+    git switch -C tmp
     (
         cd .. || return
         git pull origin $main_branch
         git switch -C $worktree && git switch $main_branch
-        cd $worktree || return
-        git switch $worktree
     )
+    git switch $worktree
+}
+function grw() {
+    local main_branch=${1:-master}
+    # Assume $PWD in work-tree dir
+    (
+        cd .. || return
+        git pull origin $main_branch
+    )
+    git rebase $main_branch
 }
