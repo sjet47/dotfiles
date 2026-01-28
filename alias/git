@@ -17,6 +17,7 @@ alias grbi="git rebase -i"
 alias grs="git restore"
 alias gmg="git merge"
 alias gpk="git cherry-pick"
+alias gbf="git branch -f"  # usage: gbrf <branch> (moves branch to current HEAD)
 
 function ghc() { git clone --recurse-submodules "https://github.com/$1.git"; }
 function ghcs() { git clone --recurse-submodules "git@github.com:$1.git"; }
@@ -28,14 +29,15 @@ function gadsm() {
     git submodule add $repo_url $repo_path
 }
 function gpw() {
-    local worktree=$1
+    local worktree="${1:-${PWD##*/}}"
     local main_branch=${2:-master}
     # Assume $PWD in work-tree dir
     git switch -C tmp
     (
         cd .. || return
+        git switch $main_branch
         git pull origin $main_branch
-        git switch -C $worktree && git switch $main_branch
+        git branch -f $worktree
     )
     git switch $worktree
 }

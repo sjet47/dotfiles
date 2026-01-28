@@ -8,6 +8,7 @@ config/*
 # Directories
 !config/alacritty/
 !config/atuin/
+!config/zellij/
 
 # Files
 !config/okularpartrc
