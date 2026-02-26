@@ -43,6 +43,8 @@ PATH="$PATH:$GOPATH/bin"
 PATH="$PATH:/usr/share/bcc/tools"
 export PATH
 
+export SHELL="/usr/bin/bash"
+
 ## Internal
 
 # Update log path
