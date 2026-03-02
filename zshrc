@@ -186,6 +186,7 @@ alias_profiles=(
   git
   docker
   kubernetes
+  agent
   # wezterm
   # terraform
   # tmux
