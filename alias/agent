@@ -1,0 +1,2 @@
+# Wrappers for code agent
+alias claudea="claude --allow-dangerously-skip-permissions"

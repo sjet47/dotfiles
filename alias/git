@@ -9,6 +9,7 @@ alias gps="git push"
 alias gpl="git pull"
 alias gsw="git switch"
 alias gdf="git diff"
+alias gdfc="git diff --cached"
 alias gdft="git difftool"
 alias gcl="git clone --recurse-submodules"
 alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -49,4 +50,10 @@ function grw() {
         git pull origin $main_branch
     )
     git rebase $main_branch
+}
+function gpo() {
+    local target_branch=${1:-master}
+    local remote=${2:-origin}
+    git fetch $remote $target_branch
+    git branch -f $target_branch $remote/$target_branch
 }
