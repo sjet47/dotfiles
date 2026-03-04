@@ -1,0 +1,3 @@
+# Codex Completion
+eval $(codex completion zsh)
+

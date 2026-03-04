@@ -1,2 +1,3 @@
 # Wrappers for code agent
-alias claudea="claude --allow-dangerously-skip-permissions"
+alias claude="claude --allow-dangerously-skip-permissions"
+alias codex="codex --yolo"

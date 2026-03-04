@@ -154,6 +154,7 @@ if [[ ! $LOAD_ONCE ]]; then
     cargo
     zoxide
     atuin
+    codex
     # kubernetes
     # terraform
     # fuck
