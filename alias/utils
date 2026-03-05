@@ -53,3 +53,22 @@ function heifc() {
     local dst="$dst_dir/${src%.*}.$format"
     heif-convert -q $rate "$src" "$dst"
 }
+function s() {
+  local q="${1:-}"
+  local ctx="${2:-15}"
+
+  rg --line-number --no-heading --color=always -- "$q" \
+    | fzf --ansi --height=80% --reverse \
+          --delimiter ':' \
+          --preview "
+            f={1}; l={2};
+            start=\$((l-$ctx)); [ \$start -lt 1 ] && start=1
+            end=\$((l+$ctx))
+            sed -n \"\${start},\${end}p\" \"\$f\" \
+              | bat --style=numbers --color=always --paging=never \
+                    --file-name \"\$f\" \
+                    --highlight-line \$((l-start+1))
+          " \
+          --preview-window=right:70% \
+          --bind 'enter:execute(vim +{2} -- {1})+abort'
+}

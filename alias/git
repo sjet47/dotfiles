@@ -19,6 +19,7 @@ alias grs="git restore"
 alias gmg="git merge"
 alias gpk="git cherry-pick"
 alias gbf="git branch -f"  # usage: gbrf <branch> (moves branch to current HEAD)
+alias lg="lazygit"
 
 function ghc() { git clone --recurse-submodules "https://github.com/$1.git"; }
 function ghcs() { git clone --recurse-submodules "git@github.com:$1.git"; }
