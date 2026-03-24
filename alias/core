@@ -22,7 +22,7 @@ alias lla="lsd -lha"
 alias ci="zi"
 alias ..="cl .."
 function cl() { z $1 && lsd; }
-function mc() { mkdir "$1" && cd "$1" || return; }
+function mc() { mkdir -pv "$1" && cd "$1" || return; }
 
 # Helpers
 function te() { pv -N source "$1" | gzip -cd - | pv -N extract | tar -x; }
