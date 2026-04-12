@@ -18,14 +18,19 @@ from rich.progress import (
 FRESH_RATE = 0.1
 TEST_TARGET = "./..."
 
+
 def get_test_names(pattern: str) -> Iterable[str]:
-    result = subprocess.run(["go", "test", "-list", pattern, TEST_TARGET], capture_output=True)
+    result = subprocess.run(
+        ["go", "test", "-list", pattern, TEST_TARGET], capture_output=True
+    )
     return filter(
         lambda line: line.startswith("Test"), result.stdout.decode("utf-8").split("\n")
     )
 
 
 class Test:
+    _proc: subprocess.Popen
+
     def __init__(self, name: str, start: bool = False, timeout: str = "1200s"):
         self.name: str = name
         self.timeout: str = timeout
@@ -34,7 +39,15 @@ class Test:
             self.start()
 
     def start(self) -> Self:
-        cmd = ["go", "test", "-count=1", f"-timeout={self.timeout}", "-run", self.name, TEST_TARGET]
+        cmd = [
+            "go",
+            "test",
+            "-count=1",
+            f"-timeout={self.timeout}",
+            "-run",
+            self.name,
+            TEST_TARGET,
+        ]
         self._proc = subprocess.Popen(
             cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
@@ -150,5 +163,5 @@ def main(pattern: str):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        sys.argv.append("Test") # Use "Test" to grep all tests
+        sys.argv.append("Test")  # Use "Test" to grep all tests
     main(sys.argv[1])
