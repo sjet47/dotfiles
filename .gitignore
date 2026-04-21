@@ -4,12 +4,17 @@ nvim/plugin
 
 # White list
 config/*
+pi-agent/*
 
 # Directories
 !config/alacritty/
 !config/atuin/
 !config/zellij/
+!pi-agent/extensions/
 
 # Files
 !config/okularpartrc
 !config/krunnerrc
+!pi-agent/models.json
+!pi-agent/pi-sub-bar-settings.json
+!pi-agent/settings.json

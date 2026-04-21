@@ -1,0 +1,43 @@
+{
+  "lastChangelogVersion": "0.68.0",
+  "defaultProvider": "heybox",
+  "defaultModel": "gpt-5.4",
+  "defaultThinkingLevel": "medium",
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-messenger",
+    "npm:pi-mcp-adapter",
+    "npm:@plannotator/pi-extension",
+    "npm:pi-btw",
+    "npm:pi-tool-display",
+    "npm:pi-rtk-optimizer",
+    "npm:@tmustier/pi-usage-extension",
+    "npm:pi-command-history",
+    "npm:@marckrenn/pi-sub-bar",
+    "npm:@benvargas/pi-openai-fast",
+    "npm:pi-subagents",
+    "npm:@burneikis/pi-fzfp",
+    "npm:pi-markdown-preview",
+    "npm:pi-mermaid"
+  ],
+  "enabledModels": [
+    "anthropic/claude-opus-4-6",
+    "anthropic/claude-sonnet-4-6",
+    "anthropic/claude-opus-4-7",
+    "openai-codex/gpt-5.4",
+    "openai-codex/gpt-5.4-mini",
+    "github-copilot/claude-opus-4.7",
+    "github-copilot/gpt-5.4",
+    "heybox/gpt-5.4"
+  ],
+  "enableInstallTelemetry": false,
+  "hideThinkingBlock": true,
+  "showHardwareCursor": true,
+  "editorPaddingX": 1,
+  "collapseChangelog": true,
+  "treeFilterMode": "default",
+  "compaction": {
+    "enabled": false
+  },
+  "theme": "dark"
+}
