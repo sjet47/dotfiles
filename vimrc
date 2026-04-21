@@ -13,13 +13,13 @@ set sidescrolloff=8
 "----------------------------------------------------------------------
 
 " 设置缩进宽度
-set sw=2
+set shiftwidth=2
 
 " 设置 TAB 宽度
-set ts=2
+set tabstop=2
 
-" 禁止展开 tab (noexpandtab)
-set noet
+" 展开 tab 为 space
+set expandtab
 
 "----------------------------------------------------------------------
 " 基础设置

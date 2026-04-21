@@ -35,8 +35,8 @@ export GPG_TTY=$(tty)
 
 # PATH
 # PATH=$PATH:$NEWPATH
+PATH="$HOME/.local/bin:$PATH"
 PATH="$PATH:$DOTFILE_DIR/scripts"
-PATH="$PATH:$HOME/.local/bin"
 PATH="$PATH:$PYENV_PATH/bin"
 PATH="$PATH:$PYENV_PATH/shims"
 PATH="$PATH:$GOPATH/bin"

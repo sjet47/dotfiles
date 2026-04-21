@@ -1,2 +1,3 @@
 registry=https://registry.npmjs.org
 #registry=http://npm.tuna.tsinghua.edu.cn/registry
+prefix=${HOME}/.local

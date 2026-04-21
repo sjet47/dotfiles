@@ -1,3 +1,4 @@
 # Wrappers for code agent
 alias claude="claude --dangerously-skip-permissions"
 alias codex="codex --yolo"
+alias copilot="copilot --yolo"
