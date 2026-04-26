@@ -30,30 +30,14 @@ function read_flag_user() {
     return 1
 }
 
-function read_os() {
-    ## Get distribution name
-    local os_name
-    os_name=$(uname)
-    if [[ $os_name == "Linux" ]]; then
-        cat <(awk '{print $1}' </etc/issue)
-    elif [[ $os_name == "Darwin" ]]; then
-        echo "macOS"
-    fi
-}
-
 function install_pkgs_arch() {
+    info "Installing packages with yay" 3 '*'
     # shellcheck disable=SC2068
     yay -Syyu --needed --noconfirm $@
 }
 
-function install_pkgs_ubuntu() {
-    sudo apt update
-    sudo apt upgrade -y
-    # shellcheck disable=SC2068
-    sudo apt install $@
-}
-
 function install_pkgs_macos() {
+    info "Installing packages with brew" 3 '*'
     brew update
     brew upgrade
     # shellcheck disable=SC2068
@@ -61,55 +45,46 @@ function install_pkgs_macos() {
 }
 
 function install_system() {
-    local disv
-    disv=$(read_os)
-    info "Detected distribution: $disv" 0 '*'
+    local os_type
+    os_type=$(detect_os)
 
-    case "$disv" in
-    Arch)
-        # shellcheck disable=SC2068
-        install_pkgs_arch ${PKG[@]}
-        ;;
-    Ubuntu)
-        # shellcheck disable=SC2068
-        install_pkgs_ubuntu ${PKG[@]}
-        ;;
-    macOS)
+    case "$os_type" in
+    macos)
+        info "Detected: macOS" 0 '*'
         # shellcheck disable=SC2068
         install_pkgs_macos ${PKG[@]}
         ;;
-    *)
-        fatal "unsupported OS: $disv"
+    arch)
+        info "Detected: Arch Linux" 0 '*'
+        # shellcheck disable=SC2068
+        install_pkgs_arch ${PKG[@]}
+        ;;
+    other)
+        info "Unsupported OS detected, falling back to --user mode" 0 '!'
+        install_user
         ;;
     esac
 }
 
 function install_user() {
-    info "install pkgs for user"
+    info "Installing packages for user (local environment)" 0 '*'
 
-    info "installing Cargo" 3 '*'
-    # Most tools can be installed with cargo install, so install it first
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source $HOME/.cargo/env
+    # Install Rust toolchain first as it's needed for cargo
+    if ! command -v cargo &>/dev/null; then
+        info "Installing Rust toolchain with rustup" 3 '*'
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --no-modify-path
+        # shellcheck disable=SC1091
+        source "$HOME/.cargo/env"
+    else
+        info "Cargo already installed, skipping rustup" 3
+    fi
 
-    info "installing package {lsd, bat, zoxide, pv, starship, atuin} with Cargo " 3 '*'
-
+    # Install packages using cargo
+    info "Installing packages {lsd, bat, zoxide, pv, starship, atuin} with Cargo" 3 '*'
+    # shellcheck disable=SC2068
     cargo install lsd bat zoxide pv starship atuin
 
-    #cargo install cargo-binstall
-
-    ## shellcheck disable=SC2068
-    #cargo binstall --strategies crate-meta-data lsd bat zoxide pv
-
-    #info "installing starship " 3 '*'
-    ## Install starship
-    #curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
-
-    #info "installing atuin " 3 '*'
-    ## Install atuin
-    #curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
-
-    ok "all pkgs installed"
+    ok "All packages installed for user"
 }
 
 function main() {
