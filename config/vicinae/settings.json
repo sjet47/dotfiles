@@ -1,0 +1,122 @@
+// This configuration is merged with the default vicinae configuration file, which you can obtain by running the `vicinae config default` command.
+// Every item defined in this file takes precedence over the values defined in the default config or any other imported file.
+//
+// You can make manual edits to this file, however you should keep in mind that this file may be written to by vicinae when a configuration change is made through the GUI.
+// When that happens, any custom comments or formatting will be lost.
+//
+// If you want to maintain a configuration file with your own comments and formatting, you should create a separate file and add it to the 'imports' array.
+//
+// Learn more about configuration at https://docs.vicinae.com/config
+{
+   "$schema": "https://vicinae.com/schemas/config.json",
+   "font": {
+      "normal": {
+         "family": "JetBrains Mono",
+         "size": 12
+      }
+   },
+   "theme": {
+      "dark": {
+         "name": "one-dark"
+      }
+   },
+   "telemetry": {
+      "system_info": false
+   },
+   "fallbacks": [
+      "shortcuts:6cadf337-9f7c-4325-ad8a-bab7b4a71eeb"
+   ],
+   "providers": {
+      "@Gelei/store.vicinae.bluetooth": {
+         "preferences": {
+            "connectionToggleable": true
+         }
+      },
+      "@destiner/store.raycast.unix-timestamp": {
+         "preferences": {
+            "format": "seconds",
+            "isUTC": false
+         },
+         "entrypoints": {
+            "current-timestamp": {
+               "alias": "now"
+            },
+            "date-to-timestamp": {
+               "alias": "uts"
+            },
+            "timestamp-to-date": {
+               "alias": "pts"
+            }
+         }
+      },
+      "@fuksman/store.raycast.calendar": {
+         "preferences": {
+            "showWeeks": true,
+            "viewMode": "1",
+            "weekStart": "0"
+         }
+      },
+      "applications": {
+         "entrypoints": {
+            "code": {
+               "alias": "code"
+            }
+         }
+      },
+      "clipboard": {
+         "entrypoints": {
+            "history": {
+               "alias": "ch"
+            }
+         }
+      },
+      "scripts": {
+         "enabled": true,
+         "preferences": {
+            "customDirs": [
+               "/home/sjet/dotfiles/config/vicinae/scripts"
+            ]
+         },
+         "entrypoints": {
+            "code-django.sh": {
+               "alias": "cdjango",
+               "enabled": true
+            },
+            "code-go.sh": {
+               "alias": "cgo",
+               "enabled": true
+            },
+            "code-script.sh": {
+               "alias": "cscript",
+               "enabled": true
+            }
+         }
+      },
+      "shortcuts": {
+         "enabled": true,
+         "entrypoints": {
+            "0fac9799-f4e3-4291-868a-5a2db7b589dd": {
+               "alias": "glab-script"
+            },
+            "36a40cd4-9936-4b37-8963-1899c1699395": {
+               "alias": "devops"
+            },
+            "64b7505d-c2f9-4b87-a7ae-7bc3f82289f2": {
+               "alias": "glab-go"
+            },
+            "6cadf337-9f7c-4325-ad8a-bab7b4a71eeb": {
+               "alias": "google"
+            },
+            "b32a53f9-c6e8-4dec-a4cd-d9a60968a83f": {
+               "alias": "gh"
+            },
+            "c685c459-637c-4aba-8225-9fa2bf495afb": {
+               "alias": "ab"
+            },
+            "c7ac3cdd-8916-4a36-8380-cdb4adfe1d00": {
+               "alias": "glab-django"
+            }
+         }
+      }
+   }
+}
