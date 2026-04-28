@@ -10,6 +10,7 @@ pi-agent/*
 !config/alacritty/
 !config/atuin/
 !config/zellij/
+!config/hypr/
 !pi-agent/extensions/
 
 # Files
