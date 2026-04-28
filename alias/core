@@ -23,6 +23,7 @@ alias ci="zi"
 alias ..="cl .."
 function cl() { z $1 && lsd; }
 function mc() { mkdir -pv "$1" && cd "$1" || return; }
+[ "$TERM" = "xterm-kitty" ] && alias ssh="kitten ssh --kitten=shell_integration=disabled"
 
 # Helpers
 function te() { pv -N source "$1" | gzip -cd - | pv -N extract | tar -x; }
