@@ -21,3 +21,4 @@ pi-agent/*
 !pi-agent/models.json
 !pi-agent/pi-sub-bar-settings.json
 !pi-agent/settings.json
+config/hypr/local/*
