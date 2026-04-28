@@ -11,6 +11,7 @@ pi-agent/*
 !config/atuin/
 !config/zellij/
 !config/hypr/
+!config/waybar/
 !config/vicinae/
 !pi-agent/extensions/
 
