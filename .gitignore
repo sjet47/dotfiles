@@ -13,6 +13,7 @@ pi-agent/*
 !config/hypr/
 !config/waybar/
 !config/vicinae/
+!config/kitty/
 !pi-agent/extensions/
 
 # Files
