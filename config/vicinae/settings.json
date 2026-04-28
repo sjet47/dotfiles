@@ -7,6 +7,7 @@
 // If you want to maintain a configuration file with your own comments and formatting, you should create a separate file and add it to the 'imports' array.
 //
 // Learn more about configuration at https://docs.vicinae.com/config
+
 {
    "$schema": "https://vicinae.com/schemas/config.json",
    "font": {
@@ -27,6 +28,13 @@
       "shortcuts:6cadf337-9f7c-4325-ad8a-bab7b4a71eeb"
    ],
    "providers": {
+      "@AntonNiklasson/store.raycast.lorem-ipsum": {
+         "entrypoints": {
+            "ai-generate": {
+               "enabled": false
+            }
+         }
+      },
       "@Gelei/store.vicinae.bluetooth": {
          "preferences": {
             "connectionToggleable": true
@@ -54,6 +62,44 @@
             "showWeeks": true,
             "viewMode": "1",
             "weekStart": "0"
+         }
+      },
+      "@marcjulian/store.raycast.obsidian": {
+         "preferences": {
+            "configFileName": ".obsidian",
+            "vaultPath": "/home/sjet/repo/pkm"
+         },
+         "entrypoints": {
+            "appendTaskCommand": {
+               "enabled": false
+            },
+            "createNoteCommand": {
+               "enabled": false
+            },
+            "dailyNoteAppendCommand": {
+               "enabled": false
+            },
+            "dailyNoteCommand": {
+               "enabled": false
+            },
+            "openVaultCommand": {
+               "enabled": false
+            },
+            "openWorkspaceCommand": {
+               "enabled": false
+            },
+            "randomNoteCommand": {
+               "enabled": false
+            },
+            "runActionCommand": {
+               "enabled": false
+            },
+            "searchMedia": {
+               "enabled": false
+            },
+            "starredNotesCommand": {
+               "enabled": false
+            }
          }
       },
       "applications": {
@@ -98,14 +144,23 @@
             "0fac9799-f4e3-4291-868a-5a2db7b589dd": {
                "alias": "glab-script"
             },
+            "23d3c218-bf1a-4f45-88d2-f27e0d1b4273": {
+               "alias": "cm-task"
+            },
             "36a40cd4-9936-4b37-8963-1899c1699395": {
                "alias": "devops"
             },
             "64b7505d-c2f9-4b87-a7ae-7bc3f82289f2": {
                "alias": "glab-go"
             },
+            "67af4b93-cb83-4cf1-bf3f-c6152aa08bc6": {
+               "alias": "cm-finance"
+            },
             "6cadf337-9f7c-4325-ad8a-bab7b4a71eeb": {
                "alias": "google"
+            },
+            "76a69160-607a-47c0-8e6d-310153204e75": {
+               "alias": "cm-dsp"
             },
             "b32a53f9-c6e8-4dec-a4cd-d9a60968a83f": {
                "alias": "gh"
@@ -115,6 +170,9 @@
             },
             "c7ac3cdd-8916-4a36-8380-cdb4adfe1d00": {
                "alias": "glab-django"
+            },
+            "cea8fff1-a4ac-41e1-a4c7-17f4dc1312b8": {
+               "alias": "cm-financial"
             }
          }
       }
