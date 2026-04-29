@@ -11,6 +11,7 @@ border-size=0
 border-radius=14
 max-icon-size=48
 icon-location=left
+icon-border-radius=8
 
 font=Noto Sans, Noto Sans CJK SC, Apple Color Emoji, JetBrainsMono Nerd Font 13
 background-color=#1c1c1eE6
