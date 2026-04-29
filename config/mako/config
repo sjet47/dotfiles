@@ -3,6 +3,7 @@ layer=overlay
 default-timeout=5000
 
 width=380
+height=140
 margin=8
 outer-margin=12
 padding=14,18
