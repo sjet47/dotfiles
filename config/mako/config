@@ -1,0 +1,33 @@
+anchor=top-right
+layer=overlay
+default-timeout=5000
+
+width=380
+margin=8
+outer-margin=12
+padding=14,18
+border-size=0
+border-radius=14
+max-icon-size=48
+icon-location=left
+
+font=sans-serif 12
+background-color=#1c1c1eE6
+text-color=#f5f5f7
+
+markup=1
+format=<b>%s</b>\n<span alpha="80%%">%b</span>
+
+[urgency=low]
+default-timeout=4000
+
+[urgency=critical]
+default-timeout=0
+background-color=#3a1d1fEE
+text-color=#ffd5d5
+
+[mode=do-not-disturb]
+invisible=true
+
+[mode=do-not-disturb app-name=notify-send]
+invisible=false
