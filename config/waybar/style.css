@@ -1,11 +1,17 @@
-@define-color background rgba(28, 28, 30, 0.85);
-@define-color foreground #f5f5f7;
-@define-color accent #ffffff;
+@define-color background        rgba(28, 28, 30, 0.78);
+@define-color background-hover  rgba(255, 255, 255, 0.08);
+@define-color background-active rgba(255, 255, 255, 0.14);
+@define-color separator         rgba(255, 255, 255, 0.10);
+@define-color border            rgba(255, 255, 255, 0.07);
+@define-color foreground        #f5f5f7;
+@define-color muted             #98989d;
+@define-color accent            #ffffff;
+@define-color warning           #ffd60a;
+@define-color critical          #ff453a;
 
 * {
   background-color: transparent;
   color: @foreground;
-
   border: none;
   border-radius: 0;
   min-height: 0;
@@ -15,64 +21,76 @@
 
 window#waybar {
   background-color: @background;
+  border-radius: 14px;
+  border: 1px solid @border;
 }
 
-.modules-left {
-  margin-left: 8px;
+.modules-left  { margin-left: 10px; }
+.modules-right { margin-right: 10px; }
+
+#custom-arch {
+  color: @foreground;
+  font-size: 18px;
+  margin: 0 10px 0 4px;
 }
 
-.modules-right {
-  margin-right: 8px;
-}
+#workspaces { margin: 0 4px; }
 
 #workspaces button {
   all: initial;
-  padding: 0 6px;
-  margin: 0 1.5px;
-  min-width: 9px;
-  color: @foreground;
+  color: @muted;
+  padding: 0 9px;
+  margin: 4px 2px;
+  min-width: 10px;
+  border-radius: 7px;
+  transition: all 180ms ease;
 }
 
-#workspaces button.empty {
-  opacity: 0.45;
+#workspaces button:hover {
+  color: @foreground;
+  background-color: @background-hover;
 }
 
 #workspaces button.active {
-  color: @accent;
+  color: @foreground;
+  background-color: @background-active;
+}
+
+#workspaces button.empty {
+  opacity: 0.5;
 }
 
 #cpu,
 #battery,
 #pulseaudio,
-#custom-arch {
-  min-width: 12px;
-  margin: 0 7.5px;
-}
-
-#tray {
-  margin-right: 16px;
-}
-
+#network,
 #bluetooth {
-  margin-right: 17px;
+  margin: 0 8px;
+  padding: 0 2px;
 }
 
-#network {
-  margin-right: 13px;
-}
+#tray { margin: 0 8px; }
 
 #custom-expand-icon {
-  margin-right: 18px;
+  margin: 0 8px;
+  color: @muted;
 }
 
 #clock {
-  margin-left: 8.75px;
+  margin-left: 14px;
+  padding-left: 14px;
+  border-left: 1px solid @separator;
   font-feature-settings: "tnum";
 }
 
+#battery.warning  { color: @warning;  }
+#battery.critical { color: @critical; }
+#network.disconnected,
+#pulseaudio.muted { color: @muted; }
+
 tooltip {
   background-color: rgba(28, 28, 30, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 8px;
   padding: 2px;
 }
@@ -82,6 +100,4 @@ tooltip label {
   padding: 4px 8px;
 }
 
-.hidden {
-  opacity: 0;
-}
+.hidden { opacity: 0; }
