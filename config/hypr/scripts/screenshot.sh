@@ -1,7 +1,7 @@
 #!/bin/bash
 # 截图：smart(默认) / region / window / fullscreen
-# 自动 wl-copy + 落盘到 ~/Pictures，通知点击打开 ksnip 编辑
-# 移植自 omarchy-cmd-screenshot，编辑器换成 ksnip
+# 自动 wl-copy + 落盘到 ~/Pictures，通知点击打开 satty 标注（回车=存盘+复制）
+# 移植自 omarchy-cmd-screenshot
 
 set -u
 
@@ -86,7 +86,12 @@ grim -g "$SELECTION" "$FILEPATH" || exit 1
 wl-copy <"$FILEPATH"
 
 (
-  ACTION=$(notify-send "截图已保存并复制到剪贴板" "点击编辑\n$FILEPATH" \
-    -t 8000 -i "$FILEPATH" -A "default=编辑")
-  [[ $ACTION == "default" ]] && ksnip -e "$FILEPATH"
+  ACTION=$(notify-send "截图已保存并复制到剪贴板" "点击用 satty 标注\n$FILEPATH" \
+    -t 8000 -i "$FILEPATH" -A "default=标注")
+  [[ $ACTION == "default" ]] && satty \
+    --filename "$FILEPATH" \
+    --output-filename "$FILEPATH" \
+    --actions-on-enter save-to-clipboard \
+    --save-after-copy \
+    --copy-command 'wl-copy'
 ) &
