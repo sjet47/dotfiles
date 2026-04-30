@@ -10,6 +10,7 @@
 
 {
    "$schema": "https://vicinae.com/schemas/config.json",
+   "favicon_service": "google",
    "font": {
       "normal": {
          "family": "JetBrains Mono",
@@ -18,7 +19,7 @@
    },
    "theme": {
       "dark": {
-         "name": "one-dark"
+         "name": "zenwritten-dark"
       }
    },
    "telemetry": {
@@ -83,7 +84,8 @@
                "enabled": false
             },
             "openVaultCommand": {
-               "enabled": false
+               "alias": "pkm",
+               "enabled": true
             },
             "openWorkspaceCommand": {
                "enabled": false
@@ -147,6 +149,15 @@
             "23d3c218-bf1a-4f45-88d2-f27e0d1b4273": {
                "alias": "cm-task"
             },
+            "28a17497-09f6-42d8-8392-dad4d3e19ef2": {
+               "alias": "dcoa"
+            },
+            "2e271d36-8efa-4fa2-b10d-5a0edd3c05b3": {
+               "alias": "grafana-go"
+            },
+            "2f114b5d-753d-414a-87ab-eb1d5d4eebb6": {
+               "alias": "oa-mall"
+            },
             "36a40cd4-9936-4b37-8963-1899c1699395": {
                "alias": "devops"
             },
@@ -165,6 +176,9 @@
             "76a69160-607a-47c0-8e6d-310153204e75": {
                "alias": "cm-dsp"
             },
+            "7da3bb10-ee9a-483b-a528-bb65a013ec5a": {
+               "alias": "dcm"
+            },
             "b32a53f9-c6e8-4dec-a4cd-d9a60968a83f": {
                "alias": "gh"
             },
@@ -174,8 +188,14 @@
             "c7ac3cdd-8916-4a36-8380-cdb4adfe1d00": {
                "alias": "glab-django"
             },
+            "c88ad673-ec7e-49e3-b881-8aab3fab4e77": {
+               "alias": "pcoa"
+            },
             "cea8fff1-a4ac-41e1-a4c7-17f4dc1312b8": {
                "alias": "cm-financial"
+            },
+            "f04015a9-29d6-4af8-9e13-5f7ac01ce783": {
+               "alias": "log"
             }
          }
       }
