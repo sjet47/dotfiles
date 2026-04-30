@@ -20,8 +20,8 @@ pi-agent/*
 # Files
 !config/okularpartrc
 !config/krunnerrc
-!pi-agent/models.json
 !pi-agent/pi-sub-bar-settings.json
 !pi-agent/settings.json
+
 config/hypr/local/*
 config/hypr/scripts/wallpaper.sh

@@ -1,0 +1,14 @@
+{
+  "targets": [
+    {
+      "provider": "openai-codex",
+      "model": "gpt-5.5",
+      "serviceTier": "priority"
+    },
+    {
+      "provider": "heybox",
+      "model": "gpt-5.5",
+      "serviceTier": "priority"
+    }
+  ]
+}
