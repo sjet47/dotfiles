@@ -13,11 +13,13 @@
   ],
   "modules-center": [],
   "modules-right": [
-    "group/tray-expander",
+    "tray",
+    "cpu",
+    "memory",
+    "custom/netio",
     "bluetooth",
     "network",
     "pulseaudio",
-    "cpu",
     "battery",
     "clock"
   ],
@@ -51,10 +53,20 @@
     "tooltip-format": "Arch Linux"
   },
   "cpu": {
-    "interval": 5,
-    "format": "󰍛",
+    "interval": 2,
+    "format": "󰍛 {usage}%",
     "on-click": "kitty -e btop",
     "on-click-right": "kitty"
+  },
+  "memory": {
+    "interval": 2,
+    "format": "󰘚 {used:0.1f}/{total:0.1f}G",
+    "tooltip-format": "{percentage}% used"
+  },
+  "custom/netio": {
+    "interval": 2,
+    "exec": "/home/sjet/.config/waybar/scripts/net-io.sh",
+    "tooltip": false
   },
   "clock": {
     "interval": 1,
@@ -122,7 +134,7 @@
     }
   },
   "bluetooth": {
-    "format": "",
+    "format": "",
     "format-off": "󰂲",
     "format-disabled": "󰂲",
     "format-connected": "󰂱",
@@ -144,27 +156,8 @@
       "default": ["󰕿", "󰖀", "󰕾"]
     }
   },
-  "group/tray-expander": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 600,
-      "children-class": "tray-group-item"
-    },
-    "modules": [
-      "custom/expand-icon",
-      "tray"
-    ]
-  },
-  "custom/expand-icon": {
-    "format": "",
-    "tooltip": false,
-    "on-scroll-up": "",
-    "on-scroll-down": "",
-    "on-scroll-left": "",
-    "on-scroll-right": ""
-  },
   "tray": {
-    "icon-size": 12,
-    "spacing": 17
+    "icon-size": 18,
+    "spacing": 12
   }
 }

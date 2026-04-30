@@ -61,6 +61,8 @@ window#waybar {
 }
 
 #cpu,
+#memory,
+#custom-netio,
 #battery,
 #pulseaudio,
 #network,
@@ -71,9 +73,10 @@ window#waybar {
 
 #tray { margin: 0 8px; }
 
-#custom-expand-icon {
-  margin: 0 8px;
-  color: @muted;
+#cpu {
+  margin-left: 14px;
+  padding-left: 14px;
+  border-left: 1px solid @separator;
 }
 
 #clock {
