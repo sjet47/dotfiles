@@ -21,7 +21,8 @@
     "network",
     "pulseaudio",
     "battery",
-    "clock"
+    "clock",
+    "custom/notifications"
   ],
   "hyprland/workspaces": {
     "on-click": "activate",
@@ -159,5 +160,12 @@
   "tray": {
     "icon-size": 18,
     "spacing": 12
+  },
+  "custom/notifications": {
+    "exec": "echo 󰂚",
+    "interval": "once",
+    "tooltip-format": "左键查看历史 / 右键切换免打扰",
+    "on-click": "/home/sjet/.config/waybar/scripts/notifications.sh",
+    "on-click-right": "makoctl mode -t do-not-disturb"
   }
 }

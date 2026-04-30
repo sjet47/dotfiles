@@ -86,6 +86,11 @@ window#waybar {
   font-feature-settings: "tnum";
 }
 
+#custom-notifications {
+  margin-left: 10px;
+  padding: 0 4px;
+}
+
 #battery.warning  { color: @warning;  }
 #battery.critical { color: @critical; }
 #network.disconnected,
