@@ -43,7 +43,7 @@ PATH="$PATH:$GOPATH/bin"
 PATH="$PATH:/usr/share/bcc/tools"
 export PATH
 
-export SHELL="/usr/bin/bash"
+export SHELL="/bin/bash"
 
 ## Internal
 
@@ -155,6 +155,7 @@ if [[ ! $LOAD_ONCE ]]; then
     zoxide
     atuin
     codex
+    bun
     # kubernetes
     # terraform
     # fuck
@@ -202,3 +203,6 @@ if [[ -z $RELOAD ]]; then
   welcome
   RELOAD=1
 fi
+
+[[ ":$PATH:" != *":$HOME/.config/kaku/zsh/bin:"* ]] && export PATH="$HOME/.config/kaku/zsh/bin:$PATH" # Kaku PATH Integration
+[[ -f "$HOME/.config/kaku/zsh/kaku.zsh" ]] && source "$HOME/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
