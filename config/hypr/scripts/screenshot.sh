@@ -6,7 +6,7 @@
 set -u
 
 [[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
-OUTPUT_DIR="${OMARCHY_SCREENSHOT_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures}}"
+OUTPUT_DIR="${OMARCHY_SCREENSHOT_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures/Screenshots}}"
 mkdir -p "$OUTPUT_DIR"
 
 # 再次触发同一脚本时取消正在进行的选区
@@ -81,7 +81,7 @@ esac
 
 [[ -z ${SELECTION:-} ]] && exit 0
 
-FILEPATH="$OUTPUT_DIR/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png"
+FILEPATH="$OUTPUT_DIR/Screenshot_$(date +'%Y%m%d_%H%M%S').png"
 grim -g "$SELECTION" "$FILEPATH" || exit 1
 wl-copy <"$FILEPATH"
 
