@@ -43,7 +43,7 @@ PATH="$PATH:$GOPATH/bin"
 PATH="$PATH:/usr/share/bcc/tools"
 export PATH
 
-export SHELL="/bin/bash"
+export SHELL="/bin/zsh"
 
 ## Internal
 
@@ -189,9 +189,9 @@ alias_profiles=(
   docker
   kubernetes
   agent
+  tmux
   # wezterm
   # terraform
-  # tmux
 )
 
 for profile in "${alias_profiles[@]}"; do
