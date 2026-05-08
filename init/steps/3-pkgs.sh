@@ -11,6 +11,7 @@ PKG=(
     starship
     zoxide
     pv
+    tmux
 )
 
 function read_flag_user() {
@@ -108,6 +109,9 @@ function install_user() {
     #info "installing atuin " 3 '*'
     ## Install atuin
     #curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
+
+    ## Tmux plugin manager
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
     ok "all pkgs installed"
 }
