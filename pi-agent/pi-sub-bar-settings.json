@@ -17,7 +17,7 @@
       "usageLabel": true,
       "status": true
     },
-    "resetTimePosition": "front",
+    "resetTimePosition": "integrated",
     "resetTimeFormat": "relative",
     "resetTimeContainment": "[]",
     "statusIndicatorMode": "icon+text",

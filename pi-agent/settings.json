@@ -1,33 +1,38 @@
 {
-  "lastChangelogVersion": "0.70.6",
-  "defaultProvider": "github-copilot",
+  "lastChangelogVersion": "0.74.0",
+  "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "high",
   "packages": [
-    "npm:pi-web-access",
-    "npm:pi-messenger",
     "npm:pi-mcp-adapter",
     "npm:@plannotator/pi-extension",
     "npm:pi-btw",
     "npm:pi-rtk-optimizer",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-command-history",
-    "npm:@marckrenn/pi-sub-bar",
     "npm:pi-subagents",
     "npm:@burneikis/pi-fzfp",
     "npm:pi-markdown-preview",
     "npm:pi-mermaid",
     "npm:@victor-software-house/pi-multicodex",
     "npm:pi-tool-display",
-    "npm:pi-fast-mode"
+    "npm:pi-autoresearch",
+    "npm:@llblab/pi-telegram",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:@tmustier/pi-ralph-wiggum",
+    "npm:pi-schedule-prompt",
+    "npm:@aliou/pi-processes",
+    "npm:pi-fast-mode",
+    "npm:@marckrenn/pi-sub-bar",
+    "npm:pi-crew",
+    "../../repo/pi-status",
+    "npm:pi-powerline-melbourne",
+    "npm:pi-web-access"
   ],
   "enabledModels": [
     "heybox/gpt-5.5",
     "openai-codex/gpt-5.5",
-    "github-copilot/gpt-5.5",
-    "github-copilot/claude-opus-4.7",
-    "anthropic/claude-opus-4-7",
-    "anthropic/claude-sonnet-4-6",
     "openai-codex/gpt-5.4-mini"
   ],
   "enableInstallTelemetry": false,
@@ -39,5 +44,19 @@
   "compaction": {
     "enabled": false
   },
-  "theme": "dark"
+  "theme": "dark",
+  "pi-multicodex": {
+    "usageMode": "left",
+    "resetWindow": "7d",
+    "showAccount": true,
+    "showReset": true,
+    "order": "account-first"
+  },
+  "powerline": {
+    "preset": "default",
+    "mouseScroll": true,
+    "fixedEditor": true
+  },
+  "workingVibe": "startrek",
+  "workingVibeMode": "file"
 }
