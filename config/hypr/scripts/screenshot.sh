@@ -6,7 +6,7 @@
 set -u
 
 [[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
-OUTPUT_DIR="${OMARCHY_SCREENSHOT_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures/Screenshots}}"
+OUTPUT_DIR="${XDG_PICTURES_DIR/Screenshots:-$HOME/Pictures/Screenshots}"
 mkdir -p "$OUTPUT_DIR"
 
 # 再次触发同一脚本时取消正在进行的选区
