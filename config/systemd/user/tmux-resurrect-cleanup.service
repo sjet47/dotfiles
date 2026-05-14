@@ -1,0 +1,6 @@
+[Unit]
+Description=Clean tmux-resurrect snapshots older than 30 days
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/find %h/.tmux/resurrect -name tmux_resurrect_*.txt -mtime +30 -delete

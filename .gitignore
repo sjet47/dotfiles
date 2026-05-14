@@ -15,6 +15,7 @@ pi-agent/*
 !config/vicinae/
 !config/kitty/
 !config/mako/
+!config/systemd/
 !pi-agent/extensions/
 
 # Files
@@ -25,3 +26,6 @@ pi-agent/*
 
 config/hypr/local/*
 config/hypr/scripts/wallpaper.sh
+
+# systemctl --user enable 生成的 symlinks，不入库
+config/systemd/user/*.target.wants/
