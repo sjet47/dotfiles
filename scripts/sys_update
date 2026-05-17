@@ -20,7 +20,7 @@ get_os_id() {
 pacman_update() {
     local filepath="$LOG_DIR/yay/$1"
     mkdir -p "$(dirname "$filepath")"
-    yes "" | yay -Syyu --logfile "$filepath" || true
+    yes "" | paru -Syyu --logfile "$filepath" || true
 }
 
 apt_update() {
