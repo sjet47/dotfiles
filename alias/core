@@ -14,7 +14,7 @@ alias grep="grep --color=auto"
 alias erc='nvim $HOME/.zshrc'
 alias relrc='source $HOME/.zshrc'
 alias md="mkdir -pv"
-alias cat="bat -p"
+command -v batcat &>/dev/null && alias cat="batcat -p" || alias cat="bat -p"
 alias l="lsd"
 alias la="lsd -a"
 alias ll="lsd -lh"
