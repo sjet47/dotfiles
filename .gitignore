@@ -24,8 +24,13 @@ pi-agent/*
 !pi-agent/pi-sub-bar-settings.json
 !pi-agent/settings.json
 
+# hypr local-only 配置:除模板外都不入库
 config/hypr/local/*
+!config/hypr/local/example.lua
 config/hypr/scripts/wallpaper.sh
+
+# 迁移到 hyprland.lua 后,Hyprland 在缺失时会自动生成 hyprland.conf stub,不入库
+config/hypr/hyprland.conf
 
 # systemctl --user enable 生成的 symlinks，不入库
 config/systemd/user/*.target.wants/
