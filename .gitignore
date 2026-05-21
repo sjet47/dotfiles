@@ -16,6 +16,7 @@ pi-agent/*
 !config/kitty/
 !config/mako/
 !config/systemd/
+!config/herdr/
 !pi-agent/extensions/
 
 # Files
@@ -23,6 +24,8 @@ pi-agent/*
 !config/krunnerrc
 !pi-agent/pi-sub-bar-settings.json
 !pi-agent/settings.json
+config/herdr/*.json
+config/herdr/*.log
 
 # hypr local-only 配置:除模板外都不入库
 config/hypr/local/*
