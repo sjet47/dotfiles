@@ -17,6 +17,7 @@ pi-agent/*
 !config/mako/
 !config/systemd/
 !config/herdr/
+!config/satty/
 !pi-agent/extensions/
 
 # Files
