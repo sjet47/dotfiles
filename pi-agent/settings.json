@@ -1,39 +1,44 @@
 {
-  "lastChangelogVersion": "0.74.0",
-  "defaultProvider": "openai-codex",
+  "lastChangelogVersion": "0.78.1",
+  "defaultProvider": "sub2api-openai",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-mcp-adapter",
-    "npm:@plannotator/pi-extension",
-    "npm:pi-btw",
+    {
+      "source": "npm:@plannotator/pi-extension",
+      "skills": []
+    },
     "npm:pi-rtk-optimizer",
     "npm:@tmustier/pi-usage-extension",
     "npm:pi-command-history",
-    "npm:pi-subagents",
-    "npm:@burneikis/pi-fzfp",
-    "npm:pi-markdown-preview",
-    "npm:pi-mermaid",
-    "npm:@victor-software-house/pi-multicodex",
-    "npm:pi-tool-display",
-    "npm:pi-autoresearch",
     "npm:@llblab/pi-telegram",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@juicesharp/rpiv-todo",
-    "npm:@tmustier/pi-ralph-wiggum",
     "npm:pi-schedule-prompt",
     "npm:@aliou/pi-processes",
     "npm:pi-fast-mode",
-    "npm:@marckrenn/pi-sub-bar",
-    "npm:pi-crew",
     "../../repo/pi-status",
-    "npm:pi-powerline-melbourne",
-    "npm:pi-web-access"
+    "npm:pi-web-access",
+    "npm:pi-cache-graph",
+    "npm:@juicesharp/rpiv-btw",
+    "npm:pi-execution-time",
+    "npm:pi-context-usage",
+    "npm:pi-simplify",
+    "npm:@tintinweb/pi-subagents",
+    "../../repo/pi-skill-stats",
+    "npm:pi-tps",
+    "npm:pi-hashline-readmap",
+    "../../repo/pi-shots",
+    "npm:@ogulcancelik/pi-herdr",
+    "../../repo/other/pi-intercom",
+    "npm:pi-dynamic-workflows",
+    "npm:@narumitw/pi-goal",
+    "npm:@termdraw/pi"
   ],
   "enabledModels": [
-    "heybox/gpt-5.5",
-    "openai-codex/gpt-5.5",
-    "openai-codex/gpt-5.4-mini"
+    "sub2api-openai/gpt-5.5",
+    "sub2api-openai/gpt-5.4-mini"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
@@ -49,7 +54,7 @@
     "usageMode": "left",
     "resetWindow": "7d",
     "showAccount": true,
-    "showReset": true,
+    "showReset": false,
     "order": "account-first"
   },
   "powerline": {
@@ -58,5 +63,11 @@
     "fixedEditor": true
   },
   "workingVibe": "startrek",
-  "workingVibeMode": "file"
+  "workingVibeMode": "file",
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "transport": "auto",
+  "quietStartup": false,
+  "doubleEscapeAction": "tree"
 }

@@ -20,13 +20,13 @@
     "resetTimePosition": "integrated",
     "resetTimeFormat": "relative",
     "resetTimeContainment": "[]",
-    "statusIndicatorMode": "icon+text",
+    "statusIndicatorMode": "icon",
     "statusIconPack": "minimal",
     "statusIconCustom": "😎😳😵🤔",
     "statusProviderDivider": false,
     "statusDismissOk": true,
     "showProviderName": true,
-    "providerLabel": "none",
+    "providerLabel": "sub",
     "providerLabelColon": false,
     "providerLabelBold": true,
     "baseTextColor": "muted",
@@ -112,7 +112,7 @@
   "displayThemes": [
     {
       "id": "sjet",
-      "name": "Sjet",
+      "name": "sjet",
       "display": {
         "alignment": "split",
         "barStyle": "both",
@@ -130,10 +130,10 @@
           "usageLabel": true,
           "status": true
         },
-        "resetTimePosition": "front",
+        "resetTimePosition": "integrated",
         "resetTimeFormat": "relative",
         "resetTimeContainment": "[]",
-        "statusIndicatorMode": "icon+text",
+        "statusIndicatorMode": "icon",
         "statusIconPack": "minimal",
         "statusIconCustom": "😎😳😵🤔",
         "statusProviderDivider": false,

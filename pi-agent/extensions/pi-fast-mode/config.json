@@ -9,6 +9,21 @@
       "provider": "heybox",
       "model": "gpt-5.5",
       "serviceTier": "priority"
+    },
+    {
+      "provider": "heybox",
+      "model": "gpt-5.4-mini",
+      "serviceTier": "priority"
+    },
+    {
+      "provider": "sub2api-openai",
+      "model": "gpt-5.5",
+      "serviceTier": "priority"
+    },
+    {
+      "provider": "sub2api-openai",
+      "model": "gpt-5.4-mini",
+      "serviceTier": "priority"
     }
   ]
 }
