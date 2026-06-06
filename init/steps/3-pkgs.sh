@@ -102,13 +102,13 @@ function install_user() {
     ## shellcheck disable=SC2068
     #cargo binstall --strategies crate-meta-data lsd bat zoxide pv
 
-    #info "installing starship " 3 '*'
     ## Install starship
-    #curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
+    info "installing starship " 3 '*'
+    curl -sS https://starship.rs/install.sh | sh -s -- -b $HOME/.local/bin -y
 
-    #info "installing atuin " 3 '*'
     ## Install atuin
-    #curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
+    info "installing atuin " 3 '*'
+    curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
     ## Tmux plugin manager
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
