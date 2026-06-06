@@ -23,6 +23,9 @@ export GOPATH="$HOME/.local/go"
 export PYENV_SHELL="zsh"
 export PYENV_PATH="$HOME/.pyenv"
 
+# Cargo
+export CARGO_PATH="$HOME/.cargo"
+
 # NVM path
 export NVM_DIR="$HOME/.nvm"
 
@@ -41,6 +44,7 @@ PATH="$PATH:$PYENV_PATH/bin"
 PATH="$PATH:$PYENV_PATH/shims"
 PATH="$PATH:$GOPATH/bin"
 PATH="$PATH:/usr/share/bcc/tools"
+PATH="$PATH:$CARGO_PATH/bin"
 export PATH
 
 export SHELL="/bin/zsh"
