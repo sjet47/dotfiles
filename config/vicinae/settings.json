@@ -13,7 +13,7 @@
    "favicon_service": "google",
    "font": {
       "normal": {
-         "family": "JetBrains Mono",
+         "family": "Noto Sans CJK SC",
          "size": 12
       }
    },
@@ -196,6 +196,9 @@
             },
             "f04015a9-29d6-4af8-9e13-5f7ac01ce783": {
                "alias": "log"
+            },
+            "sct-8cf581d43bf9": {
+               "alias": "oa-app"
             }
          }
       }
