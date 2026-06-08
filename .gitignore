@@ -45,3 +45,6 @@ config/hypr/hyprland.conf
 
 # systemctl --user enable 生成的 symlinks，不入库
 config/systemd/user/*.target.wants/
+
+# KDE/Plasma 自动生成,机器相关,只保留 conf.d 里我们自己的配置
+config/fontconfig/fonts.conf
