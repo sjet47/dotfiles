@@ -18,6 +18,7 @@ pi-agent/*
 !config/systemd/
 !config/herdr/
 !config/satty/
+!config/fontconfig/
 !pi-agent/extensions/
 !pi-agent/agents/
 !pi-agent/prompts/
