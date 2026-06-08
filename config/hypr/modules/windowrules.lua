@@ -70,10 +70,10 @@ hl.window_rule({
   float = true,
 })
 
--- 飞书:会话记录(XWayland,class 为 Feishu,title 含"会话记录")
+-- 飞书:会话记录(Wayland 原生,class 为空,靠 title 区分)
 hl.window_rule({
   name  = "float-feishu-chat-history",
-  match = { class = "Feishu", title = ".*会话记录$", xwayland = true },
+  match = { class = "^$", title = ".*会话记录$" },
   float = true,
 })
 
