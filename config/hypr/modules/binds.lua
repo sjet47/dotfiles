@@ -29,6 +29,9 @@ hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("~/.config/hypr/scripts/screensho
 hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh window"))
 hl.bind(mod .. " + SHIFT + F", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh fullscreen"))
 
+-- 录屏:region(默认拉框) / window / fullscreen,再次按下停止并保存到 ~/Videos
+hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenrecord.sh"))
+
 ----------------------------------------------------------------------
 -- 平铺:焦点 / 移动 / 缩放 / 工作区
 ----------------------------------------------------------------------
