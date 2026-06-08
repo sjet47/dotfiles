@@ -19,12 +19,17 @@ pi-agent/*
 !config/herdr/
 !config/satty/
 !pi-agent/extensions/
+!pi-agent/agents/
+!pi-agent/prompts/
 
 # Files
 !config/okularpartrc
 !config/krunnerrc
 !pi-agent/pi-sub-bar-settings.json
+!pi-agent/pi-sub-core-settings.json
 !pi-agent/settings.json
+!pi-agent/subagents.json
+!pi-agent/pi-tps.json
 config/herdr/*.json
 config/herdr/*.log
 
