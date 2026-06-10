@@ -93,9 +93,9 @@ function install_user() {
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     source $HOME/.cargo/env
 
-    info "installing package {lsd, bat, zoxide, pv, starship, atuin} with Cargo " 3 '*'
+    info "installing package {lsd, bat, zoxide, pv} with Cargo " 3 '*'
 
-    cargo install lsd bat zoxide pv starship atuin
+    cargo install lsd bat zoxide pv
 
     #cargo install cargo-binstall
 
