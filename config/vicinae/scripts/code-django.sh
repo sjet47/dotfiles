@@ -5,4 +5,4 @@
 # @vicinae.exec ["/bin/bash"]
 # @vicinae.icon ../icons/VSCode-Dark.svg
 
-code ~/heybox/repo/heybox
+ELECTRON_OZONE_PLATFORM_HINT=wayland code ~/heybox/repo/heybox
