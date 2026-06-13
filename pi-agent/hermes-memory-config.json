@@ -1,0 +1,4 @@
+{
+  "llmModelOverride": "deepseek/deepseek-v4-pro",
+  "llmThinkingOverride": "off"
+}
