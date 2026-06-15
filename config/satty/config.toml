@@ -14,8 +14,7 @@
     # auto-copy = false
     # Exit directly after copy/save action. 0.20.1: Does not apply to save as
     early-exit = true
-    # Exit directly after save as (0.20.1)
-    early-exit-save-as = true
+    # 0.21 起 satty 移除了 early-exit-save-as 字段,保留会导致配置解析失败、satty 启动即崩溃
     # Draw corners of rectangles round if the value is greater than 0 (0 disables rounded corners)
     corner-roundness = 0
     # Select the tool on startup [possible values: pointer, crop, line, arrow, rectangle, text, marker, blur, brush]
@@ -73,7 +72,9 @@
     # experimental feature (0.20.1): Scale factor on the input image when it was taken (e.g. DPI scale on the monitor it was recorded from).
     # This may be more useful to set via the command line.
     # Note, this is ignored with explicit resize.
-    input-scale = 1.5
+    # 0.20.1 之前 input-scale 在初始 resize 路径下被忽略(等同 1);0.21.0 修了该 bug 后
+    # 1.5 真正生效,导致图被缩放产生黑边、标注点击坐标错位。grim 截图本就是原生像素,设回 1。
+    input-scale = 1
     # experimental feature (NEXTRELEASE): set window title
     # title = "Satty"
     # experimental feature (NEXTRELEASE): set app_id, note this has to match D-Bus well-known name format, otherwise GTK does not accept it.
