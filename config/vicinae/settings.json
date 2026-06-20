@@ -130,13 +130,22 @@
                "alias": "cdjango",
                "enabled": true
             },
+            "code-dotfiles.sh": {
+               "alias": "cdotfiles"
+            },
             "code-go.sh": {
                "alias": "cgo",
                "enabled": true
             },
+            "code-nginx.sh": {
+               "alias": "cnginx"
+            },
             "code-script.sh": {
                "alias": "cscript",
                "enabled": true
+            },
+            "code-server.sh": {
+               "alias": "cserver"
             }
          }
       },
