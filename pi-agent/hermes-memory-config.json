@@ -1,4 +1,4 @@
 {
-  "llmModelOverride": "deepseek/deepseek-v4-pro",
+  "llmModelOverride": "deepseek/deepseek-v4-flash",
   "llmThinkingOverride": "off"
 }
