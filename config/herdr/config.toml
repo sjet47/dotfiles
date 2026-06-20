@@ -38,6 +38,7 @@ onboarding = false
 
     # Background notification popup delivery
     show_agent_labels_on_pane_borders = true
+    agent_panel_scope = "all"
     [ui.toast]
         # off = disable pop-up notifications
         # herdr = show top-right in-app toasts
