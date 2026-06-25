@@ -79,7 +79,10 @@ window#waybar {
 }
 
 #tray {
-  margin: 0 8px;
+  margin-right: 8px;
+  margin-left: 14px;
+  padding-left: 14px;
+  border-left: 1px solid @separator;
 }
 
 #cpu {
@@ -98,6 +101,11 @@ window#waybar {
 #custom-notifications {
   margin-left: 10px;
   padding: 0 4px;
+}
+
+#custom-stock {
+  padding: 0 6px;
+  font-feature-settings: "tnum";
 }
 
 #battery.warning {

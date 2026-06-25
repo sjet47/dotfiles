@@ -11,7 +11,9 @@
     "custom/arch",
     "hyprland/workspaces"
   ],
-  "modules-center": [],
+  "modules-center": [
+    "custom/stock"
+  ],
   "modules-right": [
     "tray",
     "cpu",
@@ -56,7 +58,7 @@
   "cpu": {
     "interval": 2,
     "format": "󰍛 {usage}%",
-    "on-click": "kitty -e btop",
+    "on-click": "kitty --class btop-float -e btop",
     "on-click-right": "kitty"
   },
   "memory": {
@@ -68,6 +70,11 @@
     "interval": 2,
     "exec": "/home/sjet/.config/waybar/scripts/net-io.sh",
     "tooltip": false
+  },
+  "custom/stock": {
+    "exec": "/home/sjet/.config/waybar/scripts/stock.sh VOO QQQ MU DRAM",
+    "return-type": "json",
+    "interval": 5
   },
   "clock": {
     "interval": 1,
