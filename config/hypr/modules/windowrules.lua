@@ -46,6 +46,15 @@ hl.window_rule({
   move  = "20 monitor_h-120",
 })
 
+-- waybar 点击 CPU 启动的 btop(独立 class,不影响普通 kitty)
+hl.window_rule({
+  name   = "float-btop",
+  match  = { class = "btop-float" },
+  float  = true,
+  size   = "60% 60%",
+  center = true,
+})
+
 hl.window_rule({ name = "float-satty", match = { class = "com.gabm.satty" },  float = true })
 hl.window_rule({ name = "float-ksnip", match = { class = "org.ksnip.ksnip" }, float = true })
 
