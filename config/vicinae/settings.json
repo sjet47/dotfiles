@@ -65,6 +65,13 @@
             "weekStart": "0"
          }
       },
+      "@knoopx/store.vicinae.otp": {
+         "entrypoints": {
+            "list-codes": {
+               "alias": "totp"
+            }
+         }
+      },
       "@marcjulian/store.raycast.obsidian": {
          "preferences": {
             "configFileName": ".obsidian",
