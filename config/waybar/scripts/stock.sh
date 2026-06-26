@@ -16,11 +16,11 @@ mkdir -p "$CACHE_DIR"
 err() { printf '{"text":"  --","tooltip":"%s"}\n' "$1"; exit 0; }
 
 # Yahoo 个股仅在 美东 周一至周五 04:00–20:00（盘前/盘中/盘后）有实时数据；
-# 夜盘/周末无新数据，直接复用上次结果并跳过网络请求，省开销（TZ 自动处理夏令时）
+# 夜盘/周末无新数据：有缓存就复用上次结果并跳过网络请求省开销，无缓存则照常跑一次
+# 以便首次也能拿到收盘价（TZ 自动处理夏令时）
 read -r DOW HM < <(TZ="America/New_York" date '+%u %H%M'); HM=$((10#$HM))
-if [ "$DOW" -ge 6 ] || [ "$HM" -lt 400 ] || [ "$HM" -ge 2000 ]; then
-    [ -s "$LAST" ] && { cat "$LAST"; exit 0; }
-    err "market closed (off-hours)"
+if { [ "$DOW" -ge 6 ] || [ "$HM" -lt 400 ] || [ "$HM" -ge 2000 ]; } && [ -s "$LAST" ]; then
+    cat "$LAST"; exit 0
 fi
 
 auth() {
