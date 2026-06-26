@@ -21,7 +21,7 @@ hl.bind(mod .. " + P",      hl.dsp.window.pseudo())        -- dwindle
 hl.bind(mod .. " + S",      hl.dsp.layout("togglesplit"))  -- dwindle
 
 -- 剪贴板历史
-hl.bind(mod .. " + V", hl.dsp.exec_cmd("cliphist list | vicinae dmenu | cliphist decode | wl-copy"))
+hl.bind(mod .. " + V", hl.dsp.exec_cmd("vicinae deeplink 'vicinae://launch/clipboard/history'"))
 
 -- 截图:smart(拉框,<20px² 自动吸附窗口/显示器) / region / window / fullscreen
 hl.bind("PRINT",             hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"))
