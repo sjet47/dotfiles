@@ -74,7 +74,7 @@
   "custom/stock": {
     "exec": "/home/sjet/.config/waybar/scripts/stock.sh VOO QQQ MU DRAM",
     "return-type": "json",
-    "interval": 5
+    "interval": 3
   },
   "clock": {
     "interval": 1,

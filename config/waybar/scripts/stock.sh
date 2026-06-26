@@ -10,9 +10,18 @@ UA="Mozilla/5.0"
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/waybar-stock"
 CK="$CACHE_DIR/cookies.txt"
 CRUMB_F="$CACHE_DIR/crumb"
+LAST="$CACHE_DIR/last.json"
 mkdir -p "$CACHE_DIR"
 
 err() { printf '{"text":"  --","tooltip":"%s"}\n' "$1"; exit 0; }
+
+# Yahoo 个股仅在 美东 周一至周五 04:00–20:00（盘前/盘中/盘后）有实时数据；
+# 夜盘/周末无新数据，直接复用上次结果并跳过网络请求，省开销（TZ 自动处理夏令时）
+read -r DOW HM < <(TZ="America/New_York" date '+%u %H%M'); HM=$((10#$HM))
+if [ "$DOW" -ge 6 ] || [ "$HM" -lt 400 ] || [ "$HM" -ge 2000 ]; then
+    [ -s "$LAST" ] && { cat "$LAST"; exit 0; }
+    err "market closed (off-hours)"
+fi
 
 auth() {
     curl -fsS -A "$UA" -c "$CK" -o /dev/null "https://fc.yahoo.com" 2>/dev/null
@@ -68,4 +77,4 @@ done <<<"$parsed"
 
 [ -z "$text" ] && err "stock parse failed"
 
-jq -cn --arg t "$text" --arg tip "$tip" '{text:$t, tooltip:$tip}'
+jq -cn --arg t "$text" --arg tip "$tip" '{text:$t, tooltip:$tip}' | tee "$LAST"
