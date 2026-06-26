@@ -12,7 +12,6 @@
     "npm:pi-web-access",
     "npm:@juicesharp/rpiv-btw",
     "npm:pi-execution-time",
-    "npm:pi-context-usage",
     "npm:pi-tps",
     "../../repo/other/pi-intercom",
     "npm:@narumitw/pi-goal",
@@ -25,7 +24,10 @@
     "../../repo/pi-stats",
     "../../repo/pi-status",
     "npm:pi-hermes-memory",
-    "npm:pi-hashline-edit-pro"
+    "npm:pi-hashline-edit-pro",
+    "npm:pi-cache-graph",
+    "npm:pi-context",
+    "npm:pi-wakatime"
   ],
   "enabledModels": [
     "sub2api-openai/gpt-5.5",
