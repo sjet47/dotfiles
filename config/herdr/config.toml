@@ -5,6 +5,10 @@ onboarding = false
 # Show first-run notification setup on startup.
 # Missing also shows onboarding; set false after you've chosen.
 # onboarding = true
+[terminal]
+	default_shell = "zsh"
+	shell_mode = "auto"
+	new_cwd = "follow"
 
 [theme]
     # Built-in themes: catppuccin, tokyo-night, dracula, nord, gruvbox,
@@ -47,8 +51,13 @@ onboarding = false
 
         # Play sounds when agents change state in background workspaces
         delivery = "terminal"
+	[ui.toast.herdr]
+		position = "top-right"
+	[ui.toast.clipboard]
+		enabled = true
+		position = "top-right"	
     [ui.sound]
-        # enabled = true
+        enabled = true
         # Optional custom mp3 sound files. Relative paths are resolved from this config file's directory.
         # path = "sounds/notification.mp3"   # one mp3 file for all sound notifications
         # done_path = "sounds/done.mp3"      # overrides only finished notifications
@@ -75,36 +84,56 @@ onboarding = false
     # alt+... and punctuation-with-modifiers may depend on your terminal/tmux setup.
     prefix = "ctrl+o"
 
-    # Navigate-mode actions
+	# Herdr actions
+    detach = "prefix+d"             # optional explicit detach shortcut in server/client mode
+    reload_config = "prefix+shift+r"      # optional shortcut to reload config.toml without restarting
+	goto = "prefix+s"
+    open_notification_target = "prefix+enter" # optional shortcut to jump to the visible notification target
+    toggle_sidebar = "prefix+b"
+	
+	# Agent actions
+    previous_agent = "alt+o"     # optional, unset by default
+    next_agent = "alt+i"         # optional, unset by default
+	focus_agent = "prefix+alt+1..9"
 
+    # Workspace actions
+	workspace_picker = "prefix+w"
     new_workspace = "prefix+n"
     rename_workspace = "prefix+shift+n"
     close_workspace = "prefix+shift+d"
-
     previous_workspace = "alt+k" # optional, unset by default
     next_workspace = "alt+j"     # optional, unset by default
-    previous_agent = "alt+o"     # optional, unset by default
-    next_agent = "alt+i"         # optional, unset by default
-    detach = "prefix+d"             # optional explicit detach shortcut in server/client mode
-    reload_config = "prefix+shift+r"      # optional shortcut to reload config.toml without restarting
-    # open_notification_target = "" # optional shortcut to jump to the visible notification target
+	switch_workspace = "prefix+shift+1..9"
+
+	# Tab actions
     new_tab = "prefix+c"
     rename_tab = "prefix+shift+c"         # optional, unset by default
     close_tab = "prefix+shift+w"          # optional, unset by default
     previous_tab = "alt+h"       # optional, unset by default
     next_tab = "alt+l"           # optional, unset by default
-    open_notification_target = "prefix+enter" # optional shortcut to jump to the visible notification target
-    # rename_pane = ""        # optional, unset by default
-    # focus_pane_left = ""    # optional, unset by default
-    # focus_pane_down = ""    # optional, unset by default
-    # focus_pane_up = ""      # optional, unset by default
-    # focus_pane_right = ""   # optional, unset by default
-    # split_vertical = "v"
-    # split_horizontal = "-"
-    # close_pane = "x"
-    # fullscreen = "f"
-    # resize_mode = "r"
-    # toggle_sidebar = "b"
+	switch_tab = "prefix+1..9"
+
+	# Pane actions
+    split_vertical = "prefix+\\"
+    split_horizontal = "prefix+-"
+    resize_mode = "prefix+r"
+    focus_pane_left = "prefix+h"    # optional, unset by default
+    focus_pane_down = "prefix+j"    # optional, unset by default
+    focus_pane_up = "prefix+k"      # optional, unset by default
+    focus_pane_right = "prefix+l"   # optional, unset by default
+	swap_pane_left = "prefix+shift+h"
+	swap_pane_down = "prefix+shift+j"
+	swap_pane_up = "prefix+shift+k"
+	swap_pane_right = "prefix+shift+l"
+    rename_pane = "prefix+p"        # optional, unset by default
+    close_pane = "prefix+x"
+    fullscreen = "prefix+f"
+
+	# Worktree actions
+	new_worktree = "prefix+shift+g"
+	open_worktree = "prefix+shift+o"
+	remove_worktree = "prefix+alt+d"
+
 
     # Custom prefix-mode commands. Press prefix, then the configured key.
     # type = "shell" runs detached in the background.
@@ -113,3 +142,8 @@ onboarding = false
     # key = "g"
     # type = "pane"
     # command = "lazygit"
+[session]
+	resume_agents_on_restore = true
+
+[experimental]
+	pane_history = true
