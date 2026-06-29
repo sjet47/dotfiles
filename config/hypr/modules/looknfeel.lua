@@ -67,6 +67,11 @@ hl.config({
   misc = {
     force_default_wallpaper = 0,    -- 0/1 关闭吉祥物壁纸
     disable_hyprland_logo   = true, -- 关闭随机 logo 背景
+
+    -- dpms 关屏后,靠输入(鼠标移动/按键)唤醒屏幕,由合成器负责正确提交+重试。
+    -- 本版本 hl.dsp.dpms("on") 点不亮,必须靠这两个开关才能可靠唤醒。
+    mouse_move_enables_dpms = true,
+    key_press_enables_dpms  = true,
   },
 
   xwayland = {
