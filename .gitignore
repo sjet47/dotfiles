@@ -37,6 +37,7 @@ pi-agent/*
 !pi-agent/pi-tps.json
 !pi-agent/settings.json
 !pi-agent/subagents.json
+!pi-agent/APPEND_SYSTEM.md
 config/herdr/*.json
 config/herdr/*.log
 

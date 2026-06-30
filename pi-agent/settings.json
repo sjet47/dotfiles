@@ -7,7 +7,6 @@
     "npm:pi-command-history",
     "npm:@llblab/pi-telegram",
     "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@juicesharp/rpiv-todo",
     "npm:pi-fast-mode",
     "npm:pi-web-access",
     "npm:@juicesharp/rpiv-btw",
@@ -19,22 +18,23 @@
     "npm:@ff-labs/pi-fff",
     "npm:@tintinweb/pi-subagents",
     "npm:@tifan/pi-recap",
-    "npm:@ayulab/pi-rewind",
     "../../repo/pi-shots",
     "../../repo/pi-stats",
     "../../repo/pi-status",
     "npm:pi-hermes-memory",
-    "npm:pi-hashline-edit-pro",
     "npm:pi-cache-graph",
-    "npm:pi-context",
-    "npm:pi-wakatime"
+    "npm:pi-wakatime",
+    "npm:@tintinweb/pi-tasks",
+    "npm:pi-readseek",
+    "npm:@aliou/pi-processes",
+    "npm:@mrclrchtr/supi-context",
+    "npm:pi-schedule-prompt"
   ],
   "enabledModels": [
     "sub2api-openai/gpt-5.5",
     "deepseek/deepseek-v4-flash",
     "deepseek/deepseek-v4-pro",
     "anthropic/claude-opus-4-8",
-    "github-copilot/gemini-3.5-flash",
     "github-copilot/claude-sonnet-4.6",
     "moonshotai-cn/kimi-k2.7-code"
   ],
@@ -45,7 +45,7 @@
   "collapseChangelog": true,
   "treeFilterMode": "user-only",
   "compaction": {
-    "enabled": true
+    "enabled": false
   },
   "theme": "dark",
   "pi-multicodex": {
