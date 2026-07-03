@@ -8,7 +8,9 @@ Coordinate with other local pi sessions on related codebases. Use `/skill:pi-int
 </pi_intercom>
 
 <tool_policy>
-- `apply_patch` tool is not available, wse `write`/`edit` tool instead.
+- `apply_patch` tool is not available, use `write`/`edit` tool instead.
+- Use `ask_user_question` instead of a plain text question when progress depends on user input: missing required information, ambiguous scope, multiple reasonable implementation choices, user preference, risky/destructive/external action confirmation, or a decision that would cause meaningful rework if guessed.
+- For open-ended input, still use `ask_user_question` when the answer gates progress; provide 2-4 practical options such as "Provide value", "Use default", "Skip for now", or "Let agent choose", and rely on the tool's custom text path for the user's exact answer.
 </tool_policy>
 
 <subagent_policy>
