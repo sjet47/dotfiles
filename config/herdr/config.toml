@@ -6,14 +6,14 @@ onboarding = false
 # Missing also shows onboarding; set false after you've chosen.
 # onboarding = true
 [terminal]
-	default_shell = "zsh"
-	shell_mode = "auto"
-	new_cwd = "follow"
+    default_shell = "zsh"
+    shell_mode = "auto"
+    new_cwd = "follow"
 
 [theme]
     # Built-in themes: catppuccin, tokyo-night, dracula, nord, gruvbox,
     #                  one-dark, solarized, kanagawa, rose-pine, vesper
-    name = "one-dark"
+name = "terminal"
 
     # Override individual color tokens on top of the base theme.
     # Accepts: hex (#rrggbb), named colors, rgb(r,g,b), or panel_bg = "reset"
@@ -23,6 +23,7 @@ onboarding = false
     # red = "#ff6188"
     # green = "#a6e3a1"
 
+auto_switch = false
 [ui]
     # Sidebar width (auto-scaled based on workspace names, this sets the default)
     # sidebar_width = 26
@@ -51,11 +52,11 @@ onboarding = false
 
         # Play sounds when agents change state in background workspaces
         delivery = "terminal"
-	[ui.toast.herdr]
-		position = "top-right"
-	[ui.toast.clipboard]
-		enabled = true
-		position = "top-right"	
+    [ui.toast.herdr]
+        position = "top-right"
+    [ui.toast.clipboard]
+        enabled = true
+        position = "top-right"
     [ui.sound]
         enabled = true
         # Optional custom mp3 sound files. Relative paths are resolved from this config file's directory.
@@ -84,36 +85,36 @@ onboarding = false
     # alt+... and punctuation-with-modifiers may depend on your terminal/tmux setup.
     prefix = "ctrl+o"
 
-	# Herdr actions
+    # Herdr actions
     detach = "prefix+d"             # optional explicit detach shortcut in server/client mode
     reload_config = "prefix+shift+r"      # optional shortcut to reload config.toml without restarting
-	goto = "prefix+s"
+    goto = "prefix+s"
     open_notification_target = "prefix+enter" # optional shortcut to jump to the visible notification target
     toggle_sidebar = "prefix+b"
-	
-	# Agent actions
+
+    # Agent actions
     previous_agent = "alt+o"     # optional, unset by default
     next_agent = "alt+i"         # optional, unset by default
-	focus_agent = "prefix+alt+1..9"
+    focus_agent = "prefix+alt+1..9"
 
     # Workspace actions
-	workspace_picker = "prefix+w"
+    workspace_picker = "prefix+w"
     new_workspace = "prefix+n"
     rename_workspace = "prefix+shift+n"
     close_workspace = "prefix+shift+d"
     previous_workspace = "alt+k" # optional, unset by default
     next_workspace = "alt+j"     # optional, unset by default
-	switch_workspace = "prefix+shift+1..9"
+    switch_workspace = "prefix+shift+1..9"
 
-	# Tab actions
+    # Tab actions
     new_tab = "prefix+c"
     rename_tab = "prefix+shift+c"         # optional, unset by default
     close_tab = "prefix+shift+w"          # optional, unset by default
     previous_tab = "alt+h"       # optional, unset by default
     next_tab = "alt+l"           # optional, unset by default
-	switch_tab = "prefix+1..9"
+    switch_tab = "prefix+1..9"
 
-	# Pane actions
+    # Pane actions
     split_vertical = "prefix+\\"
     split_horizontal = "prefix+-"
     resize_mode = "prefix+r"
@@ -121,18 +122,18 @@ onboarding = false
     focus_pane_down = "prefix+j"    # optional, unset by default
     focus_pane_up = "prefix+k"      # optional, unset by default
     focus_pane_right = "prefix+l"   # optional, unset by default
-	swap_pane_left = "prefix+shift+h"
-	swap_pane_down = "prefix+shift+j"
-	swap_pane_up = "prefix+shift+k"
-	swap_pane_right = "prefix+shift+l"
+    swap_pane_left = "prefix+shift+h"
+    swap_pane_down = "prefix+shift+j"
+    swap_pane_up = "prefix+shift+k"
+    swap_pane_right = "prefix+shift+l"
     rename_pane = "prefix+p"        # optional, unset by default
     close_pane = "prefix+x"
     fullscreen = "prefix+f"
 
-	# Worktree actions
-	new_worktree = "prefix+shift+g"
-	open_worktree = "prefix+shift+o"
-	remove_worktree = "prefix+alt+d"
+    # Worktree actions
+    new_worktree = "prefix+shift+g"
+    open_worktree = "prefix+shift+o"
+    remove_worktree = "prefix+alt+d"
 
 
     # Custom prefix-mode commands. Press prefix, then the configured key.
@@ -143,7 +144,7 @@ onboarding = false
     # type = "pane"
     # command = "lazygit"
 [session]
-	resume_agents_on_restore = true
+    resume_agents_on_restore = true
 
 [experimental]
-	pane_history = true
+    pane_history = true
