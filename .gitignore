@@ -1,4 +1,6 @@
 .DS_Store
+.pi/tasks
+HANDOFF.md
 vim/.netrwhist
 nvim/plugin
 
