@@ -19,6 +19,7 @@
     "cpu",
     "memory",
     "custom/netio",
+    "custom/keyboard",
     "bluetooth",
     "network",
     "pulseaudio",
@@ -72,7 +73,7 @@
     "tooltip": false
   },
   "custom/stock": {
-    "exec": "/home/sjet/.config/waybar/scripts/stock.sh MU SMH WDC",
+    "exec": "/home/sjet/.config/waybar/scripts/stock.sh DRAM MU SMH",
     "return-type": "json",
     "interval": 3
   },
@@ -140,6 +141,12 @@
       "warning": 20,
       "critical": 10
     }
+  },
+  "custom/keyboard": {
+    "exec": "/home/sjet/.config/waybar/scripts/kb-battery.sh",
+    "return-type": "json",
+    "interval": 60,
+    "on-click": "blueman-manager"
   },
   "bluetooth": {
     "format": "",

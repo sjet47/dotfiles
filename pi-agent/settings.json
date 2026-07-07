@@ -28,7 +28,8 @@
     "npm:pi-readseek",
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
-    "npm:pi-schedule-prompt"
+    "npm:pi-schedule-prompt",
+    "npm:@juicesharp/rpiv-advisor"
   ],
   "enabledModels": [
     "sub2api-openai/gpt-5.5",

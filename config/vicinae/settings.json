@@ -219,6 +219,9 @@
             },
             "sct-8cf581d43bf9": {
                "alias": "oa-app"
+            },
+            "sct-ffb46c6a37af": {
+               "alias": "oa-act"
             }
          }
       }
