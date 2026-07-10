@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.80.3",
+  "lastChangelogVersion": "0.80.6",
   "defaultProvider": "sub2api-openai",
-  "defaultModel": "gpt-5.5",
+  "defaultModel": "gpt-5.6-terra",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-command-history",
@@ -29,14 +29,20 @@
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
+    "npm:@ayulab/pi-rewind",
     "npm:@juicesharp/rpiv-advisor"
   ],
   "enabledModels": [
-    "sub2api-openai/gpt-5.5",
     "deepseek/deepseek-v4-flash",
     "deepseek/deepseek-v4-pro",
     "github-copilot/claude-sonnet-4.6",
-    "moonshotai-cn/kimi-k2.7-code"
+    "moonshotai-cn/kimi-k2.7-code",
+    "sub2api-openai/gpt-5.6-luna",
+    "sub2api-heybox/gpt-5.6-luna",
+    "sub2api-openai/gpt-5.6-terra",
+    "sub2api-heybox/gpt-5.6-terra",
+    "sub2api-openai/gpt-5.6-sol",
+    "sub2api-heybox/gpt-5.6-sol"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
