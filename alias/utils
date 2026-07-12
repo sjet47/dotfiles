@@ -5,6 +5,7 @@ ENV_DIR=${SSHFS_DIR:-$HOME/env}
 BACKUP_DIR=${BACKUP_DIR:-$HOME/.backup}
 
 # Shortcuts
+alias h="herdr"
 alias rs="rsync -avz"
 alias zj="zellij"
 alias cal="cal -w3c 1"
