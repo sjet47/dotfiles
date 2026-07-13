@@ -45,7 +45,7 @@
   "collapseChangelog": true,
   "treeFilterMode": "user-only",
   "compaction": {
-    "enabled": false
+    "enabled": true
   },
   "theme": "dark",
   "pi-multicodex": {
