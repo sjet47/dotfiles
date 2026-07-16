@@ -115,6 +115,7 @@ return {
 
   font_size = 11.5,
   font = wezterm.font_with_fallback {
+    'Maple Mono NF CN',
     'JetBrainsMono NF',
     'JetBrains Mono',
     'Apple Color Emoji',
