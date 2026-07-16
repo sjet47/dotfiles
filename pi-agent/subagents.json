@@ -7,5 +7,6 @@
   "scopeModels": true,
   "disableDefaultAgents": true,
   "toolDescriptionMode": "full",
-  "fleetView": false
+  "fleetView": false,
+  "widgetMode": "background"
 }

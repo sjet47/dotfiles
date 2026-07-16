@@ -1,25 +1,19 @@
 {
-  "lastChangelogVersion": "0.80.6",
+  "lastChangelogVersion": "0.80.7",
   "defaultProvider": "sub2api-openai",
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "high",
   "packages": [
-    "npm:pi-command-history",
     "npm:@llblab/pi-telegram",
     "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:pi-fast-mode",
     "npm:pi-web-access",
     "npm:@juicesharp/rpiv-btw",
-    "npm:pi-execution-time",
     "npm:pi-tps",
-    "../../repo/other/pi-intercom",
     "npm:@narumitw/pi-goal",
     "npm:@termdraw/pi",
     "npm:@ff-labs/pi-fff",
     "npm:@tintinweb/pi-subagents",
     "npm:@tifan/pi-recap",
-    "../../repo/pi-shots",
-    "../../repo/pi-stats",
     "npm:pi-hermes-memory",
     "npm:pi-cache-graph",
     "npm:pi-wakatime",
@@ -28,7 +22,8 @@
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
-    "npm:@ayulab/pi-rewind"
+    "npm:@quintinshaw/pi-dynamic-workflows",
+    "https://github.com/sjet47/pi-setup"
   ],
   "enabledModels": [
     "deepseek/deepseek-v4-flash",
