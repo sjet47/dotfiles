@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.80.7",
+  "lastChangelogVersion": "0.81.1",
   "defaultProvider": "sub2api-openai",
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "high",
@@ -7,23 +7,16 @@
     "npm:@llblab/pi-telegram",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-web-access",
-    "npm:@juicesharp/rpiv-btw",
     "npm:pi-tps",
     "npm:@narumitw/pi-goal",
-    "npm:@termdraw/pi",
-    "npm:@ff-labs/pi-fff",
     "npm:@tintinweb/pi-subagents",
     "npm:@tifan/pi-recap",
-    "npm:pi-hermes-memory",
-    "npm:pi-cache-graph",
-    "npm:pi-wakatime",
     "npm:@tintinweb/pi-tasks",
-    "npm:pi-readseek",
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
-    "npm:@quintinshaw/pi-dynamic-workflows",
-    "https://github.com/sjet47/pi-setup"
+    "https://github.com/sjet47/pi-setup",
+    "npm:pi-readseek"
   ],
   "enabledModels": [
     "deepseek/deepseek-v4-flash",
@@ -31,7 +24,8 @@
     "moonshotai-cn/kimi-k2.7-code",
     "sub2api-openai/gpt-5.6-luna",
     "sub2api-openai/gpt-5.6-terra",
-    "sub2api-openai/gpt-5.6-sol"
+    "sub2api-openai/gpt-5.6-sol",
+    "moonshotai-cn/kimi-k3"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,

@@ -45,5 +45,6 @@
       "model": "gpt-5.6-luna",
       "serviceTier": "priority"
     }
-  ]
+  ],
+  "enabled": true
 }
