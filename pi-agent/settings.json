@@ -4,11 +4,9 @@
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "high",
   "packages": [
-    "npm:@llblab/pi-telegram",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-web-access",
     "npm:pi-tps",
-    "npm:@narumitw/pi-goal",
     "npm:@tintinweb/pi-subagents",
     "npm:@tifan/pi-recap",
     "npm:@tintinweb/pi-tasks",
