@@ -1,6 +1,7 @@
 git:
-  pagers:
-    - pager: delta --dark --paging=never
-    - pager: ydiff -p cat -s --wrap --width={{columnWidth}}
+  diffRenderers:
+    - command: delta --dark --paging=never
+    - command: ydiff -p cat -s --wrap --width={{columnWidth}}
       colorArg: never
-    - externalDiffCommand: difft --color=always
+    - command: difft --color=always
+      type: extDiff
