@@ -13,7 +13,7 @@ onboarding = false
 [theme]
     # Built-in themes: catppuccin, tokyo-night, dracula, nord, gruvbox,
     #                  one-dark, solarized, kanagawa, rose-pine, vesper
-name = "terminal"
+    name = "terminal"
 
     # Override individual color tokens on top of the base theme.
     # Accepts: hex (#rrggbb), named colors, rgb(r,g,b), or panel_bg = "reset"
@@ -23,7 +23,7 @@ name = "terminal"
     # red = "#ff6188"
     # green = "#a6e3a1"
 
-auto_switch = false
+    auto_switch = false
 [ui]
     # Sidebar width (auto-scaled based on workspace names, this sets the default)
     # sidebar_width = 26
@@ -67,7 +67,12 @@ auto_switch = false
         # By default, droid is muted.
         # [ui.sound.agents]
         # droid = "off"
-
+    [ui.sidebar.agents]
+        rows = [
+          ["state_icon", "agent", "state_text"],
+          ["terminal_title_stripped"],
+          ["workspace", "tab"],
+        ]
 [advanced]
     # Allow launching herdr from inside a herdr-managed pane.
     # allow_nested = false
@@ -75,6 +80,8 @@ auto_switch = false
     # Matches Ghostty's default scrollback-limit behavior.
     # scrollback_limit_bytes = 10000000
 
+[worktrees]
+    directory = "~/heybox/repo/worktree"
 
 [keys]
     # Prefix key to enter navigate mode (default: "ctrl+b")
