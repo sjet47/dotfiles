@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.81.1",
+  "lastChangelogVersion": "0.83.0",
   "defaultProvider": "sub2api-openai",
-  "defaultModel": "gpt-5.6-sol",
+  "defaultModel": "deepseek-v4-flash",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:@juicesharp/rpiv-ask-user-question",
@@ -17,13 +17,12 @@
     "npm:pi-readseek"
   ],
   "enabledModels": [
-    "deepseek/deepseek-v4-flash",
-    "deepseek/deepseek-v4-pro",
-    "moonshotai-cn/kimi-k2.7-code",
     "sub2api-openai/gpt-5.6-luna",
-    "sub2api-openai/gpt-5.6-terra",
     "sub2api-openai/gpt-5.6-sol",
-    "moonshotai-cn/kimi-k3"
+    "sub2api-openai/deepseek-v4-pro",
+    "sub2api-openai/deepseek-v4-flash",
+    "sub2api-openai/kimi-k3",
+    "sub2api-openai/grok-4.5"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
@@ -57,5 +56,6 @@
   "doubleEscapeAction": "tree",
   "images": {
     "autoResize": false
-  }
+  },
+  "showCacheMissNotices": true
 }
