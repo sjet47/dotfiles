@@ -157,6 +157,9 @@
             },
             "code-server.sh": {
                "alias": "cserver"
+            },
+            "code-webapp.sh": {
+               "alias": "cweb"
             }
          }
       },
