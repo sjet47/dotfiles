@@ -1,6 +1,6 @@
 ---
 description: Network and codebase investigator
-model: deepseek/deepseek-v4-flash
+model: sub2api-openai/deepseek-v4-flash
 thinking: high
 prompt_mode: replace
 ---

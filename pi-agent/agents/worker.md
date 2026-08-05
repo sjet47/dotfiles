@@ -1,6 +1,6 @@
 ---
 description: Implementation and testing specialist
-model: sub2api-openai/gpt-5.6-terra
+model: sub2api-openai/deepseek-v4-flash
 thinking: high
 prompt_mode: replace
 ---
