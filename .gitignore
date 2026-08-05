@@ -17,7 +17,6 @@ pi-agent/*
 !config/vicinae/
 !config/kitty/
 !config/mako/
-!config/systemd/
 !config/herdr/
 !config/satty/
 !config/fontconfig/
@@ -42,6 +41,7 @@ pi-agent/*
 !pi-agent/APPEND_SYSTEM.md
 config/herdr/*.json
 config/herdr/*.log
+config/herdr/.plugins.lock
 
 # hypr local-only 配置:除模板外都不入库
 config/hypr/local/*
