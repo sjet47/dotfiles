@@ -73,7 +73,7 @@
     "tooltip": false
   },
   "custom/stock": {
-    "exec": "/home/sjet/.config/waybar/scripts/stock.sh DRAM MU SMH",
+    "exec": "/home/sjet/.config/waybar/scripts/stock.sh VOO QQQ MU",
     "return-type": "json",
     "interval": 3
   },
