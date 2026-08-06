@@ -10,55 +10,20 @@ export LANG="en_US.UTF-8"
 # Preferred editor
 export EDITOR="vim"
 
+# Preferred shell
+export SHELL="/bin/zsh"
+
 # Dotfile path
 export DOTFILE_DIR="$HOME/dotfiles"
 
-# Starship DISABLE for now
-export STARSHIP_CONFIG="$HOME/.config/starship.toml"
-
-# Go path
-export GOPATH="$HOME/.local/go"
-
-# Pyenv
-export PYENV_SHELL="zsh"
-export PYENV_PATH="$HOME/.pyenv"
-
-# Cargo
-export CARGO_PATH="$HOME/.cargo"
-
-# NVM path
-export NVM_DIR="$HOME/.nvm"
-
-# oh-my-zsh
-export ZSH="$HOME/.oh-my-zsh"
-export ZSH_CUSTOM="$ZSH/custom"
-
 # gpg-agent
+# shellcheck disable=SC2155
 export GPG_TTY=$(tty)
 
 # PATH
 # PATH=$PATH:$NEWPATH
 PATH="$HOME/.local/bin:$PATH"
 PATH="$PATH:$DOTFILE_DIR/scripts"
-PATH="$PATH:$PYENV_PATH/bin"
-PATH="$PATH:$PYENV_PATH/shims"
-PATH="$PATH:$GOPATH/bin"
-PATH="$PATH:/usr/share/bcc/tools"
-PATH="$PATH:$CARGO_PATH/bin"
-export PATH
-
-export SHELL="/bin/zsh"
-
-## Internal
-
-# Update log path
-UPDATE_LOG="$HOME/.local/log/update"
-
-# Backup path
-BACKUP_DIR="$HOME/.backup"
-
-# SSHFS path
-SSHFS_DIR="$HOME/env"
 
 ###########################################################
 #                    Zsh Configuration                    #
@@ -141,38 +106,36 @@ plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting sudo web-se
 autoload -Uz compinit
 compinit
 
-sourceExist() {
+__sourceExist() {
   [ -f "$1" ] && source "$1"
 }
 
+
 # Load Local profile
-sourceExist "$HOME/.profile"
+__sourceExist "$HOME/.profile"
 
 # Load once, should only have non-user-defined configuration
-if [[ ! $LOAD_ONCE ]]; then
+if [[ ! $__ZSH_LOAD_ONCE ]]; then
 
-  plugin_setups=(
+  __plugin_setups=(
     oh-my-zsh
     zsh-autosuggestions
-    starship
-    cargo
-    zoxide
     atuin
-    codex
+    starship
+    zoxide
+    cargo
     bun
+    go
     ghcup
-    # kubernetes
-    # terraform
-    # fuck
-    # carapace
-    # pyenv
   )
 
-  for setup in "${plugin_setups[@]}"; do
+  for setup in "${__plugin_setups[@]}"; do
     source "$DOTFILE_DIR/plugins/$setup"
   done
 
-  LOAD_ONCE=true
+  export PATH
+
+  __ZSH_LOAD_ONCE=true
 fi
 
 ###########################################################
@@ -182,10 +145,10 @@ fi
 update() {
   sys_update $UPDATE_LOG
   omz update
-  sourceExist "$HOME/.zshrc"
+  __sourceExist "$HOME/.zshrc"
 }
 
-alias_profiles=(
+__alias_profiles=(
   core
   utils
   dev
@@ -194,17 +157,14 @@ alias_profiles=(
   kubernetes
   agent
   tmux
-  # wezterm
-  # terraform
 )
 
-for profile in "${alias_profiles[@]}"; do
+for profile in "${__alias_profiles[@]}"; do
   source "$DOTFILE_DIR/alias/$profile"
 done
 
 ## Pre-execute command
-if [[ -z $RELOAD ]]; then
+if [[ -z $__ZSH_RELOAD ]]; then
   welcome
-  RELOAD=1
+  __ZSH_RELOAD=1
 fi
-

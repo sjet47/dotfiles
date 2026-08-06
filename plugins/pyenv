@@ -1,3 +1,6 @@
 # Python pyenv
+export PYENV_SHELL="zsh"
+export PYENV_PATH="$HOME/.pyenv"
+
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"

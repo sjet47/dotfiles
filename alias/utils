@@ -1,7 +1,6 @@
 # Alias for utility tools
 
 # Need to install: rsync, zellij, thefuck, enca, rclone, fd, nali, ffmpeg 7zz, yazi, sshfs
-ENV_DIR=${SSHFS_DIR:-$HOME/env}
 BACKUP_DIR=${BACKUP_DIR:-$HOME/.backup}
 
 # Shortcuts

@@ -1,2 +1,4 @@
 # oh-my-zsh
-sourceExist "$ZSH/oh-my-zsh.sh"
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM="$ZSH/custom"
+__sourceExist "$ZSH/oh-my-zsh.sh"

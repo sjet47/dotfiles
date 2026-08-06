@@ -1,10 +1,10 @@
 #!/bin/bash
 
-ENV_DIR=${ENV_DIR:-$HOME/env}
+SSHFS_DIR="$HOME/env"
 MOUNT_DIR=${MOUNT_DIR:-$HOME}
 
 for host in "$@"; do
-    target_dir=$ENV_DIR/$host
+    target_dir=$SSHFS_DIR/$host
     mkdir -p $target_dir
     sshfs $host:$MOUNT_DIR $target_dir
 done
