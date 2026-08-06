@@ -23,8 +23,8 @@ alias lg="lazygit"
 alias gcpb="git branch --show-current | wl-copy -n"
 alias gcph="git rev-parse HEAD | wl-copy -n"
 
-function ghc() { git clone --recurse-submodules "https://github.com/$1.git"; }
-function ghcs() { git clone --recurse-submodules "git@github.com:$1.git"; }
+function ghcl() { git clone --recurse-submodules "https://github.com/$1.git"; }
+function ghcls() { git clone --recurse-submodules "git@github.com:$1.git"; }
 function git_repo_url() { cd $1 && git remote -v | grep origin | head -n 1 | awk '{print $2}'; }
 function gadsm() {
     local repo_path repo_url
