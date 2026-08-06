@@ -17,7 +17,6 @@
     "npm:pi-readseek"
   ],
   "enabledModels": [
-    "sub2api-openai/gpt-5.6-luna",
     "sub2api-openai/gpt-5.6-sol",
     "sub2api-openai/deepseek-v4-pro",
     "sub2api-openai/deepseek-v4-flash",
