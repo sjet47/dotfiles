@@ -160,12 +160,12 @@ if [[ ! $LOAD_ONCE ]]; then
     atuin
     codex
     bun
+    ghcup
     # kubernetes
     # terraform
     # fuck
     # carapace
     # pyenv
-    # ghcup
   )
 
   for setup in "${plugin_setups[@]}"; do
