@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.83.0",
+  "lastChangelogVersion": "0.84.1",
   "defaultProvider": "sub2api-openai",
   "defaultModel": "deepseek-v4-flash",
   "defaultThinkingLevel": "high",
@@ -14,7 +14,8 @@
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
     "https://github.com/sjet47/pi-setup",
-    "npm:pi-readseek"
+    "npm:pi-readseek",
+    "https://github.com/sjet47/pi-intercom"
   ],
   "enabledModels": [
     "sub2api-openai/gpt-5.6-sol",
@@ -56,5 +57,7 @@
   "images": {
     "autoResize": false
   },
-  "showCacheMissNotices": true
+  "showCacheMissNotices": true,
+  "tuiMode": "fullscreen",
+  "fullscreenScrollbar": "auto"
 }

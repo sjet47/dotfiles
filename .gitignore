@@ -39,6 +39,7 @@ pi-agent/*
 !pi-agent/settings.json
 !pi-agent/subagents.json
 !pi-agent/APPEND_SYSTEM.md
+!pi-agent/keybindings.json
 config/herdr/*.json
 config/herdr/*.log
 config/herdr/.plugins.lock
