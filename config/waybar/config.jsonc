@@ -73,7 +73,7 @@
     "tooltip": false
   },
   "custom/stock": {
-    "exec": "/home/sjet/.config/waybar/scripts/stock.sh VOO QQQ MU",
+    "exec": "/home/sjet/.config/waybar/scripts/stock.sh VOO QQQ",
     "return-type": "json",
     "interval": 3
   },
