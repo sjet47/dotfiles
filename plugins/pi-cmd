@@ -1,0 +1,45 @@
+# Ctrl+G: turn the current BUFFER into a runnable command via pi
+pi-cmd() {
+  local prompt=$BUFFER
+  [[ -n ${prompt//[[:space:]]/} ]] || return 1
+  command -v pi >/dev/null || {
+    zle -M 'pi-cmd: pi not found'
+    return 1
+  }
+
+  local context=$'PWD: '"$PWD"$'\nRecent history:'$'\n'
+  context+=$(fc -ln -8 2>/dev/null)
+
+  zle -M 'pi-cmd...'
+  zle -R
+
+  local cmd
+  cmd=$(
+    pi -p --no-session --no-tools --no-extensions --no-skills \
+      --no-prompt-templates --no-context-files --no-themes --offline \
+      --thinking off --model 'deepseek/deepseek-v4-flash' \
+      --system-prompt 'Convert the user request into one immediately runnable zsh command for Arch Linux. Output ONLY the command: no markdown fences, no explanation. Use PWD and recent history as context. If the request is already a command, fix or complete it. If you cannot produce a command, output nothing.' \
+      "$prompt"$'\n\n'"$context"
+  ) || {
+    zle -M 'pi-cmd: pi failed'
+    return 1
+  }
+
+  cmd=${cmd##$'\n'}
+  cmd=${cmd%%$'\n'}
+  if [[ $cmd == '```'* ]]; then
+    cmd=${cmd#\`\`\`*$'\n'}
+    cmd=${cmd%%$'\n\`\`\`'*}
+  fi
+
+  if [[ -z ${cmd//[[:space:]]/} ]]; then
+    zle -M 'pi-cmd: empty reply'
+    return 1
+  fi
+
+  BUFFER=$cmd
+  CURSOR=${#BUFFER}
+  zle -M ''
+}
+zle -N pi-cmd
+bindkey '^G' pi-cmd

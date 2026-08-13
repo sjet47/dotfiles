@@ -127,6 +127,7 @@ if [[ ! $__ZSH_LOAD_ONCE ]]; then
     bun
     go
     ghcup
+    pi-cmd
   )
 
   for setup in "${__plugin_setups[@]}"; do
