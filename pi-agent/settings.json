@@ -22,7 +22,8 @@
     "sub2api-openai/deepseek-v4-pro",
     "sub2api-openai/deepseek-v4-flash",
     "sub2api-openai/kimi-k3",
-    "sub2api-openai/grok-4.5"
+    "sub2api-openai/grok-4.5",
+    "sub2api-grok/grok-4.6"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
