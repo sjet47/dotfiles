@@ -160,6 +160,9 @@
             },
             "code-webapp.sh": {
                "alias": "cweb"
+            },
+            "watch-bird.sh": {
+               "alias": "bird"
             }
          }
       },
