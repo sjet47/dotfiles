@@ -4,6 +4,16 @@
 - For open-ended input, still use `ask_user_question` when the answer gates progress; provide 2-4 practical options such as "Provide value", "Use default", "Skip for now", or "Let agent choose", and rely on the tool's custom text path for the user's exact answer.
 </tool_policy>
 
+<pi-intercom>
+Coordinate with other local pi sessions on related codebases. Use `/skill:pi-intercom` for patterns.
+
+**When:** Same codebase (parallel work), reference codebase (consulting patterns), related repos (shared libraries).
+
+**Not when:** Unrelated codebases, trivial questions, or when you can proceed independently.
+
+**Principle:** Prefer `send` for notifications; `ask` only when blocked waiting for input.
+</pi-intercom>
+
 <subagent_policy>
 Use subagents proactively for non-trivial work when delegation reduces main-context
 pollution, enables parallel progress, or produces an independent conclusion.
