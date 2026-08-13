@@ -72,6 +72,13 @@ hl.window_rule({
   float = true,
 })
 
+-- MPV
+hl.window_rule({
+  name  = "float-mpv",
+  match = { class = "^mpv$" },
+  float = true,
+})
+
 -- 飞书:图片预览(XWayland,class 为空,title 固定"图片")
 hl.window_rule({
   name  = "float-feishu-image-preview",
@@ -89,7 +96,7 @@ hl.window_rule({
 hl.window_rule({ name = "float-blueman-manager",     match = { class = "blueman-manager" },          float = true })
 hl.window_rule({ name = "float-pavucontrol",         match = { class = "org.pulseaudio.pavucontrol" }, float = true })
 hl.window_rule({ name = "float-nm-connection-editor", match = { class = "nm-connection-editor" },     float = true })
-hl.window_rule({ name = "float-localsend",           match = { class = "localsend" },                float = true })
+hl.window_rule({ name = "float-localsend",           match = { class = "org.localsend.localsend_app" },                float = true })
 hl.window_rule({ name = "float-dolphin",             match = { class = "org.kde.dolphin" },          float = true })
 hl.window_rule({ name = "float-telegram",            match = { class = "org.telegram.desktop" },     float = true })
 
