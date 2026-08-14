@@ -145,7 +145,7 @@
   "custom/keyboard": {
     "exec": "/home/sjet/.config/waybar/scripts/kb-battery.sh",
     "return-type": "json",
-    "interval": 60,
+    "interval": 10,
     "on-click": "blueman-manager"
   },
   "bluetooth": {
