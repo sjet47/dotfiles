@@ -55,8 +55,8 @@ hl.window_rule({
   center = true,
 })
 
-hl.window_rule({ name = "float-satty", match = { class = "com.gabm.satty" },  float = true })
-hl.window_rule({ name = "float-ksnip", match = { class = "org.ksnip.ksnip" }, float = true })
+hl.window_rule({ name = "float-tensaku", match = { class = "dev.tensaku.Tensaku" }, float = true, center = true })
+hl.window_rule({ name = "float-ksnip",   match = { class = "org.ksnip.ksnip" },     float = true })
 
 -- KeePassXC 数据库解锁/打开窗口,避免启动时占用 tiling 布局
 hl.window_rule({

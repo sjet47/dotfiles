@@ -1,6 +1,6 @@
 #!/bin/bash
-# 截图：smart(默认) / region / window / fullscreen
-# 自动 wl-copy + 落盘到 ~/Pictures，通知点击打开 satty 标注（回车=存盘+复制）
+# 截图：smart(默认) / region / window / fullscreen / qr(框选解码二维码)
+# 自动 wl-copy + 落盘到 ~/Pictures，通知点击打开 tensaku 标注（回车=存盘+复制）
 # 移植自 omarchy-cmd-screenshot
 
 set -u
@@ -45,6 +45,23 @@ freeze() {
 }
 
 case "$MODE" in
+  qr)
+    # 框选区域解码二维码/条码,结果进剪贴板(不落盘)
+    freeze
+    SELECTION=$(slurp 2>/dev/null)
+    [[ -z ${SELECTION:-} ]] && exit 0
+    TMP=$(mktemp --suffix=.png)
+    grim -g "$SELECTION" "$TMP" || { rm -f "$TMP"; exit 1; }
+    CODE=$(zbarimg --raw -q "$TMP" 2>/dev/null)
+    rm -f "$TMP"
+    if [[ -z $CODE ]]; then
+      notify-send -t 4000 "未识别到二维码/条码" "试试放大后再框选"
+    else
+      printf '%s' "$CODE" | wl-copy
+      notify-send -t 6000 "二维码已解码并复制" "$CODE"
+    fi
+    exit 0
+    ;;
   region)
     freeze
     SELECTION=$(slurp 2>/dev/null)
@@ -86,9 +103,9 @@ grim -g "$SELECTION" "$FILEPATH" || exit 1
 wl-copy <"$FILEPATH"
 
 (
-  ACTION=$(notify-send "截图已保存并复制到剪贴板" "点击用 satty 标注\n$FILEPATH" \
+  ACTION=$(notify-send "截图已保存并复制到剪贴板" "点击用 tensaku 标注\n$FILEPATH" \
     -t 8000 -i "$FILEPATH" -A "default=标注")
-  [[ $ACTION == "default" ]] && satty \
+  [[ $ACTION == "default" ]] && tensaku \
     --filename "$FILEPATH" \
     --output-filename "$FILEPATH" \
     --actions-on-enter save-to-clipboard \

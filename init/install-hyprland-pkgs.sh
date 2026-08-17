@@ -58,8 +58,9 @@ APPS=(
 CAPTURE=(
     grim             # 截图后端
     slurp            # 区域选择
-    satty            # 截图标注
+    tensaku          # 截图标注(AUR,satty fork,支持滚动长截图)
     swappy           # 截图标注(备选)
+    zbar             # zbarimg 二维码解码(screenshot.sh qr 模式)
     wl-clipboard     # wl-copy / wl-paste
     cliphist          # 剪贴板历史
     wl-screenrec-git  # 录屏(archlinuxcn / AUR)
@@ -77,7 +78,8 @@ SYSTEM=(
     pamixer                # 音量控制(备用)
     pavucontrol            # 图形音量面板
     playerctl              # 媒体播放控制(快捷键)
-    brightnessctl          # 亮度快捷键(binds.lua,笔记本背光)
+    brightnessctl          # 亮度快捷键(brightness.sh,笔记本内屏背光)
+    ddcutil                # 外接显示器 DDC/CI 亮度(brightness.sh)
     power-profiles-daemon  # 电源模式切换
     blueman                # 蓝牙托盘
     bluez-utils            # bluetoothctl 等

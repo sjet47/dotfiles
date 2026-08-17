@@ -32,6 +32,9 @@ hl.bind(mod .. " + SHIFT + F", hl.dsp.exec_cmd("~/.config/hypr/scripts/screensho
 -- 录屏:region(默认拉框) / window / fullscreen,再次按下停止并保存到 ~/Videos
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenrecord.sh"))
 
+-- 框选解码二维码,结果进剪贴板
+hl.bind(mod .. " + SHIFT + Q", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh qr"))
+
 ----------------------------------------------------------------------
 -- 平铺:焦点 / 移动 / 缩放 / 工作区
 ----------------------------------------------------------------------
@@ -55,11 +58,19 @@ for i = 1, 10 do
   hl.bind(mod .. " + SHIFT + " .. key,   hl.dsp.window.move({ workspace = i }))
 end
 
--- 缩放当前窗口 (SHIFT + 方向键)
+-- 缩放当前窗口:细调 (SHIFT + 方向键 ±40) / 粗调 (CTRL + SHIFT + 方向键 ±160)
 hl.bind(mod .. " + SHIFT + left",  hl.dsp.window.resize({ x = -40, y = 0,   relative = true }))
 hl.bind(mod .. " + SHIFT + right", hl.dsp.window.resize({ x = 40,  y = 0,   relative = true }))
 hl.bind(mod .. " + SHIFT + up",    hl.dsp.window.resize({ x = 0,   y = -40, relative = true }))
 hl.bind(mod .. " + SHIFT + down",  hl.dsp.window.resize({ x = 0,   y = 40,  relative = true }))
+hl.bind(mod .. " + CTRL + SHIFT + left",  hl.dsp.window.resize({ x = -160, y = 0,    relative = true }))
+hl.bind(mod .. " + CTRL + SHIFT + right", hl.dsp.window.resize({ x = 160,  y = 0,    relative = true }))
+hl.bind(mod .. " + CTRL + SHIFT + up",    hl.dsp.window.resize({ x = 0,    y = -160, relative = true }))
+hl.bind(mod .. " + CTRL + SHIFT + down",  hl.dsp.window.resize({ x = 0,    y = 160,  relative = true }))
+
+-- 记忆/恢复窗口尺寸(按 应用:工作区 存取)
+hl.bind(mod .. " + ALT + HOME", hl.dsp.exec_cmd("~/.config/hypr/scripts/winsize.sh save"))
+hl.bind(mod .. " + HOME",       hl.dsp.exec_cmd("~/.config/hypr/scripts/winsize.sh restore"))
 
 -- 特殊工作区(scratchpad)
 hl.bind(mod .. " + grave",         hl.dsp.workspace.toggle_special("scratchpad"))
@@ -82,8 +93,9 @@ hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
 hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
+-- 亮度作用于聚焦的显示器:内屏 brightnessctl,外接屏 DDC/CI
+hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("~/.config/hypr/scripts/brightness.sh up"),        { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("~/.config/hypr/scripts/brightness.sh down"),      { locked = true, repeating = true })
 
 -- 需要 playerctl
 hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
