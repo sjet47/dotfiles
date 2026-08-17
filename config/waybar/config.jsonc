@@ -68,8 +68,9 @@
     "tooltip-format": "{percentage}% used"
   },
   "custom/netio": {
-    "interval": 2,
+    // 常驻脚本,每行输出即刷新;restart-interval 用于脚本意外退出后拉起
     "exec": "/home/sjet/.config/waybar/scripts/net-io.sh",
+    "restart-interval": 5,
     "tooltip": false
   },
   "custom/stock": {
@@ -143,9 +144,10 @@
     }
   },
   "custom/keyboard": {
+    // 常驻脚本,跟随 upower 事件刷新(无轮询)
     "exec": "/home/sjet/.config/waybar/scripts/kb-battery.sh",
     "return-type": "json",
-    "interval": 10,
+    "restart-interval": 5,
     "on-click": "blueman-manager"
   },
   "bluetooth": {
