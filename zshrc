@@ -127,6 +127,7 @@ if [[ ! $__ZSH_LOAD_ONCE ]]; then
     bun
     go
     ghcup
+    ocaml
     pi-cmd
   )
 
