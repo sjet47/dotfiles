@@ -1,6 +1,7 @@
 #!/bin/bash
-# 截图：smart(默认) / region / window / fullscreen / qr(框选解码二维码)
+# 截图：smart(默认) / region / window / fullscreen / active(当前窗口,不框选) / qr(框选解码二维码)
 # 自动 wl-copy + 落盘到 ~/Pictures，通知点击打开 tensaku 标注（回车=存盘+复制）
+# 第二个参数传 save：只落盘并把路径打到 stdout，不碰剪贴板、不弹通知（供 agent 等非交互调用）
 # 移植自 omarchy-cmd-screenshot
 
 set -u
@@ -9,10 +10,13 @@ set -u
 OUTPUT_DIR="${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
 mkdir -p "$OUTPUT_DIR"
 
-# 再次触发同一脚本时取消正在进行的选区
-pkill slurp && exit 0
-
 MODE="${1:-smart}"
+OUTPUT="${2:-}"
+
+# 再次触发同一脚本时取消正在进行的选区；save 是非交互调用，不应打断用户手上的框选
+if [[ $OUTPUT != "save" ]]; then
+  pkill slurp && exit 0
+fi
 
 JQ_MONITOR_GEO='
   def format_geo:
@@ -73,6 +77,10 @@ case "$MODE" in
   fullscreen)
     SELECTION=$(hyprctl monitors -j | jq -r "${JQ_MONITOR_GEO} .[] | select(.focused == true) | format_geo")
     ;;
+  active)
+    SELECTION=$(hyprctl activewindow -j | jq -r 'select(.at) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
+    [[ -z $SELECTION ]] && { echo "当前没有活动窗口" >&2; exit 1; }
+    ;;
   smart|*)
     RECTS=$(get_rectangles)
     freeze
@@ -98,8 +106,22 @@ esac
 
 [[ -z ${SELECTION:-} ]] && exit 0
 
-FILEPATH="$OUTPUT_DIR/Screenshot_$(date +'%Y%m%d_%H%M%S').png"
+BASE="$OUTPUT_DIR/Screenshot_$(date +'%Y%m%d_%H%M%S')"
+FILEPATH="$BASE.png"
+# 时间戳精确到秒，同一秒内的连续截图（如改动前后对比）需要错开文件名
+n=2
+while [[ -e $FILEPATH ]]; do
+  FILEPATH="${BASE}_$n.png"
+  n=$((n + 1))
+done
+
 grim -g "$SELECTION" "$FILEPATH" || exit 1
+
+if [[ $OUTPUT == "save" ]]; then
+  echo "$FILEPATH"
+  exit 0
+fi
+
 wl-copy <"$FILEPATH"
 
 (
