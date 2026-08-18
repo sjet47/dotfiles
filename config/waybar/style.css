@@ -73,6 +73,7 @@ window#waybar {
 #memory,
 #custom-netio,
 #custom-keyboard,
+#custom-claude,
 #battery,
 #pulseaudio,
 #network,
@@ -111,11 +112,22 @@ window#waybar {
   font-feature-settings: "tnum";
 }
 
-#battery.warning {
+/* Claude 星芒图标以背景图渲染,文本(百分比)左侧留出图标位 */
+#custom-claude {
+  background-image: url("icons/claude.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 15px 15px;
+  padding-left: 20px;
+}
+
+#battery.warning,
+#custom-claude.warning {
   color: @warning;
 }
 
-#battery.critical {
+#battery.critical,
+#custom-claude.critical {
   color: @critical;
 }
 

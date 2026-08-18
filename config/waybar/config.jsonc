@@ -24,6 +24,7 @@
     "network",
     "pulseaudio",
     "battery",
+    "custom/claude",
     "clock",
     "custom/notifications"
   ],
@@ -180,6 +181,12 @@
   "tray": {
     "icon-size": 18,
     "spacing": 12
+  },
+  "custom/claude": {
+    "exec": "/home/sjet/.config/waybar/scripts/claude-usage.sh",
+    "return-type": "json",
+    "on-click": "pkill -USR1 -f 'scripts/claude-usage.sh$'",
+    "on-click-right": "xdg-open https://claude.ai/settings/usage"
   },
   "custom/notifications": {
     "exec": "echo 󰂚",
