@@ -1,12 +1,12 @@
 #!/bin/bash
 # 录屏：region(默认,拉框) / window / fullscreen
-# 用 wl-screenrec(VAAPI 硬件编码)录制到 ~/Videos，再次触发=停止并落盘
+# 用 wl-screenrec(VAAPI 硬件编码)录制到 ~/Videos/Screencasts，再次触发=停止并落盘
 # 选区逻辑复用自 screenshot.sh；录屏需实时画面，故不冻结(无 hyprpicker)
 
 set -u
 
 [[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
-OUTPUT_DIR="${XDG_VIDEOS_DIR:-$HOME/Videos}"
+OUTPUT_DIR="${XDG_VIDEOS_DIR:-$HOME/Videos}/Screencasts"
 mkdir -p "$OUTPUT_DIR"
 
 STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/screenrecord.path"
