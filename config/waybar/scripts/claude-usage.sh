@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code 订阅用量,常驻进程:默认每 15 分钟探测一次 Anthropic OAuth usage 端点,
-# 文本显示周限额百分比,tooltip 含 5 小时会话窗口与重置时间。
+# 文本显示 5 小时会话窗口百分比,tooltip 含周限额与重置时间。
 # 收到 SIGUSR1 立即刷新(on-click 触发)。
 # 鉴权与 payload 结构参考 omarchy bin/omarchy-agent-usage-claude。
 set -uo pipefail
@@ -83,11 +83,11 @@ emit() {
   [[ $w_pct -ge 0 ]] && tooltip+="\n周限额: ${w_pct}% · 重置 $(fmt_reset "$w_reset")"
   tooltip+="\n更新于 $(date '+%H:%M') · 点击刷新"
 
-  # 文本优先展示周限额;端点只给了会话数据时退回会话
-  if [[ $w_pct -ge 0 ]]; then text="${w_pct}%"; else text="${s_pct}%"; fi
+  # 文本优先展示 5h 会话窗口;端点只给了周数据时退回周限额
+  if [[ $s_pct -ge 0 ]]; then text="${s_pct}%"; else text="${w_pct}%"; fi
 
   LAST_JSON=$(printf '{"text":"%s","tooltip":"%s","class":"%s","percentage":%d}' \
-    "$text" "$tooltip" "$class" "$(( w_pct >= 0 ? w_pct : s_pct ))")
+    "$text" "$tooltip" "$class" "$(( s_pct >= 0 ? s_pct : w_pct ))")
   LAST_AT=$(date '+%H:%M')
   EMIT_OK=1
   echo "$LAST_JSON"
