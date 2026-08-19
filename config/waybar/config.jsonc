@@ -19,12 +19,12 @@
     "cpu",
     "memory",
     "custom/netio",
+    "custom/claude",
     "custom/keyboard",
     "bluetooth",
     "network",
     "pulseaudio",
     "battery",
-    "custom/claude",
     "clock",
     "custom/notifications"
   ],
