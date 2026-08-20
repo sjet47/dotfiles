@@ -1,0 +1,20 @@
+# 覆盖 /usr/share/applications/binaryninja.desktop
+#
+# 症状:从 vicinae 启动时整个界面缩成 2/3。
+# 根因:vicinae 是 systemd user service,它拉起的应用继承 systemd manager 的环境,
+#      拿不到 env.lua 里的 QT_SCALE_FACTOR=1.5,XWayland 下就没人给它缩放。
+#      (BN 自带的 Qt 6.10 编译期默认平台是 xcb,即使 XDG_SESSION_TYPE=wayland
+#       也仍走 XWayland,所以指望环境变量或会话类型都治不了它。)
+# 修法:走 Wayland 原生 —— BN 自带 qt/platforms/libqwayland.so,原生化后直接跟随
+#      显示器 scale,与启动路径无关。
+# 注意:QT_SCALE_FACTOR 又不能全局补进 environment.d —— vicinae 自己就是 Qt 原生
+#      Wayland 进程,补了它会变成 1.5x1.5=2.25 倍。
+# -u QT_SCALE_FACTOR 不可省:从终端/Hyprland 启动时环境里有 1.5,原生 Wayland 下
+#      会和显示器 scale 叠乘。
+[Desktop Entry]
+Name=Binary Ninja
+Exec=env -u QT_SCALE_FACTOR QT_QPA_PLATFORM=wayland /opt/binaryninja/binaryninja %f
+Icon=/opt/binaryninja/docs/img/logo.png
+Type=Application
+Categories=Development;Debugger;Profiling;
+StartupWMClass=com.vector35.binaryninja

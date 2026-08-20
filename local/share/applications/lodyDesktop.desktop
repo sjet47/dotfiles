@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Lody
+Exec=lody --ozone-platform=wayland --enable-wayland-ime %U
+Terminal=false
+Type=Application
+Icon=lody
+StartupWMClass=Lody
+Comment=Lody Desktop - Electron app
+MimeType=x-scheme-handler/lody;
+Categories=Utility;

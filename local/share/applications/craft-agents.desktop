@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Craft Agents
+Exec=/home/sjet/.local/bin/Craft-Agents-fork.AppImage --ozone-platform=wayland %U
+Terminal=false
+Type=Application
+Icon=/home/sjet/.local/share/icons/hicolor/512x512/apps/craft-agents.png
+StartupWMClass=Craft Agents
+X-AppImage-Version=0.10.5-fork
+Comment=Craft Agents (fork: Agent Context auto-injection patch)
+Categories=Utility;
