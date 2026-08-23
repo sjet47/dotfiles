@@ -102,3 +102,27 @@ hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = tr
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
+
+----------------------------------------------------------------------
+-- 远程桌面快捷键透传
+----------------------------------------------------------------------
+
+-- Hyprland 的 keybind 在合成器层就被吃掉,VNC/RDP 客户端根本收不到,所以连着远程
+-- 桌面时按 SUPER+1 切的是本机 workspace 而不是对面那台的。进入 passthrough submap
+-- 后只剩下面这一个退出键,其余按键(含 SUPER 组合)全部交给焦点窗口,于是原样送到远程。
+--
+-- 注意:退出键自身不透传,远程那台机器上用不了这个组合(当前 binds 里没占用它)。
+local PASSTHROUGH_EXIT = mod .. " + SHIFT + ESCAPE"
+
+hl.define_submap("passthrough", function()
+    hl.bind(PASSTHROUGH_EXIT, function()
+        hl.dispatch(hl.dsp.submap("reset"))
+        hl.dispatch(hl.dsp.exec_cmd("notify-send -t 1500 -a Hyprland '快捷键透传' '已关闭'"))
+    end)
+end)
+
+hl.bind(PASSTHROUGH_EXIT, function()
+    hl.dispatch(hl.dsp.submap("passthrough"))
+    hl.dispatch(hl.dsp.exec_cmd(
+        "notify-send -t 1500 -a Hyprland '快捷键透传' '已开启 — 快捷键送往远程,SUPER+SHIFT+ESC 退出'"))
+end)
