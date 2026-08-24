@@ -4,6 +4,7 @@ set -e
 
 source "$(dirname $0)/common.sh"
 
+# 仅用于 Ubuntu / macOS —— Arch 走 pacman/pkg-sync,见 install_pkgs_arch()
 PKG=(
     lsd
     bat
@@ -43,8 +44,11 @@ function read_os() {
 }
 
 function install_pkgs_arch() {
-    # shellcheck disable=SC2068
-    yay -Syyu --needed --noconfirm $@
+    # Arch 上的包清单由 pacman/pkg-sync 统一维护(分组 + 双向对账),
+    # 这里不再重复列包。$@ 传进来的 PKG 数组只服务于 Ubuntu/macOS。
+    local repo_root
+    repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
+    "$repo_root/pacman/pkg-sync" install
 }
 
 function install_pkgs_ubuntu() {
@@ -68,8 +72,8 @@ function install_system() {
 
     case "$disv" in
     Arch)
-        # shellcheck disable=SC2068
-        install_pkgs_arch ${PKG[@]}
+        # 不传 PKG:Arch 的包清单在 pacman/*.txt 里
+        install_pkgs_arch
         ;;
     Ubuntu)
         # shellcheck disable=SC2068

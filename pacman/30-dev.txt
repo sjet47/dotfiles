@@ -1,0 +1,93 @@
+# 30-dev.txt — 开发工具链 —— 按需裁剪,不写代码的机器可以整组跳过
+#
+# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── 语言与运行时 ────────────────────────────────────────────────────────
+go              # Core compiler tools for the Go programming language
+go-tools        # Developer tools for the Go programming language
+nodejs          # Evented I/O for V8 javascript ("Current" release)
+npm             # JavaScript package manager
+bun             # Incredibly fast JavaScript runtime, bundler, test runner, and pa
+typescript      # JavaScript with syntax for types
+rustup          # The Rust toolchain installer
+cargo-binstall  # Binary installation for Rust projects
+zig             # a general-purpose programming language and toolchain for maintai
+ocaml           # A functional language with OO extensions
+opam            # OCaml package manager
+mlton           # Whole-program optimizing Standard ML compiler
+ghcup-hs-bin    # an installer for the general purpose language Haskell
+
+# ── Python 生态 ─────────────────────────────────────────────────────
+python-pip                       # The PyPA recommended tool for installing Python packages
+python-pipx                      # Install and Run Python Applications in Isolated Environments
+python-setuptools                # Easily download, build, install, upgrade, and uninstall Python p
+python-pdm                       # A modern Python package and dependency manager supporting the la
+uv                               # An extremely fast Python package installer and resolver written 
+ruff                             # An extremely fast Python linter, written in Rust
+python-playwright                # A Python library to automate Chromium, Firefox and WebKit browse
+python-weasyprint                # Utility to render HTML and CSS to PDF
+python-redis                     # The Python interface to the Redis key-value store
+python-grpcio                    # Python language bindings for grpc, remote procedure call (RPC) f
+python-googleapis-common-protos  # Python classes generated from the common protos in the googleapi
+
+# ── 构建 / 编译 ───────────────────────────────────────────────────────
+llvm        # Compiler infrastructure
+cmake       # A cross-platform open-source make system
+meson       # High productivity build system
+ninja       # Small build system with a focus on speed
+bear        # A tool to generate compilation database for clang tooling
+ctags       # Generates an index file of language objects found in source file
+cppunit     # A C++ unit testing framework
+rapidjson   # Fast JSON parser/generator for C++ with both SAX/DOM style API
+pre-commit  # A framework for managing and maintaining multi-language pre-comm
+mise        # The front-end to your dev env
+
+# ── 编辑器 / 文档 ──────────────────────────────────────────────────────
+neovim                  # Fork of Vim aiming to improve user experience, plugins, and GUIs
+vim                     # Vi Improved, a highly configurable, improved version of the vi t
+visual-studio-code-bin  # [AUR] Visual Studio Code (vscode): Editor for building and debugging m
+zeal-git                # A simple documentation browser
+
+# ── 容器 / Kubernetes ───────────────────────────────────────────────
+docker          # Pack, ship and run any application as a lightweight container
+docker-buildx   # Docker CLI plugin for extended build capabilities with BuildKit
+docker-compose  # Fast, isolated development environments using Docker
+dive            # A tool for exploring layers in a docker image
+lazydocker      # A simple terminal UI for docker and docker-compose, written in G
+kubectl         # A command line tool for communicating with a Kubernetes API serv
+helm            # The Kubernetes Package Manager
+cilium-cli      # install, manage & troubleshoot Kubernetes clusters running Ciliu
+
+# ── 运维 / 服务 ───────────────────────────────────────────────────────
+supervisor    # A system for controlling process state under UNIX
+nginx         # Lightweight HTTP server and IMAP/POP3 proxy server
+subversion    # A Modern Concurrent Version Control System
+
+# ── 数据库 / 监控导出 ────────────────────────────────────────────────────
+postgresql                 # Sophisticated object-relational DBMS
+pgcli                      # A command line interface for PostgreSQL with auto-completion and
+redis                      # [AUR] An in-memory database that persists on disk
+prometheus-node-exporter   # Exporter for machine metrics
+prometheus-redis-exporter  # Prometheus exporter for ValKey & Redis metrics
+
+# ── RPC / HTTP 调试 ─────────────────────────────────────────────────
+protoc-gen-go  # [AUR] Go support for Google's protocol buffers
+grpcurl        # [AUR] Like cURL, but for gRPC: Command-line tool for interacting with 
+websocat       # Command-line client for web sockets, like netcat/curl/socat for 
+httpie         # human-friendly CLI HTTP client for the API era
+
+# ── 性能剖析 / 逆向 ─────────────────────────────────────────────────────
+perf                  # Linux kernel performance auditing tool
+flamegraph            # [AUR] Flame Graphs visualize profiled code
+strace                # A diagnostic, debugging and instructional userspace tracer
+rr-git                # a nondeterministic debugger
+bcc-libbpf-tools      # BPF Compiler Collection (Tools)
+bpftool-bin           # [AUR] bpftool is a tool for inspection and simple manipulation of eBPF
+xdp-tools             # Utilities and example programs for use with XDP
+binaryninja-personal  # [AUR] An interactive decompiler, disassembler, debugger, and binary an
+
+# ── AI / Agent ────────────────────────────────────────────────────
+llama.cpp             # Port of Facebook's LLaMA model in C/C++ (with system ggml suppor
+claude-desktop        # [AUR] Official Claude AI desktop app from Anthropic — Chat, Cowork, an
+herdr-bin             # [AUR] Supervise multiple coding agents in one terminal

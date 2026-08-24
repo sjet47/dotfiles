@@ -1,0 +1,83 @@
+# 40-apps.txt — GUI 应用与专项工具 —— 迁移时按实际需要挑
+#
+# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── 浏览器 / 邮件 ──────────────────────────────────────────────────────
+google-chrome  # [AUR] The popular web browser by Google (Stable Channel)
+thunderbird    # Standalone mail and news reader from mozilla.org
+
+# ── 笔记 / 阅读 / 文献 ──────────────────────────────────────────────────
+obsidian    # A powerful knowledge base that works on top of a local folder of
+zotero-bin  # Zotero Standalone. Is a free, easy-to-use tool to help you colle
+foliate     # A simple and modern GTK eBook reader
+anki-bin    # [AUR] Helps you remember facts (like words/phrases in a foreign langua
+
+# ── 办公 / 创作 ───────────────────────────────────────────────────────
+libreoffice-still  # LibreOffice maintenance branch
+gimp               # GNU Image Manipulation Program
+audacity           # A program that lets you manipulate digital audio waveforms
+obs-studio         # Free, open source software for live streaming and recording
+fontforge          # Outline and bitmap font editor
+
+# ── 影音播放 ──────────────────────────────────────────────────────────
+mpv              # a free, open source, and cross-platform media player
+mpv-mpris        # MPRIS plugin for mpv
+vlc-plugins-all  # Free and open source cross-platform multimedia player and framew
+
+# ── 下载 / 局域网传输 ────────────────────────────────────────────────────
+qbittorrent    # An advanced BitTorrent client programmed in C++, based on Qt too
+localsend-bin  # [AUR] An open source cross-platform alternative to AirDrop
+
+# ── 通讯 ────────────────────────────────────────────────────────────
+telegram-desktop-bin  # [AUR] Official desktop version of Telegram messaging app - Static bina
+discord               # All-in-one voice and text chat for gamers
+feishu-bin            # [AUR] Linux client of Feishu (Lark) from Bytedance.
+
+# ── 密码 / 硬件密钥 ─────────────────────────────────────────────────────
+keepassxc        # 密码管理(autostart + windowrules)
+yubikey-manager  # Python library and command line tool for configuring a YubiKey
+
+# ── 代理 / VPN ──────────────────────────────────────────────────────
+v2raya                      # A web GUI client of Project V which supports VMess, VLESS, SS, S
+cgproxy-git                 # A transparent proxy program powered by cgroup2 and tproxy
+tailscale                   # A mesh VPN that makes it easy to connect your devices, wherever 
+frpc                        # A fast reverse proxy to help you expose a local server behind a 
+openvpn                     # An easy-to-use, robust and highly configurable VPN (Virtual Priv
+openvpn3                    # [AUR] OpenVPN 3 Linux client
+openconnect                 # Open client for Cisco AnyConnect VPN
+networkmanager-openvpn      # NetworkManager VPN plugin for OpenVPN (with GUI)
+networkmanager-openconnect  # NetworkManager VPN plugin for OpenConnect (with GUI)
+
+# ── 网络诊断 / 抓包 ─────────────────────────────────────────────────────
+nmap              # Utility for network discovery and security auditing
+tcpdump           # Powerful command-line packet analyzer
+tcpreplay         # Gives the ability to replay previously captured traffic in a lib
+ssldump           # [AUR] SSLv3/TLS network protocol analyzer
+mtr               # Combines the functionality of traceroute and ping into one tool 
+traceroute        # Tracks the route taken by packets over an IP network
+trippy            # A network diagnostic tool
+bind              # A complete, highly portable implementation of the DNS protocol
+gnu-netcat        # [AUR] GNU rewrite of netcat, the network piping application
+sniffnet          # Application to comfortably monitor your network traffic
+wireshark-qt      # Network traffic and protocol analyzer/sniffer - Qt GUI
+nali-go-bin       # [AUR] An offline tool for querying IP geographic information and CDN p
+
+# ── 数据库 / API 客户端 ─────────────────────────────────────────────────
+mongodb-compass-bin  # [AUR] The official GUI for MongoDB - binary version
+reqable-bin          # [AUR] A cross platform professional HTTP development and Debugger that
+
+# ── 虚拟化 / 磁盘 / 硬件 ─────────────────────────────────────────────────
+virtualbox  # Powerful x86 virtualization for enterprise as well as home use
+gparted     # A Partition Magic clone, frontend to GNU Parted
+qflipper    # Desktop application for updating Flipper Zero firmware via PC
+
+# ── 游戏 / 手柄 ───────────────────────────────────────────────────────
+steam               # Valve's digital software delivery system
+minecraft-launcher  # Official Minecraft Launcher
+prismlauncher       # Minecraft launcher with ability to manage multiple instances
+protonhax           # [AUR] Program to help executing outside programs in proton
+mcrcon              # [AUR] Console based remote console (rcon) client for Minecraft servers
+xone-dkms-git       # Modern Linux driver for Xbox One and Xbox Series X|S controllers
+xpadneo-dkms        # Advanced Linux Driver for Xbox One Wireless Gamepad
+xboxdrv             # [AUR] Userspace Xbox gamepad driver and input remapper

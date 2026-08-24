@@ -1,0 +1,21 @@
+# 90-optional.txt — 可留可不留 —— 备选方案 / 一次性尝试 / 纯玩具。迁移时默认整组跳过,想清楚再单独装
+#
+# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── 备选终端 (默认终端是 kitty,见 10-desktop) ───────────────────────────────
+ghostty          # Fast, native, feature-rich terminal emulator pushing modern feat
+konsole          # KDE terminal emulator
+yakuake          # A drop-down terminal emulator based on KDE konsole technology
+cool-retro-term  # A good looking terminal emulator which mimics the old cathode di
+
+# ── 已被其他工具覆盖的冗余项 ──────────────────────────────────────────────────
+
+# ── 一次性尝试 / 玩具 ────────────────────────────────────────────────────
+lolcat          # Okay, no unicorns. But rainbows!!
+imgcat          # [AUR] Output images as RGB ANSI graphics on the terminal
+gitlogue        # A cinematic Git commit replay tool for the terminal
+gource          # software version control visualization
+geogebra        # Dynamic mathematics software with interactive graphics, algebra 
+z-library-bin   # [AUR] Z-library application
+electron32-bin  # [AUR] Build cross platform desktop apps with web technologies — prebui

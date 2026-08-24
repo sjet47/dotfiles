@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+#
+# pkg-sync —— 分组包清单的对账与安装
+#
+#   ./pkg-sync                     双向对账:清单与系统的差异(附带仓库检查)
+#   ./pkg-sync repos               只检查前置仓库是否就绪
+#   ./pkg-sync install             安装 00~40 组(跳过 90-optional)
+#   ./pkg-sync install 30-dev ...  只装指定组
+#   ./pkg-sync install --skip-repo-check ...   跳过仓库检查(明知选中组不需要时)
+#
+# 清单文件 = 本目录下的 NN-*.txt,是包清单的唯一事实来源。
+# 格式:每行一个包名,# 之后为注释。
+
+set -euo pipefail
+cd "$(dirname "$(readlink -f "$0")")"
+
+# 清单里的包分布在这些仓库。core/extra 是默认开启的,
+# multilib 默认被注释掉,archlinuxcn 需要手动添加 —— 迁移时这两个是最常踩的坑:
+# 缺了仓库,pacman 只会报一堆 "target not found",不会告诉你根因。
+REQUIRED_REPOS=(core extra multilib archlinuxcn)
+
+# 从清单文件提取包名:剥掉注释和空白
+extract() { sed 's/#.*//' "$@" | tr -s '[:space:]' '\n' | grep -v '^$' | sort -u; }
+
+default_groups() { ls [0-9][0-9]-*.txt | grep -v '^90-'; }
+
+repo_hint() {
+    case "$1" in
+    multilib) cat <<'HINT'
+      取消 /etc/pacman.conf 里 [multilib] 两行的注释,然后 sudo pacman -Sy
+      (缺了它 lib32-mesa / lib32-vulkan-radeon 装不上,AMD 显卡跑 Steam 会缺库)
+HINT
+        ;;
+    archlinuxcn) cat <<'HINT'
+      追加到 /etc/pacman.conf:
+        [archlinuxcn]
+        Server = https://repo.archlinuxcn.org/$arch
+      然后 sudo pacman -Sy && sudo pacman -S archlinuxcn-keyring
+      (清单里有 17 个包来自这里)
+HINT
+        ;;
+    *)  echo "      这是默认仓库,被禁用属于异常,检查 /etc/pacman.conf" ;;
+    esac
+}
+
+cmd_repos() {
+    local enabled missing=()
+    enabled=$(pacman-conf --repo-list)
+    for r in "${REQUIRED_REPOS[@]}"; do
+        grep -qx -- "$r" <<<"$enabled" || missing+=("$r")
+    done
+
+    if ((${#missing[@]} == 0)); then
+        echo "仓库就绪：${REQUIRED_REPOS[*]}"
+        return 0
+    fi
+
+    echo "缺少前置仓库，装了也会缺包：" >&2
+    for r in "${missing[@]}"; do
+        echo "  ✗ $r" >&2
+        repo_hint "$r" >&2
+    done
+    return 1
+}
+
+cmd_check() {
+    local listed sys untracked missing
+    listed=$(extract $(ls [0-9][0-9]-*.txt))
+    sys=$(pacman -Qqe | sort -u)
+    untracked=$(comm -23 <(echo "$sys") <(echo "$listed"))
+    missing=$(comm -13 <(echo "$sys") <(echo "$listed"))
+
+    if [[ -n $untracked ]]; then
+        echo "系统里有、清单里没有（装了新包忘了记）："
+        echo "$untracked" | sed 's/^/  + /'
+        echo
+    fi
+    if [[ -n $missing ]]; then
+        echo "清单里有、系统没装（清单腐烂，或该包已被弃用）："
+        echo "$missing" | sed 's/^/  - /'
+        echo
+    fi
+    [[ -z $untracked && -z $missing ]] && echo "清单与系统一致（$(echo "$sys" | wc -l) 个显式包）。"
+
+    cmd_repos || true      # 对账时仓库问题只提示,不改变退出码
+}
+
+cmd_install() {
+    local skip_repo=0 files=()
+    for a in "$@"; do [[ $a == --skip-repo-check ]] && skip_repo=1; done
+
+    ((skip_repo)) || cmd_repos || {
+        echo >&2
+        echo "先把上面的仓库配好再装。确认选中的组用不到它们,可加 --skip-repo-check 跳过。" >&2
+        exit 1
+    }
+
+    for g in "$@"; do
+        [[ $g == --* ]] && continue
+        [[ -f $g ]] || g="$g.txt"
+        [[ -f $g ]] || { echo "找不到清单: $g" >&2; exit 1; }
+        files+=("$g")
+    done
+    ((${#files[@]})) || mapfile -t files < <(default_groups)
+
+    echo "将从以下清单安装：${files[*]}"
+    local pkgs; pkgs=$(extract "${files[@]}")
+    echo "共 $(echo "$pkgs" | wc -l) 个包（已装的会跳过）"
+
+    if command -v paru >/dev/null; then
+        echo "$pkgs" | paru -Syu --needed -
+    else
+        echo "未找到 paru，仅能安装官方仓库的包（[AUR] 标记的会失败）。" >&2
+        echo "$pkgs" | sudo pacman -Syu --needed -
+    fi
+}
+
+case "${1:-check}" in
+    check)   cmd_check ;;
+    repos)   cmd_repos ;;
+    install) shift; cmd_install "$@" ;;
+    *)       sed -n '2,16p' "$0" | sed 's/^# \?//'; exit 1 ;;
+esac

@@ -1,0 +1,71 @@
+# 00-base.txt — 系统底座 —— 装机第一步,缺了开不了机或联不上网
+#
+# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── 内核 / 固件 / 微码 ──────────────────────────────────────────────────
+base            # Minimal package set to define a basic Arch Linux installation
+base-devel      # Basic tools to build Arch Linux packages
+linux           # The Linux kernel and modules
+linux-headers   # Headers and scripts for building modules for the Linux kernel
+linux-firmware  # Firmware files for Linux - Default set
+amd-ucode       # Microcode update image for AMD CPUs
+alsa-firmware   # Firmware binaries for loader programs in alsa-tools and hotplug 
+sof-firmware    # Sound Open Firmware
+
+# ── 引导 / AMD 显卡驱动 ─────────────────────────────────────────────────
+refind               # An EFI boot manager
+vulkan-radeon        # Open-source Vulkan driver for AMD GPUs
+lib32-vulkan-radeon  # Open-source Vulkan driver for AMD GPUs - 32-bit
+lib32-mesa           # Open-source OpenGL drivers - 32-bit
+xf86-video-amdgpu    # X.org amdgpu video driver
+
+# ── 包管理 ───────────────────────────────────────────────────────────
+archlinuxcn-keyring  # Arch Linux CN PGP keyring
+paru                 # Feature packed AUR helper
+pacman-contrib       # Contributed scripts and tools for pacman systems
+expac                # alpm data (pacman database) extraction utility
+reflector            # A Python 3 module and script to retrieve and filter the latest P
+kernel-modules-hook  # Keeps your system fully functional after a kernel upgrade
+
+# ── 网络基础 ──────────────────────────────────────────────────────────
+networkmanager        # Network connection manager and user applications
+nm-connection-editor  # NetworkManager GUI connection editor and widgets
+dhcpcd                # DHCP/ IPv4LL/ IPv6RA/ DHCPv6 client
+iwd                   # Internet Wireless Daemon
+openssh               # SSH protocol implementation for remote login, command execution 
+net-tools             # Configuration tools for Linux networking
+inetutils             # A collection of common network programs
+wget                  # Network utility to retrieve files from the web
+
+# ── 文件系统 / 存储 ─────────────────────────────────────────────────────
+ntfs-3g    # NTFS FUSE driver
+nfs-utils  # Support programs for Network File Systems
+sshfs      # FUSE client based on the SSH File Transfer Protocol
+usbutils   # A collection of USB tools to query connected USB devices
+rsync      # A fast and versatile file copying tool for remote and local file
+
+# ── 归档解压 ──────────────────────────────────────────────────────────
+7zip   # File archiver for extremely high compression
+zip    # Compressor/archiver for creating and modifying zipfiles
+unzip  # For extracting and viewing files in .zip archives
+unrar  # The RAR uncompression program
+cpio   # A tool to copy files into or out of a cpio or tar archive
+
+# ── 系统基础工具 ────────────────────────────────────────────────────────
+cronie                 # Daemon that runs specified programs at scheduled times and relat
+man-db                 # A utility for reading man pages
+man-pages              # Linux man pages
+words                  # A collection of International 'words' files for /usr/share/dict
+less                   # A terminal based program for viewing text files
+tree                   # A directory listing program displaying a depth indented list of 
+plocate                # Alternative to locate, faster and compatible with mlocate's data
+power-profiles-daemon  # 电源模式切换
+
+# ── 打印 ────────────────────────────────────────────────────────────
+cups      # OpenPrinting CUPS - daemon package
+cups-pdf  # PDF printer for cups
+
+# ── 蓝牙 ────────────────────────────────────────────────────────────
+bluez-utils  # bluetoothctl 等
+bluez-obex   # 蓝牙文件传输

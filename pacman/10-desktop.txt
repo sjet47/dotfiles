@@ -1,0 +1,99 @@
+# 10-desktop.txt — Hyprland 桌面环境 —— 装完这组就有可用图形界面
+#
+# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── Hyprland 核心 / 会话 / 锁屏 ─────────────────────────────────────────
+hyprland                     # Wayland 合成器本体
+uwsm                         # 通用 Wayland 会话管理(autostart/binds 里 uwsm-app 拉起应用)
+xdg-desktop-portal-hyprland  # 截图/录屏/文件选择 portal 后端
+xwayland-satellite           # 按需启动的 Xwayland
+hypridle                     # 空闲管理(配合 hyprlock)
+hyprlock                     # 锁屏
+hyprpaper                    # 壁纸(备用,当前配置默认用 awww)
+hyprpicker                   # 取色器(截图冻结画面)
+awww                         # 壁纸守护(wallpaper.sh / autostart 的 awww-daemon 实际使用)
+polkit-gnome                 # 图形化授权代理
+
+# ── 状态栏 / 启动器 / 通知 / 注销 ───────────────────────────────────────────
+waybar       # 顶部状态栏
+vicinae-bin  # [AUR] 应用启动器(AUR,配置里默认用它)
+mako         # 通知守护
+wlogout      # [AUR] 注销/电源菜单
+
+# ── 截图 / 录屏 / 剪贴板 ─────────────────────────────────────────────────
+grim                 # 截图后端
+slurp                # 区域选择
+tensaku              # [AUR] 截图标注(AUR,satty fork,支持滚动长截图)
+spectacle            # KDE screenshot capture utility
+gpu-screen-recorder  # A shadowplay-like screen recorder for Linux. The fastest screen 
+wl-screenrec-git     # 录屏(archlinuxcn / AUR)
+wl-clipboard         # wl-copy / wl-paste
+cliphist             # 剪贴板历史
+wtype                # xdotool type for wayland
+zbar                 # zbarimg 二维码解码(screenshot.sh qr 模式)
+
+# ── 密钥环 ───────────────────────────────────────────────────────────
+gnome-keyring  # 密钥环 / SSH agent(autostart + env.lua 的 SSH_AUTH_SOCK)
+seahorse       # GNOME application for managing PGP keys
+lssecret-git   # [AUR] utility to list all secret items in a secret service using libse
+
+# ── KDE 应用 ────────────────────────────────────────────────────────
+plasma-meta     # Meta package to install KDE Plasma
+dolphin         # 文件管理器(vars.lua,SUPER+E)
+ark             # Archiving Tool
+gwenview        # A fast and easy to use image viewer
+okular          # Document Viewer
+filelight       # View disk usage information
+kate            # Advanced text editor
+isoimagewriter  # Program to write hybrid ISO files onto USB disks
+kdeconnect      # Adds communication between KDE and your smartphone
+
+# ── 远程桌面 (见 HANDOFF: wayvnc 走 frp+ssh 隧道) ─────────────────────────
+wayvnc    # VNC server for wlroots-based Wayland compositors
+tigervnc  # Suite of VNC servers and clients based on the VNC 4 branch of Ti
+krdc      # Remote Desktop Client
+krfb      # Desktop Sharing
+
+# ── 亮度 ──────────────────────────────────────────────────────────────
+ddcutil  # 外接显示器 DDC/CI 亮度(scripts/brightness.sh 直接调用)
+
+# ── 音频 / 蓝牙前端 ─────────────────────────────────────────────────────
+pavucontrol      # 图形音量面板
+pamixer          # 音量控制(备用)
+easyeffects      # Audio Effects for Pipewire applications
+lsp-plugins-lv2  # Collection of open-source plugins - LV2
+blueman          # 蓝牙托盘
+bluetui          # TUI for managing bluetooth devices
+
+# ── 托盘 / 全局菜单兼容 ───────────────────────────────────────────────────
+appmenu-gtk-module  # Application Menu GTK Module
+libdbusmenu-glib    # Library for passing menus over DBus
+libdbusmenu-gtk3    # Library for passing menus over DBus (GTK+ 3 library)
+libdbusmenu-qt5     # A library that provides a Qt implementation of the DBusMenu spec
+
+# ── 输入法 (fcitx5) ──────────────────────────────────────────────────
+fcitx5                 # 输入法框架
+fcitx5-anthy           # Anthy Wrapper for Fcitx5
+fcitx5-chinese-addons  # 拼音/中文输入
+fcitx5-configtool      # 图形配置
+fcitx5-gtk             # GTK 应用集成
+fcitx5-qt              # Qt 应用集成
+fcitx5-material-color  # Material color theme for fcitx5
+
+# ── 字体 ────────────────────────────────────────────────────────────
+adobe-source-han-serif-cn-fonts  # Adobe Source Han Serif Subset OTF - Simplified Chinese OpenType/
+noto-fonts-cjk                   # Google Noto CJK fonts
+noto-fonts-extra                 # Google Noto TTF fonts - additional variants
+wqy-zenhei                       # A Hei Ti Style (sans-serif) Chinese Outline Font.
+ttf-apple-emoji                  # [AUR] Apple Color Emoji is a color typeface used by iOS and macOS to d
+ttf-cascadia-code                # A monospaced font by Microsoft that includes programming ligatur
+ttf-cascadia-code-nerd           # Patched font Cascadia Code (Caskaydia) from nerd fonts library
+ttf-jetbrains-mono               # Typeface for developers, by JetBrains
+ttf-jetbrains-mono-nerd          # Patched font JetBrains Mono from nerd fonts library
+ttf-maplemono-nf-cn-unhinted     # Maple Mono NF CN(kitty 默认字体,自带 Nerd/CJK)
+ttf-nunito                       # Sans serif font with rounded tips by Vernon Adams
+
+# ── 默认终端 / 缩略图 / 系统监视 ─────────────────────────────────────────────
+kitty              # 配置里默认终端
+ffmpegthumbnailer  # Lightweight video thumbnailer that can be used by file managers
