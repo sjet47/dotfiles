@@ -19,3 +19,6 @@ gource          # software version control visualization
 geogebra        # Dynamic mathematics software with interactive graphics, algebra 
 z-library-bin   # [AUR] Z-library application
 electron32-bin  # [AUR] Build cross platform desktop apps with web technologies — prebui
+cmatrix         # 终端 matrix 雨屏保
+unimatrix-git   # [AUR] matrix 雨屏保(unicode 版)
+ttfx            # [AUR] 终端文字特效/屏保(Omarchy 的 terminaltexteffects Rust 移植)

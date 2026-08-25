@@ -54,6 +54,7 @@ fastfetch            # 系统信息
 cpufetch             # Simple yet fancy CPU architecture fetching tool
 hwinfo               # Hardware detection tool from openSUSE
 impala               # TUI for managing wifi
+dmidecode  # 读 BIOS/主板/内存槽位硬件信息
 
 # ── 文档 / 图形 / 排版 ──────────────────────────────────────────────────
 graphviz        # Graph visualization software

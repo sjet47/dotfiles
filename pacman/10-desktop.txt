@@ -14,6 +14,7 @@ hyprpaper                    # 壁纸(备用,当前配置默认用 awww)
 hyprpicker                   # 取色器(截图冻结画面)
 awww                         # 壁纸守护(wallpaper.sh / autostart 的 awww-daemon 实际使用)
 polkit-gnome                 # 图形化授权代理
+sddm  # 登录/显示管理器(sddm.service enabled;原先只是 sddm-kcm 的依赖,险些被孤儿清理带走)
 
 # ── 状态栏 / 启动器 / 通知 / 注销 ───────────────────────────────────────────
 waybar       # 顶部状态栏
@@ -48,6 +49,7 @@ filelight       # View disk usage information
 kate            # Advanced text editor
 isoimagewriter  # Program to write hybrid ISO files onto USB disks
 kdeconnect      # Adds communication between KDE and your smartphone
+kimageformats  # 给 Qt 应用补 AVIF/HEIF/JXL 图片格式(gwenview 打开这些格式靠它)
 
 # ── 远程桌面 (见 HANDOFF: wayvnc 走 frp+ssh 隧道) ─────────────────────────
 wayvnc    # VNC server for wlroots-based Wayland compositors
@@ -65,6 +67,9 @@ easyeffects      # Audio Effects for Pipewire applications
 lsp-plugins-lv2  # Collection of open-source plugins - LV2
 blueman          # 蓝牙托盘
 bluetui          # TUI for managing bluetooth devices
+pipewire        # 音频/视频服务端(原先非显式,依赖链经 kwin,plasma 移除后有孤儿风险)
+pipewire-pulse  # PulseAudio 兼容层
+wireplumber     # pipewire 会话管理(wireplumber.service enabled,音量快捷键的 wpctl 来自它)
 
 # ── 托盘 / 全局菜单兼容 ───────────────────────────────────────────────────
 appmenu-gtk-module  # Application Menu GTK Module

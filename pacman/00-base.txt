@@ -44,6 +44,7 @@ nfs-utils  # Support programs for Network File Systems
 sshfs      # FUSE client based on the SSH File Transfer Protocol
 usbutils   # A collection of USB tools to query connected USB devices
 rsync      # A fast and versatile file copying tool for remote and local file
+smartmontools  # 磁盘 SMART 健康检测(smartctl)
 
 # ── 归档解压 ──────────────────────────────────────────────────────────
 7zip   # File archiver for extremely high compression
@@ -65,6 +66,7 @@ power-profiles-daemon  # 电源模式切换
 # ── 打印 ────────────────────────────────────────────────────────────
 cups      # OpenPrinting CUPS - daemon package
 cups-pdf  # PDF printer for cups
+print-manager  # 图形化打印机配置(未装 system-config-printer,删了只剩 CUPS 网页版)
 
 # ── 蓝牙 ────────────────────────────────────────────────────────────
 bluez-utils  # bluetoothctl 等
