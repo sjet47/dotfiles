@@ -1,0 +1,12 @@
+[SddmGreeterTheme]
+Name=hyprlock
+Description=Matches the hyprlock lock screen (Apple-style dark)
+Author=sjet
+License=MIT
+Type=sddm-theme
+Version=1.0
+Website=
+Screenshot=
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=

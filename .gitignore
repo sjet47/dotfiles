@@ -24,6 +24,7 @@ pi-agent/*
 !config/fontconfig/
 !config/gtk-3.0/
 !config/gtk-4.0/
+!config/sddm/
 !config/environment.d/
 !config/environment.d/
 !pi-agent/agents
