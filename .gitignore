@@ -68,6 +68,11 @@ config/systemd/user/*
 !config/systemd/user/tmux-resurrect-cleanup.timer
 !config/systemd/user/waybar.service
 !config/systemd/user/wayvnc@.service
+# mako 屏蔽:/usr/share/dbus-1/services/fr.emersion.mako.service 把 mako 注册成
+# org.freedesktop.Notifications 的 D-Bus 可激活提供者,只要名字空出来(quickshell 崩溃、
+# 重启的间隙)任何一条通知都会把它拉回来,之后 quickshell 就再也注册不上。
+# 这个指向 /dev/null 的软链是 systemctl --user mask 的产物,必须入库。
+!config/systemd/user/mako.service
 
 # KDE/Plasma 自动生成,机器相关,只保留 conf.d 里我们自己的配置
 config/fontconfig/fonts.conf

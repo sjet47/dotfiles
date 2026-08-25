@@ -1,12 +1,12 @@
 //
 // 通知守护 —— 替代 mako
 //
-// 独立于 osd 那份配置跑(qs -c notifications),两者互不影响:通知崩了不会带走 OSD。
-//
 // 对外接口(waybar 的 custom/notifications 模块在用):
-//   qs -c notifications ipc call notif dndToggle   切免打扰,返回 on/off
-//   qs -c notifications ipc call notif dndStatus   查免打扰
-//   qs -c notifications ipc call notif history     历史记录 JSON
+//   qs ipc call notif dndToggle    切免打扰,返回 on/off
+//   qs ipc call notif dndStatus    查免打扰
+//   qs ipc call notif history      历史记录 JSON
+//   qs ipc call notif invoke       触发最新一条的 default action(对应 makoctl invoke)
+//   qs ipc call notif dismissAll   清空(对应 makoctl dismiss --all)
 //
 // 行为对齐 config/mako/config:浅色卡片、右上角、宽 420、默认 5s、
 // critical 不自动消失且红边、免打扰时只放行 notify-send、截图通知用大图。
@@ -17,27 +17,18 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
-import Quickshell.Hyprland
 import Quickshell.Wayland
 import Quickshell.Services.Notifications
 
-ShellRoot {
-    id: root
+Scope {
+    id: notif
+
+    required property string activeMonitor
 
     property bool  dnd: false
     property var   popups: []      // 正在显示的 Notification 对象
     property var   log: []         // 历史(纯数据,通知对象销毁后仍在)
     readonly property int maxLog: 50
-
-    // 与 osd 那份同样的处理:focusedMonitor 启动时为 null,先用 hyprctl 播种
-    property string seedMonitor: ""
-    readonly property string activeMonitor: Hyprland.focusedMonitor?.name ?? root.seedMonitor
-
-    Process {
-        running: true
-        command: ["sh", "-c", "hyprctl monitors -j | jq -r '.[]|select(.focused)|.name'"]
-        stdout: StdioCollector { onStreamFinished: root.seedMonitor = this.text.trim() }
-    }
 
     NotificationServer {
         id: server
@@ -52,60 +43,72 @@ ShellRoot {
         onNotification: function (n) {
             n.tracked = true;
 
-            root.log = [{
+            notif.log = [{
                 appName: n.appName, summary: n.summary, body: n.body,
                 urgency: n.urgency, time: Date.now()
-            }].concat(root.log).slice(0, root.maxLog);
+            }].concat(notif.log).slice(0, notif.maxLog);
 
             // 免打扰:只放行 notify-send(和 mako 的 [mode=do-not-disturb app-name=notify-send] 一致)
-            if (root.dnd && n.appName !== "notify-send") return;
+            if (notif.dnd && n.appName !== "notify-send") return;
 
-            root.popups = [n].concat(root.popups);
+            notif.popups = [n].concat(notif.popups);
         }
     }
 
     function drop(n) {
-        root.popups = root.popups.filter(x => x !== n);
+        notif.popups = notif.popups.filter(x => x !== n);
     }
 
     IpcHandler {
         target: "notif"
 
-        function dndToggle(): string { root.dnd = !root.dnd; return root.dnd ? "on" : "off"; }
-        function dndStatus(): string { return root.dnd ? "on" : "off"; }
-        function history(): string   { return JSON.stringify(root.log); }
+        function dndToggle(): string { notif.dnd = !notif.dnd; return notif.dnd ? "on" : "off"; }
+        function dndStatus(): string { return notif.dnd ? "on" : "off"; }
+        function history(): string   { return JSON.stringify(notif.log); }
 
         // 对应 makoctl invoke / makoctl dismiss --all
         function invoke(): string {
-            const n = root.popups[0];
+            const n = notif.popups[0];
             if (!n) return "none";
             const def = (n.actions ?? []).find(a => a.identifier === "default");
-            root.drop(n);
+            notif.drop(n);
             if (!def) { n.dismiss(); return "dismissed"; }
             def.invoke();
             return "invoked";
         }
         function dismissAll(): string {
-            const c = root.popups.length;
-            root.popups.forEach(n => n.dismiss());
-            root.popups = [];
+            const c = notif.popups.length;
+            notif.popups.forEach(n => n.dismiss());
+            notif.popups = [];
             return String(c);
         }
     }
 
+    // 直接把 JS 数组喂给 Repeater 的话,数组一变整列 delegate 全部重建 —— 表现为
+    // 某条自动消失时,其余卡片的缩略图会闪一下重新解码。ScriptModel 做增量 diff,
+    // 只增删变化的那一项,存活的 delegate 不动。
+    ScriptModel {
+        id: popupModel
+        values: notif.popups
+    }
+
+    // 只给当前活动屏建面板。若对所有屏建再靠 visible 控制,隐藏的那块也会照样
+    // 实例化整列 delegate 并解码一遍图片(插桩实测每条 delegate 创建两次)。
     Variants {
-        model: Quickshell.screens
+        model: Quickshell.screens.filter(s => s.name === notif.activeMonitor)
 
         PanelWindow {
             id: panel
             required property var modelData
 
             screen: modelData
-            visible: root.popups.length > 0 && root.activeMonitor === modelData.name
+            visible: notif.popups.length > 0
 
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.namespace: "quickshell-notifications"
-            exclusionMode: ExclusionMode.Ignore
+            // 不能 Ignore:那样会无视 waybar 的独占区,卡片压到状态栏上去
+            // (实测 y=495 落在 waybar 的 479..510 区间内,而 mako 是 530)
+            exclusionMode: ExclusionMode.Normal
             anchors { top: true; right: true }
             margins { top: 20; right: 20 }      // mako outer-margin=20
             implicitWidth: 420                  // mako width=420
@@ -118,7 +121,7 @@ ShellRoot {
                 spacing: 10
 
                 Repeater {
-                    model: root.popups
+                    model: popupModel
 
                     delegate: Rectangle {
                         id: card
@@ -139,7 +142,9 @@ ShellRoot {
                         width: parent.width
                         implicitHeight: row.implicitHeight + 20   // mako padding=10,15 的上下部分
                         radius: 12                                // mako border-radius=12
-                        color: "#f5f5f7d9"                        // mako background-color
+                        // mako 的 #f5f5f7d9 是 RRGGBBAA,而 Qt 的八位色是 AARRGGBB ——
+                        // 照抄字符串会被读成 96% 不透明的米黄色,要换序。
+                        color: "#d9f5f5f7"                        // = mako background-color
                         border.width: 1                           // mako border-size=1
                         border.color: card.n.urgency === NotificationUrgency.Critical ? "#ff453a"
                                     : card.n.urgency === NotificationUrgency.Low      ? "#e5e5ea"
@@ -149,7 +154,7 @@ ShellRoot {
                         Timer {
                             running: card.n.urgency !== NotificationUrgency.Critical
                             interval: card.n.expireTimeout > 0 ? card.n.expireTimeout : 5000
-                            onTriggered: { root.drop(card.n); card.n.expire(); }
+                            onTriggered: { notif.drop(card.n); card.n.expire(); }
                         }
 
                         MouseArea {
@@ -157,12 +162,12 @@ ShellRoot {
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: function (mouse) {
                                 if (mouse.button === Qt.RightButton) {
-                                    root.drop(card.n); card.n.dismiss();
+                                    notif.drop(card.n); card.n.dismiss();
                                     return;
                                 }
                                 // 左键触发 default action(截图的"标注"、录屏的"打开"都靠它)
                                 const def = (card.n.actions ?? []).find(a => a.identifier === "default");
-                                root.drop(card.n);
+                                notif.drop(card.n);
                                 if (def) def.invoke(); else card.n.dismiss();
                             }
                         }
@@ -181,12 +186,9 @@ ShellRoot {
                                 Layout.alignment: Qt.AlignVCenter
                                 fillMode: Image.PreserveAspectFit
                                 asynchronous: true
-                                // 截图通知传的是整张 4K PNG。不限制解码尺寸的话 Qt 会按原始
-                                // 分辨率解到内存里且不随弹窗消失释放(实测基线 184MB 涨到 293MB),
-                                // 而每次截图都会发一条,会持续累积。按显示尺寸解码即可。
+                                // 截图通知传的是整张 4K PNG,不限制就按原分辨率解进内存
                                 sourceSize.width: card.iconSize * 2
                                 sourceSize.height: card.iconSize * 2
-                                cache: false
                             }
 
                             ColumnLayout {
@@ -205,8 +207,8 @@ ShellRoot {
                                 Text {
                                     Layout.fillWidth: true
                                     visible: (card.n.body ?? "") !== ""
-                                    // body 里是真换行符(0a,实测 xxd 确认),而 StyledText 是 HTML
-                                    // 语义会把它折叠成空格,所以要换成 <br/>。mako 是渲染成换行的,对齐它。
+                                    // body 里是真换行符(0a,xxd 实测),而 StyledText 是 HTML 语义会把它
+                                    // 折叠成空格,所以要换成 <br/>。mako 是渲染成换行的,对齐它。
                                     text: (card.n.body ?? "").replace(/\n/g, "<br/>")
                                     color: "#1d1d1f"
                                     font.family: "Noto Sans"
@@ -222,13 +224,14 @@ ShellRoot {
                                     Layout.fillWidth: true
                                     Layout.topMargin: 4
                                     spacing: 6
-                                    visible: repeater.count > 0
+                                    visible: actions.count > 0
 
                                     Repeater {
-                                        id: repeater
+                                        id: actions
                                         model: (card.n.actions ?? []).filter(a => a.identifier !== "default")
 
                                         delegate: Rectangle {
+                                            id: btn
                                             required property var modelData
                                             width: label.implicitWidth + 18
                                             height: label.implicitHeight + 8
@@ -239,7 +242,7 @@ ShellRoot {
                                             Text {
                                                 id: label
                                                 anchors.centerIn: parent
-                                                text: parent.modelData.text
+                                                text: btn.modelData.text
                                                 color: "#1d1d1f"
                                                 font.family: "Noto Sans"
                                                 font.pixelSize: 13
@@ -248,7 +251,7 @@ ShellRoot {
                                                 id: hover
                                                 anchors.fill: parent
                                                 hoverEnabled: true
-                                                onClicked: { root.drop(card.n); parent.modelData.invoke(); }
+                                                onClicked: { notif.drop(card.n); btn.modelData.invoke(); }
                                             }
                                         }
                                     }

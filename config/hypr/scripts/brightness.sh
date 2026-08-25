@@ -21,7 +21,7 @@ esac
 mon=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
 
 # 推给 OSD;没装 quickshell 或 OSD 没跑都不影响亮度调节本身
-osd() { command -v qs >/dev/null 2>&1 && qs -c osd ipc call osd brightness "$1" >/dev/null 2>&1 & }
+osd() { command -v qs >/dev/null 2>&1 && qs ipc call osd brightness "$1" >/dev/null 2>&1 & }
 
 if [[ $mon == eDP* || $mon == LVDS* || $mon == DSI* ]]; then
   brightnessctl -e4 -n2 set "$BCTL" >/dev/null

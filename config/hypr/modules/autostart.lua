@@ -5,9 +5,6 @@
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("systemctl --user --no-block start hypridle.service")
-  -- 通知守护:mako → quickshell(config/quickshell/notifications)。
-  -- 与 OSD 分开跑,通知崩了不会带走 OSD。mako 的包和配置暂时留着方便回退。
-  hl.exec_cmd("uwsm-app -- qs -c notifications")
   hl.exec_cmd("systemctl --user --no-block start waybar.service")
   hl.exec_cmd("uwsm-app -- awww-daemon")
   -- 候选框是 XWayland 顶层窗口(见 windowrules.lua),需要 QT_SCALE_FACTOR 才不会按 1x 渲染。
@@ -16,6 +13,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets,ssh,pkcs11")
   hl.exec_cmd("systemctl --user --no-block start vicinae.service")
   hl.exec_cmd("uwsm-app -- keepassxc")
-  -- 音量/亮度 OSD(config/quickshell/osd)
-  hl.exec_cmd("uwsm-app -- qs -c osd")
+  -- 桌面 shell:OSD + 通知守护(替代 mako),整个桌面只此一个 quickshell 实例。
+  -- mako 的包和 config/mako/ 暂时留着方便回退。
+  hl.exec_cmd("uwsm-app -- qs")
 end)

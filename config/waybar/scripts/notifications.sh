@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# waybar 通知模块的后端。守护进程是 quickshell(config/quickshell/notifications),
+# waybar 通知模块的后端。守护进程是 quickshell(config/quickshell/,单实例 `qs`),
 # 原来是 mako —— 字段名也跟着变了(mako 的 app_name → appName)。
 #
 #   status   打印图标,免打扰时换成带斜杠的铃铛(mako 时代没有这个反馈)
@@ -8,7 +8,7 @@
 
 set -uo pipefail
 
-qs_call() { qs -c notifications ipc call notif "$@" 2>/dev/null; }
+qs_call() { qs ipc call notif "$@" 2>/dev/null; }
 
 case "${1:-status}" in
 status)
