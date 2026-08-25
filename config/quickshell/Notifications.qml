@@ -52,6 +52,11 @@ Scope {
             if (notif.dnd && n.appName !== "notify-send") return;
 
             notif.popups = [n].concat(notif.popups);
+
+            // 发送方主动关闭(CloseNotification)或用 replaces_id 顶掉旧的时,对象会失效。
+            // 不同步摘掉的话,popups 里留下失效引用,delegate 渲染成一张永不消失的空白卡片
+            // —— 飞书的"报警"反复发,实测能堆出好几张。
+            n.closed.connect(function () { notif.drop(n); });
         }
     }
 
