@@ -8,12 +8,12 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("systemctl --user --no-block start mako.service")
   hl.exec_cmd("systemctl --user --no-block start waybar.service")
   hl.exec_cmd("uwsm-app -- awww-daemon")
-  hl.exec_cmd("uwsm-app -- fcitx5 -d")
+  -- 候选框是 XWayland 顶层窗口(见 windowrules.lua),需要 QT_SCALE_FACTOR 才不会按 1x 渲染。
+  -- 全局已不设该变量,这里是唯一的显式消费者。
+  hl.exec_cmd("uwsm-app -- env QT_SCALE_FACTOR=1.5 fcitx5 -d")
   hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets,ssh,pkcs11")
   hl.exec_cmd("systemctl --user --no-block start vicinae.service")
-  -- KeePassXC 是 Qt6 原生 Wayland,而 uwsm-app 建的是 scope(继承 Hyprland 环境),
-  -- 会吃到 env.lua 的 QT_SCALE_FACTOR=1.5 并和显示器 scale 叠乘成 2.25 倍。
-  -- QT_SCALE_FACTOR 是 Qt 里少数不分后端、无脑相乘的变量,只该给 XWayland 下的
-  -- Qt 应用(如 fcitx5 候选框),凡是走原生 Wayland 的 Qt 应用都必须摘掉它。
-  hl.exec_cmd("uwsm-app -- env -u QT_SCALE_FACTOR keepassxc")
+  hl.exec_cmd("uwsm-app -- keepassxc")
+  -- 音量/亮度 OSD(config/quickshell/osd)
+  hl.exec_cmd("uwsm-app -- qs -c osd")
 end)

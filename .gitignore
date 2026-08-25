@@ -19,6 +19,7 @@ pi-agent/*
 !config/mako/
 !config/wayvnc/
 !config/systemd/
+!config/quickshell/
 !config/herdr/
 !config/satty/
 !config/fontconfig/
