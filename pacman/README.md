@@ -57,7 +57,7 @@ pkg=ddcutil    # 换成要查的包名
 pacman -Ql "$pkg" | awk '$2 ~ /^\/usr\/bin\/[^\/]+$/ {print $2}' | xargs -n1 basename
 ```
 
-修法：`sudo pacman -D --asexplicit <pkg>`，然后补进清单。
+修法：`sudo pacman -D --asexplicit ddcutil`（换成实际包名），然后补进清单。
 
 ### 2. enabled 的服务却是非显式安装 = 定时炸弹
 
@@ -112,9 +112,9 @@ multilib 在 `/etc/pacman.conf` 里是注释掉的，archlinuxcn 要手工添加
 
 ### 6. `-n` 和 `--print` 不能同时用
 
-`pacman -Rns --print <pkg>` 会报 `invalid option: '--nosave' and '--print' may not be used together`。
+`pacman -Rns --print plasma-meta` 会报 `invalid option: '--nosave' and '--print' may not be used together`。
 如果你把 stderr 混进了 stdout 再数行数，会看到"只删 1 个包"这种假象，实际那 1 行是错误信息。
-dry-run 用 `pacman -Rs --print --print-format '%n' <pkg>`。
+dry-run 用 `pacman -Rs --print --print-format '%n' plasma-meta`。
 
 ### 7. 管道喂 stdin 时 pacman 需要 tty
 
@@ -138,3 +138,83 @@ AUR 包。pacman 原生的 `-Qqe` / `-Qqen` / `-Qqem` 加 stdin 安装已经够�
 这套东西的前身是三份手写清单，最后的状态是：引用了从没装过的包、同一个包写了两遍、
 三份加起来还漏掉 245 个显式包。**清单的价值不在于写下来，而在于能和现实对账。**
 所以宁可注释写得糙一点，也要保证 `pkg-sync` 能跑通。
+
+### 11. AUR 包会因系统库 SONAME 升级静默失效，而且重装无效
+
+AUR 包是**在你机器上编译**的，链接的是当时的系统库。之后 pacman 升级了那个库、SONAME 变了，
+旧二进制就加载不了 —— 但 pacman 不会告诉你，因为包依赖关系（`protobuf>=2.4.0` 这种）依然满足。
+
+实例：`openvpn3` 构建于 7 月，链接 `libabsl_*.so.2605`；abseil-cpp 升到 `20260817.0-1` 之后
+只提供 `.2608`，后端进程直接起不来。
+
+**症状极具误导性** —— 主程序 `/usr/bin/openvpn3` 是好的，配置能正常加载，只有真正建隧道时
+后端才崩，报错是 `New tunnel did not respond`，看着完全像网络问题。真正的原因得去 journal 里找：
+
+```bash
+journalctl -b | grep -i openvpn3 | grep 'error while loading shared libraries'
+```
+
+**重装解决不了**。paru 会复用 `~/.cache/paru/clone/<pkg>/` 里已构建的 `.pkg.tar.zst`，
+装完 `pacman -Qi` 的 `Build Date` 纹丝不动。必须强制重建：
+
+```bash
+paru -S --rebuild openvpn3    # 换成实际包名
+```
+
+判断是否中招，看 `Build Date` 和缺库：
+
+```bash
+pacman -Qi openvpn3 | grep 'Build Date'
+ldd /usr/lib/openvpn3-linux/openvpn3-service-client | grep 'not found'
+```
+
+体检全部 AUR 包（换机后、大版本升级后值得跑一次）：
+
+```bash
+for p in $(pacman -Qqem); do
+  pacman -Ql "$p" | awk '{print $2}' | grep -E '/(bin|lib)/' | while read -r f; do
+    [[ -f $f ]] || continue
+    ldd "$f" 2>/dev/null | awk '/not found/{print $1}' | while read -r lib; do
+      # Flutter/Electron 等自带库的应用把依赖放在同目录,单独 ldd 解析不到,属误报
+      [[ -e "$(dirname "$f")/$lib" ]] && continue
+      echo "[!] $p :: $(basename "$f") 缺 $lib"
+    done
+  done
+done
+```
+
+> 已知无害的残留：`localsend-bin :: libdartjni.so 缺 libjvm.so` —— Dart 的 Java 互操作桥，
+> LocalSend 在 Linux 上不使用，没装 JDK 就会报，可忽略。
+
+### 12. PATH 里的项目工具链会污染 AUR 构建
+
+`makepkg` 继承你当前 shell 的 PATH。如果 PATH 前面挂着项目级或语言管理器的 bin 目录
+（opam / ghcup / bun / 各种 `.toolset/bin`），里面的旧版工具会**盖住系统版本**，
+构建时用它生成代码、却对着系统头文件编译，于是炸在完全无关的地方。
+
+实例：`openvpn3` 重建时报
+
+```
+/usr/include/google/protobuf/arena.h: error: invalid new-expression of
+abstract class type 'openvpn::DcoKeyConfig_KeyDirection'
+```
+
+看着像"上游代码跟 protobuf 35 不兼容，这个包在 Arch 上坏了"。实际是
+`~/heybox/repo/heybox-go/.zeus-toolset/bin/protoc`（libprotoc **26.1**）盖住了
+`/usr/bin/protoc`（libprotoc **35.1**），差 9 个大版本，生成的 C++ 代码带的虚函数集
+跟新运行时的抽象基类对不上。
+
+排查 —— 比对同名工具的所有副本：
+
+```bash
+which -a protoc     # 换成构建报错涉及的工具:protoc / cmake / go / node ...
+```
+
+修法是用干净 PATH 构建：
+
+```bash
+PATH="/usr/bin:$PATH" paru -S --rebuild openvpn3
+```
+
+**一个上游包在标准 Arch 环境编译不过，先怀疑本地构建环境被污染，再怀疑上游。**
+本机 PATH 前面常年挂着 5 个这类目录，中招概率不低。

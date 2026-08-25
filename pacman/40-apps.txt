@@ -44,7 +44,10 @@ cgproxy-git                 # A transparent proxy program powered by cgroup2 and
 tailscale                   # A mesh VPN that makes it easy to connect your devices, wherever 
 frpc                        # A fast reverse proxy to help you expose a local server behind a 
 openvpn                     # An easy-to-use, robust and highly configurable VPN (Virtual Priv
-openvpn3                    # [AUR] OpenVPN 3 Linux client
+openvpn3        # [AUR] OpenVPN 3 客户端。**必须用干净 PATH 构建**:
+                #   PATH="/usr/bin:$PATH" paru -S --rebuild openvpn3
+                #   否则项目里的旧 protoc 会盖住系统版本导致编译失败,见 README 坑 12;
+                #   abseil/protobuf 升级后还需重建,见坑 11
 openconnect                 # Open client for Cisco AnyConnect VPN
 networkmanager-openvpn      # NetworkManager VPN plugin for OpenVPN (with GUI)
 networkmanager-openconnect  # NetworkManager VPN plugin for OpenConnect (with GUI)

@@ -22,3 +22,5 @@ electron32-bin  # [AUR] Build cross platform desktop apps with web technologies 
 cmatrix         # 终端 matrix 雨屏保
 unimatrix-git   # [AUR] matrix 雨屏保(unicode 版)
 ttfx            # [AUR] 终端文字特效/屏保(Omarchy 的 terminaltexteffects Rust 移植)
+quickshell      # QML 的 Wayland shell 工具包(Omarchy 4 用它替掉 waybar 等一整套);
+                #   目前只是试用,若决定替代 waybar 请挪到 10-desktop.txt
