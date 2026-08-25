@@ -64,6 +64,10 @@ Scope {
         notif.popups = notif.popups.filter(x => x !== n);
     }
 
+    // IpcHandler 够不到 delegate(动画在 delegate 里),所以用信号让对应的卡片自己认领,
+    // 这样 IPC 触发的关闭和鼠标点击走的是同一条动画路径。
+    signal closeRequested(var target, var act)
+
     // 退场动画播完后的收尾。放在 Scope 上而不是 delegate 里:drop() 会销毁 delegate,
     // 让它在自己的方法执行到一半时把自己销毁掉不安全。
     function finishClose(n, act) {
@@ -83,15 +87,14 @@ Scope {
             const n = notif.popups[0];
             if (!n) return "none";
             const def = (n.actions ?? []).find(a => a.identifier === "default");
-            notif.drop(n);
-            if (!def) { n.dismiss(); return "dismissed"; }
-            def.invoke();
-            return "invoked";
+            // 动作在动画结束后才执行,所以这里的返回值是"已受理"而非"已完成"
+            notif.closeRequested(n, def ? (() => def.invoke()) : (nn => nn.dismiss()));
+            return def ? "invoked" : "dismissed";
         }
         function dismissAll(): string {
             const c = notif.popups.length;
-            notif.popups.forEach(n => n.dismiss());
-            notif.popups = [];
+            // 不能在这里清空 popups:delegate 得活到动画播完,各自的 onFinished 会摘掉自己
+            notif.popups.forEach(n => notif.closeRequested(n, nn => nn.dismiss()));
             return String(c);
         }
     }
@@ -174,6 +177,13 @@ Scope {
                                 from: 1; to: 0; duration: 200
                             }
                             onFinished: notif.finishClose(card.n, exitAnim.act)
+                        }
+
+                        Connections {
+                            target: notif
+                            function onCloseRequested(target, act) {
+                                if (target === card.n) card.close(act);
+                            }
                         }
 
                         // act 是动画结束后要做的事(expire / dismiss / invoke)
