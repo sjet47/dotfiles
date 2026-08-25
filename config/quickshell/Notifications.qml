@@ -64,6 +64,13 @@ Scope {
         notif.popups = notif.popups.filter(x => x !== n);
     }
 
+    // 退场动画播完后的收尾。放在 Scope 上而不是 delegate 里:drop() 会销毁 delegate,
+    // 让它在自己的方法执行到一半时把自己销毁掉不安全。
+    function finishClose(n, act) {
+        notif.drop(n);
+        if (act) act(n);
+    }
+
     IpcHandler {
         target: "notif"
 
@@ -117,13 +124,26 @@ Scope {
             anchors { top: true; right: true }
             margins { top: 20; right: 20 }      // mako outer-margin=20
             implicitWidth: 420                  // mako width=420
-            implicitHeight: Math.max(1, stack.implicitHeight)
+            // 面板高度固定,不跟着卡片变。
+            //
+            // 早先的写法是 implicitHeight 绑定卡片总高、再加 Behavior 做过渡,结果等于
+            // 每帧都在 resize Wayland layer surface —— 缓冲区尺寸与内容重绘不同步,
+            // 上移过程中会出现旧位置内容残留的重影。
+            //
+            // 现在固定成整屏高,卡片在里面自由动;多出来的透明区域靠 mask 把输入放行,
+            // 否则这块看不见的覆盖层会吃掉下面窗口的点击。
+            implicitHeight: panel.screen.height - 40
+            mask: Region { item: stack }
             color: "transparent"
 
             Column {
                 id: stack
                 width: parent.width
                 spacing: 10
+
+                // 上方卡片被摘掉后,下方靠 move 过渡平滑上移(默认是瞬间跳位)
+                move: Transition { NumberAnimation { properties: "y"; duration: 220; easing.type: Easing.OutCubic } }
+                add:  Transition { NumberAnimation { properties: "y"; duration: 220; easing.type: Easing.OutCubic } }
 
                 Repeater {
                     model: popupModel
@@ -136,6 +156,32 @@ Scope {
                         // 截图通知带 -i <图片路径>,mako 里给它开了 max-icon-size=80
                         readonly property bool bigImage: /Screenshot|截图/.test(card.n.summary ?? "")
                         readonly property int  iconSize: card.bigImage ? 80 : 32
+
+                        // 退场:向右滑出 + 淡出。动画期间 delegate 必须还活着,
+                        // 所以真正从 model 摘掉要等 onFinished,否则一 drop 就销毁,没机会播。
+                        transform: Translate { id: slide }
+
+                        ParallelAnimation {
+                            id: exitAnim
+                            property var act: null
+                            NumberAnimation {
+                                target: slide; property: "x"
+                                from: 0; to: card.width + 40
+                                duration: 200; easing.type: Easing.InCubic
+                            }
+                            NumberAnimation {
+                                target: card; property: "opacity"
+                                from: 1; to: 0; duration: 200
+                            }
+                            onFinished: notif.finishClose(card.n, exitAnim.act)
+                        }
+
+                        // act 是动画结束后要做的事(expire / dismiss / invoke)
+                        function close(act) {
+                            if (exitAnim.running) return;
+                            exitAnim.act = act ?? null;
+                            exitAnim.start();
+                        }
 
                         readonly property string pic: {
                             if (card.n.image) return card.n.image;
@@ -159,7 +205,7 @@ Scope {
                         Timer {
                             running: card.n.urgency !== NotificationUrgency.Critical
                             interval: card.n.expireTimeout > 0 ? card.n.expireTimeout : 5000
-                            onTriggered: { notif.drop(card.n); card.n.expire(); }
+                            onTriggered: card.close(n => n.expire())
                         }
 
                         MouseArea {
@@ -167,13 +213,14 @@ Scope {
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: function (mouse) {
                                 if (mouse.button === Qt.RightButton) {
-                                    notif.drop(card.n); card.n.dismiss();
+                                    card.close(n => n.dismiss());
                                     return;
                                 }
                                 // 左键触发 default action(截图的"标注"、录屏的"打开"都靠它)
-                                const def = (card.n.actions ?? []).find(a => a.identifier === "default");
-                                notif.drop(card.n);
-                                if (def) def.invoke(); else card.n.dismiss();
+                                card.close(function (n) {
+                                    const def = (n.actions ?? []).find(a => a.identifier === "default");
+                                    if (def) def.invoke(); else n.dismiss();
+                                });
                             }
                         }
 
@@ -256,7 +303,7 @@ Scope {
                                                 id: hover
                                                 anchors.fill: parent
                                                 hoverEnabled: true
-                                                onClicked: { notif.drop(card.n); btn.modelData.invoke(); }
+                                                onClicked: card.close(() => btn.modelData.invoke())
                                             }
                                         }
                                     }
