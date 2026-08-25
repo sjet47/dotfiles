@@ -45,6 +45,7 @@ sshfs      # FUSE client based on the SSH File Transfer Protocol
 usbutils   # A collection of USB tools to query connected USB devices
 rsync      # A fast and versatile file copying tool for remote and local file
 smartmontools  # 磁盘 SMART 健康检测(smartctl)
+btrfs-progs  # 根分区是 btrfs;缺了 mkinitcpio 的 fsck hook 会报 No fsck helpers found
 
 # ── 归档解压 ──────────────────────────────────────────────────────────
 7zip   # File archiver for extremely high compression

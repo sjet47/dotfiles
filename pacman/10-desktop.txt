@@ -40,7 +40,6 @@ seahorse       # GNOME application for managing PGP keys
 lssecret-git   # [AUR] utility to list all secret items in a secret service using libse
 
 # ── KDE 应用 ────────────────────────────────────────────────────────
-plasma-meta     # Meta package to install KDE Plasma
 dolphin         # 文件管理器(vars.lua,SUPER+E)
 ark             # Archiving Tool
 gwenview        # A fast and easy to use image viewer
@@ -50,6 +49,7 @@ kate            # Advanced text editor
 isoimagewriter  # Program to write hybrid ISO files onto USB disks
 kdeconnect      # Adds communication between KDE and your smartphone
 kimageformats  # 给 Qt 应用补 AVIF/HEIF/JXL 图片格式(gwenview 打开这些格式靠它)
+breeze-gtk  # GTK 应用的 Breeze 主题(gtk-theme-name=Breeze 靠它;已从 plasma 依赖转显式)
 
 # ── 远程桌面 (见 HANDOFF: wayvnc 走 frp+ssh 隧道) ─────────────────────────
 wayvnc    # VNC server for wlroots-based Wayland compositors
@@ -85,6 +85,10 @@ fcitx5-configtool      # 图形配置
 fcitx5-gtk             # GTK 应用集成
 fcitx5-qt              # Qt 应用集成
 fcitx5-material-color  # Material color theme for fcitx5
+
+# ── 光标 / 音效主题 ──────────────────────────────────────────────────────
+adwaita-cursors         # 光标主题(gtk settings.ini + XCURSOR_THEME 都指向 Adwaita)
+sound-theme-freedesktop # GTK 提示音(gtk-sound-theme-name=freedesktop)
 
 # ── 字体 ────────────────────────────────────────────────────────────
 adobe-source-han-serif-cn-fonts  # Adobe Source Han Serif Subset OTF - Simplified Chinese OpenType/

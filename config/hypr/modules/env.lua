@@ -1,6 +1,7 @@
 -- 环境变量
 -- 文档: https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
 
+hl.env("XCURSOR_THEME", "Adwaita")  -- 原 breeze_cursors 随 plasma 一起删了
 hl.env("XCURSOR_SIZE", "28")
 hl.env("HYPRCURSOR_SIZE", "28")
 

@@ -17,9 +17,13 @@ pi-agent/*
 !config/vicinae/
 !config/kitty/
 !config/mako/
+!config/wayvnc/
+!config/systemd/
 !config/herdr/
 !config/satty/
 !config/fontconfig/
+!config/gtk-3.0/
+!config/gtk-4.0/
 !config/environment.d/
 !config/environment.d/
 !pi-agent/agents
@@ -52,8 +56,16 @@ config/hypr/scripts/wallpaper.sh
 # 迁移到 hyprland.lua 后,Hyprland 在缺失时会自动生成 hyprland.conf stub,不入库
 config/hypr/hyprland.conf
 
-# systemctl --user enable 生成的 symlinks，不入库
-config/systemd/user/*.target.wants/
+# systemd user units: config/* 会把整个 systemd 目录一并忽略(git 不递归进被排除的目录),
+# 所以得先放行目录(见上面的 !config/systemd/)再逐个挑文件,否则新增 unit 会被静默忽略。
+# 顺带排掉 systemctl --user enable 生成的 *.target.wants/ symlinks。
+# agent-ticket / go2rtc-cloud-relay / hy-mt2 维持原状,不入库。
+config/systemd/user/*
+!config/systemd/user/mako.service.d/
+!config/systemd/user/tmux-resurrect-cleanup.service
+!config/systemd/user/tmux-resurrect-cleanup.timer
+!config/systemd/user/waybar.service
+!config/systemd/user/wayvnc@.service
 
 # KDE/Plasma 自动生成,机器相关,只保留 conf.d 里我们自己的配置
 config/fontconfig/fonts.conf
