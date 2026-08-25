@@ -13,7 +13,6 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("uwsm-app -- gnome-keyring-daemon --start --components=secrets,ssh,pkcs11")
   hl.exec_cmd("systemctl --user --no-block start vicinae.service")
   hl.exec_cmd("uwsm-app -- keepassxc")
-  -- 桌面 shell:OSD + 通知守护(替代 mako),整个桌面只此一个 quickshell 实例。
-  -- mako 的包和 config/mako/ 暂时留着方便回退。
+  -- 桌面 shell:OSD + 通知守护,整个桌面只此一个 quickshell 实例。
   hl.exec_cmd("uwsm-app -- qs")
 end)

@@ -18,8 +18,8 @@ sddm  # 登录/显示管理器(sddm.service enabled;原先只是 sddm-kcm 的依
 
 # ── 状态栏 / 启动器 / 通知 / 注销 ───────────────────────────────────────────
 waybar       # 顶部状态栏
+quickshell   # 桌面 shell:音量/亮度 OSD + 通知守护(替代 mako),见 config/quickshell/
 vicinae-bin  # [AUR] 应用启动器(AUR,配置里默认用它)
-mako         # 通知守护
 wlogout      # [AUR] 注销/电源菜单
 
 # ── 截图 / 录屏 / 剪贴板 ─────────────────────────────────────────────────
