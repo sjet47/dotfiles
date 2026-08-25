@@ -10,6 +10,7 @@ yakuake          # A drop-down terminal emulator based on KDE konsole technology
 cool-retro-term  # A good looking terminal emulator which mimics the old cathode di
 
 # ── 一次性尝试 / 玩具 ────────────────────────────────────────────────────
+xf86-input-wacom  # 数位板驱动,当前无设备,保守保留
 lolcat          # Okay, no unicorns. But rainbows!!
 imgcat          # [AUR] Output images as RGB ANSI graphics on the terminal
 gitlogue        # A cinematic Git commit replay tool for the terminal

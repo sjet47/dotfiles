@@ -41,13 +41,10 @@ lssecret-git   # [AUR] utility to list all secret items in a secret service usin
 
 # ── KDE 应用 ────────────────────────────────────────────────────────
 dolphin         # 文件管理器(vars.lua,SUPER+E)
-ark             # Archiving Tool
 gwenview        # A fast and easy to use image viewer
 okular          # Document Viewer
 filelight       # View disk usage information
-kate            # Advanced text editor
 isoimagewriter  # Program to write hybrid ISO files onto USB disks
-kdeconnect      # Adds communication between KDE and your smartphone
 kimageformats  # 给 Qt 应用补 AVIF/HEIF/JXL 图片格式(gwenview 打开这些格式靠它)
 breeze-gtk  # GTK 应用的 Breeze 主题(gtk-theme-name=Breeze 靠它;已从 plasma 依赖转显式)
 
@@ -76,6 +73,7 @@ appmenu-gtk-module  # Application Menu GTK Module
 libdbusmenu-glib    # Library for passing menus over DBus
 libdbusmenu-gtk3    # Library for passing menus over DBus (GTK+ 3 library)
 libdbusmenu-qt5     # A library that provides a Qt implementation of the DBusMenu spec
+gtk2  # 遗留 GTK2 应用的运行时
 
 # ── 输入法 (fcitx5) ──────────────────────────────────────────────────
 fcitx5                 # 输入法框架
@@ -102,6 +100,8 @@ ttf-jetbrains-mono               # Typeface for developers, by JetBrains
 ttf-jetbrains-mono-nerd          # Patched font JetBrains Mono from nerd fonts library
 ttf-maplemono-nf-cn-unhinted     # Maple Mono NF CN(kitty 默认字体,自带 Nerd/CJK)
 ttf-nunito                       # Sans serif font with rounded tips by Vernon Adams
+adobe-source-code-pro-fonts  # 部分应用按名引用
+cantarell-fonts              # GNOME 默认 UI 字体,GTK 应用可能回落到它
 
 # ── 默认终端 / 缩略图 / 系统监视 ─────────────────────────────────────────────
 kitty              # 配置里默认终端

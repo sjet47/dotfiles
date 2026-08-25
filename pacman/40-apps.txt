@@ -24,6 +24,7 @@ fontforge          # Outline and bitmap font editor
 mpv              # a free, open source, and cross-platform media player
 mpv-mpris        # MPRIS plugin for mpv
 vlc-plugins-all  # Free and open source cross-platform multimedia player and framew
+vlc              # VLC 顶层包:拥有 vlc.desktop 启动器入口(二进制其实在 vlc-cli)
 
 # ── 下载 / 局域网传输 ────────────────────────────────────────────────────
 qbittorrent    # An advanced BitTorrent client programmed in C++, based on Qt too
@@ -84,3 +85,50 @@ mcrcon              # [AUR] Console based remote console (rcon) client for Minec
 xone-dkms-git       # Modern Linux driver for Xbox One and Xbox Series X|S controllers
 xpadneo-dkms        # Advanced Linux Driver for Xbox One Wireless Gamepad
 xboxdrv             # [AUR] Userspace Xbox gamepad driver and input remapper
+
+# ── Steam/Proton 32 位运行时 ────────────────────────────────────────
+# Wine/Proton 在运行时按名加载这些,不体现为任何包的依赖 —— 孤儿清理会
+# 一次性扫光(音频 openal/libpulse/mpg123、输入 libx*、DX12 翻译 vkd3d)。
+# 已 pacman -D --asexplicit 钉住,勿改回 asdeps。
+lib32-acl
+lib32-audit
+lib32-flac
+lib32-gettext
+lib32-glu
+lib32-gst-plugins-base-libs
+lib32-gstreamer
+lib32-lcms2
+lib32-libasyncns
+lib32-libcanberra
+lib32-libcap
+lib32-libgudev
+lib32-libjpeg-turbo
+lib32-libjpeg6-turbo
+lib32-libltdl
+lib32-libnl
+lib32-libnsl
+lib32-libogg
+lib32-libpcap
+lib32-libpulse
+lib32-libsndfile
+lib32-libtiff
+lib32-libtirpc
+lib32-libudev0-shim
+lib32-libunwind
+lib32-libusb
+lib32-libvorbis
+lib32-libxcursor
+lib32-libxi
+lib32-libxrandr
+lib32-libxrender
+lib32-libxtst
+lib32-libxv
+lib32-mpg123
+lib32-ocl-icd
+lib32-openal
+lib32-opus
+lib32-orc
+lib32-pam
+lib32-tdb
+lib32-udis86-git
+lib32-vkd3d
