@@ -218,3 +218,43 @@ PATH="/usr/bin:$PATH" paru -S --rebuild openvpn3
 
 **一个上游包在标准 Arch 环境编译不过，先怀疑本地构建环境被污染，再怀疑上游。**
 本机 PATH 前面常年挂着 5 个这类目录，中招概率不低。
+
+### 13. `.pacnew` 会无声堆积，而且 diff 要用 sudo
+
+包升级时若配置文件被本地改过，pacman 不会覆盖，而是把新版本写成 `<file>.pacnew` 放旁边。
+**不会有任何提示**，于是你的配置一直停在旧版，错过上游的新选项和安全默认值。本机曾一次性
+攒下 14 个，最老的来自 2025-10。
+
+```bash
+sudo find /etc -name '*.pacnew' -o -name '*.pacsave'
+```
+
+**坑**:`/etc/sudoers` 是 0440,不加 sudo 的 `diff` 会静默失败、输出为空。如果你拿
+`diff a b | grep -c '^[<>]'` 数差异行,会得到 0,误判成"没差异可以直接删"——而 sudoers
+恰恰是这批里最不能出错的。**整个扫描循环都要在 root 下跑**。
+
+合并的判断顺序:
+
+1. 先看**双方各自的生效行**(`grep -vE '^\s*#|^\s*$'`),而不是通读整个 diff ——
+   `.pacnew` 大部分改动是注释和文档,生效行往往只有几条
+2. 你的生效行 = 本地定制,默认全部保留。特别当心承重的:`sshd_config` 的
+   `AllowTcpForwarding`(wayvnc 隧道靠它)、`/etc/default/v2raya` 的 shim 路径、
+   `pacman.conf` 的 `[multilib]`/`[archlinuxcn]`(清单安装依赖)
+3. pacnew 的生效行 = 上游新默认值,逐条决定是否采纳
+4. 改完**立刻用该配置自己的校验器验证**:`visudo -c -f`、`sshd -t`、`bash -n /etc/profile`、
+   `pacman -Sy`。sudoers 写错会让 sudo 完全不可用,必须先 `visudo -c` 通过再落盘
+
+`pacman -Qkk <pkg>` 报 backup file 校验不匹配时,未必是你改过——也可能是包已更新而
+`/etc` 里还是旧版(即存在未处理的 .pacnew)。采纳 pacnew 反而能消除这个不匹配。
+
+### 14. 缓存比孤儿包大一个数量级
+
+清了 3 GiB 孤儿之后才发现 `/var/cache/pacman/pkg` 有 93 GiB、`~/.cache/paru` 有 46 GiB。
+
+```bash
+sudo paccache -rk2      # 每个包保留最近 2 个版本(本机一次释放 79.67 GiB)
+sudo paccache -ruk0     # 再清已卸载包的缓存;刚做过大批卸载时先别清,这是回滚保险
+```
+
+`/var/cache/pacman/pkg/download-*` 是中断下载留下的暂存目录(root 0700,`du` 会报权限
+拒绝),`paccache` 不管它们,需要手工删。本机攒了 6 个共 292 MiB。
