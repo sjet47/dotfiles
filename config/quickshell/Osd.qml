@@ -2,6 +2,7 @@
 // 音量 / 亮度 OSD
 //
 // 音量:直接监听 PipeWire,不需要改快捷键 —— 谁改的音量都会弹(wpctl / pavucontrol / 滚轮)。
+// 麦克风:同理监听 defaultAudioSource 的 muted,给 XF86AudioMicMute 补上视觉反馈。
 // 亮度:由 scripts/brightness.sh 通过 IPC 推送,因为 DDC/CI 的当前值没法便宜地读到。
 //   qs ipc call osd brightness <0-100>
 //
@@ -20,7 +21,7 @@ Scope {
 
     required property string activeMonitor
 
-    property string kind: "volume"   // "volume" | "brightness"
+    property string kind: "volume"   // "volume" | "brightness" | "mic"
     property real   level: 0         // 0..1
     property bool   muted: false
     property bool   showing: false
@@ -28,10 +29,11 @@ Scope {
     // PipeWire 启动时会枚举一遍节点并触发 volumeChanged,不静默会一开机就弹一次
     property bool armed: false
 
-    readonly property var sink: Pipewire.defaultAudioSink
+    readonly property var sink:   Pipewire.defaultAudioSink
+    readonly property var source: Pipewire.defaultAudioSource
 
     // 不 track 的话 volume/muted 不会更新
-    PwObjectTracker { objects: [Pipewire.defaultAudioSink] }
+    PwObjectTracker { objects: [Pipewire.defaultAudioSink, Pipewire.defaultAudioSource] }
 
     Timer { interval: 1500; running: true; onTriggered: osd.armed = true }
     Timer { id: hideTimer; interval: 1600; onTriggered: osd.showing = false }
@@ -52,6 +54,16 @@ Scope {
         }
         function onMutedChanged() {
             if (osd.armed) osd.popup("volume", osd.sink.audio.volume, osd.sink.audio.muted);
+        }
+    }
+
+    // 麦克风:只听 muted。XF86AudioMicMute 绑的就是 set-mute,而音量变化可能来自
+    // 应用自动增益之类的后台行为,跟着弹会很吵。
+    Connections {
+        target: osd.source?.audio ?? null
+
+        function onMutedChanged() {
+            if (osd.armed) osd.popup("mic", osd.source.audio.volume, osd.source.audio.muted);
         }
     }
 
@@ -109,6 +121,7 @@ Scope {
                         color: osd.muted ? "#98989d" : "#f5f5f7"
                         text: {
                             if (osd.kind === "brightness") return osd.level > 0.5 ? "󰃠" : "󰃞";
+                            if (osd.kind === "mic") return osd.muted ? "󰍭" : "󰍬";
                             if (osd.muted) return "󰝟";
                             if (osd.level < 0.01) return "󰕿";
                             return osd.level < 0.5 ? "󰖀" : "󰕾";

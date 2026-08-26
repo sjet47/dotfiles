@@ -5,7 +5,7 @@
 | 文件 | 内容 | IPC target |
 | --- | --- | --- |
 | `shell.qml` | 入口。共用的聚焦显示器播种放在这里 | — |
-| `Osd.qml` | 音量 / 亮度 OSD | `osd` |
+| `Osd.qml` | 音量 / 亮度 / 麦克风 OSD | `osd` |
 | `Notifications.qml` | 通知守护（替代 mako） | `notif` |
 | `Power.qml` | 电源菜单（替代 wlogout） | `power` |
 
@@ -26,7 +26,11 @@ qs ipc call power open / hide
 
 waybar 的 `custom/notifications` 模块经 `waybar/scripts/notifications.sh` 调用后三个。
 
-音量不需要接口：直接监听 PipeWire，任何途径改音量都会弹。亮度没有便宜的读取方式（DDC 的 `getvcp` 一次 ~200ms），所以由 `brightness.sh` 维护缓存后推过来。
+音量和麦克风不需要接口：直接监听 PipeWire。音量听 `defaultAudioSink` 的 volume/muted，
+任何途径改音量都会弹；麦克风听 `defaultAudioSource` 的 **muted 而已** —— 音量变化可能来自
+应用自动增益之类的后台行为，跟着弹会很吵，而 `XF86AudioMicMute` 绑的本来就是 set-mute。
+
+亮度没有便宜的读取方式（DDC 的 `getvcp` 一次 ~200ms），所以由 `brightness.sh` 维护缓存后推过来。
 
 ## 电源菜单
 
