@@ -125,8 +125,11 @@ Scope {
             // (实测 y=495 落在 waybar 的 479..510 区间内,而 mako 是 530)
             exclusionMode: ExclusionMode.Normal
             anchors { top: true; right: true }
-            margins { top: 20; right: 20 }      // mako outer-margin=20
-            implicitWidth: 420                  // mako width=420
+            // 面板紧贴屏幕右边缘,卡片靠 stack 的宽度在内部留出 20px 间距。
+            // 若给面板留 margin,退场向右滑出时会被面板边界裁掉,在屏幕内部形成
+            // 一条可见的竖直硬边;贴边之后裁剪线与屏幕边缘重合,看起来就是正常滑出屏外。
+            margins { top: 20; right: 0 }
+            implicitWidth: 420 + 20             // mako width=420,再加右侧间距
             // 面板高度固定,不跟着卡片变。
             //
             // 早先的写法是 implicitHeight 绑定卡片总高、再加 Behavior 做过渡,结果等于
@@ -141,12 +144,14 @@ Scope {
 
             Column {
                 id: stack
-                width: parent.width
+                width: parent.width - 20        // 右侧 20px 留给滑出,兼作 mako 的 outer-margin
                 spacing: 10
 
-                // 上方卡片被摘掉后,下方靠 move 过渡平滑上移(默认是瞬间跳位)
+                // 其余卡片让位/上移(默认是瞬间跳位)。新卡片的进场不在这里做:
+                // 它插在 index 0,y 本来就是 0,add 过渡是空转 —— 而且那样它会
+                // 立刻满不透明地出现在顶部,与还在下移的旧卡片重叠 220ms。
+                // 进场交给 delegate 自己从屏幕右侧滑入,与这里的下移并行(参考 macOS)。
                 move: Transition { NumberAnimation { properties: "y"; duration: 220; easing.type: Easing.OutCubic } }
-                add:  Transition { NumberAnimation { properties: "y"; duration: 220; easing.type: Easing.OutCubic } }
 
                 Repeater {
                     model: popupModel
@@ -160,9 +165,23 @@ Scope {
                         readonly property bool bigImage: /Screenshot|截图/.test(card.n.summary ?? "")
                         readonly property int  iconSize: card.bigImage ? 80 : 32
 
+                        // 初始位置在屏外右侧、全透明,由 enterAnim 拉进来。
+                        // 直接从 x=0 满不透明开始的话,会和还在下移的旧卡片重叠。
+                        transform: Translate { id: slide; x: 460 }
+                        opacity: 0
+
+                        // 进场:从右滑入 + 淡入,与 Column 的 move 过渡并行
+                        ParallelAnimation {
+                            id: enterAnim
+                            running: true
+                            NumberAnimation { target: slide; property: "x"
+                                              to: 0; duration: 260; easing.type: Easing.OutCubic }
+                            NumberAnimation { target: card; property: "opacity"
+                                              to: 1; duration: 260; easing.type: Easing.OutCubic }
+                        }
+
                         // 退场:向右滑出 + 淡出。动画期间 delegate 必须还活着,
                         // 所以真正从 model 摘掉要等 onFinished,否则一 drop 就销毁,没机会播。
-                        transform: Translate { id: slide }
 
                         ParallelAnimation {
                             id: exitAnim
