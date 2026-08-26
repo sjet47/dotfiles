@@ -27,29 +27,33 @@ waybar 的 `custom/notifications` 模块经 `waybar/scripts/notifications.sh` �
 
 ## 与 mako 的关系
 
-已完全替代。mako 的包和 `config/mako/config` **仍保留**，只是 `systemctl --user mask` 掉了（原因见坑 1）。回退路径：
+已完全替代，**mako 的包和配置都已删除**，没有回退路径了。
 
-```bash
-systemctl --user unmask mako.service
-# 再把 hypr/modules/autostart.lua 里的 qs 那行换回 systemctl --user start mako.service
-```
-
-配色、位置、超时、免打扰规则都是逐项照 `config/mako/config` 对齐的，改样式时可以拿它当基准。
+配色、位置、超时、免打扰规则当初是逐项照 `config/mako/config` 对齐的。那个文件已经不在，所以
+`Notifications.qml` 里那些 `// mako border-radius=12`、`// mako text-color` 之类的行尾注释
+是这些数值的唯一出处记录 —— 改样式时它们就是基准，别顺手删掉。
 
 ---
 
 ## 坑
 
-### 1. mako 会被 D-Bus 激活抢回通知名
+### 1. 别让第二个通知守护装进来
 
-`/usr/share/dbus-1/services/fr.emersion.mako.service` 把 mako 注册成了 `org.freedesktop.Notifications` 的可激活提供者。只要这个名字空出来（quickshell 崩溃或重启的间隙），**任何一条通知都会把 mako 拉起来**，之后 quickshell 再也注册不上，日志里是：
+通知守护通常会装一个 D-Bus 激活文件（mako 当初是 `/usr/share/dbus-1/services/fr.emersion.mako.service`），
+把自己注册成 `org.freedesktop.Notifications` 的可激活提供者。只要这个名字空出来
+（quickshell 崩溃或重启的间隙），**任何一条通知都会把它拉起来**，之后 quickshell 再也注册不上：
 
 ```
 Could not register notification server at org.freedesktop.Notifications,
 presumably because one is already registered.
 ```
 
-所以 mako 必须 mask。产生的 `/dev/null` 软链在 `config/systemd/user/mako.service`，已入库。
+当时是靠 `systemctl --user mask` 压住的，现在 mako 已卸载所以没有这个问题。
+但**如果以后又装了别的通知守护**（dunst / swaync / fnott …），同样的抢名会再来一次，
+届时要么卸掉它、要么 mask 它的 service。
+
+quickshell 自己**没有**激活文件，只能靠 autostart 抢先占名 —— 所以它挂掉时不会有人接管，
+`notify-send` 会直接失败而不是静默换人。
 
 ### 2. Qt 的八位色是 AARRGGBB，不是 RRGGBBAA
 

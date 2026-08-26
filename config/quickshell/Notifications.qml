@@ -8,8 +8,9 @@
 //   qs ipc call notif invoke       触发最新一条的 default action(对应 makoctl invoke)
 //   qs ipc call notif dismissAll   清空(对应 makoctl dismiss --all)
 //
-// 行为对齐 config/mako/config:浅色卡片、右上角、宽 420、默认 5s、
-// critical 不自动消失且红边、免打扰时只放行 notify-send、截图通知用大图。
+// 行为沿用被替代的 mako:浅色卡片、右上角、宽 420、默认 5s、critical 不自动消失且红边、
+// 免打扰时只放行 notify-send、截图通知用大图。mako 的配置文件已随包删除,下面各处
+// 行尾的 `// mako xxx` 注释就是这些数值的唯一出处,别删。
 //
 pragma ComponentBehavior: Bound
 

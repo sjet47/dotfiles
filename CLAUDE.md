@@ -27,7 +27,7 @@ Arch Linux + Hyprland 的个人配置仓库。
 
 几点注意：
 
-- 热重载**不重启进程**（PID 不变），D-Bus 注册也保住，所以没有让 mako 被 D-Bus 激活抢名的窗口。
+- 热重载**不重启进程**（PID 不变），`org.freedesktop.Notifications` 的 D-Bus 注册也保住，中途不会漏收通知。
 - 但 QML 侧的运行时状态**全部重置**：正在显示的通知、免打扰开关、历史记录都会清空。要跨重载保留通知，得把 `NotificationServer.keepOnReload` 改成 `true`。
 - 语法错误**不会杀掉进程，但会让整个 shell 卸载** —— 面板和 IPC 全没了（`qs ipc` 报
   `Not ready to accept queries yet`），期间通知也收不到。把文件改对后会自动恢复，PID 不变。

@@ -189,7 +189,7 @@
     "on-click-right": "xdg-open https://claude.ai/settings/usage"
   },
   "custom/notifications": {
-    // 后端已从 mako 换成 quickshell(config/quickshell/notifications)。
+    // 后端已从 mako 换成 quickshell(config/quickshell/,单实例 qs)。
     // signal 1:切免打扰后脚本发 RTMIN+1,图标立刻反映状态(mako 时代没有这个反馈)。
     "exec": "/home/sjet/.config/waybar/scripts/notifications.sh status",
     "interval": "once",
