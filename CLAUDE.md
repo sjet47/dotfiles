@@ -15,7 +15,7 @@ Arch Linux + Hyprland 的个人配置仓库。
 
 几点注意：
 
-- waybar、mako 通知属于 layer-shell surface，不是窗口，只有 `fullscreen` 能截到。
+- waybar、通知卡片、OSD 都属于 layer-shell surface，不是窗口，只有 `fullscreen` 能截到。
 - `active` 截的是当前焦点窗口——从终端里调用时焦点多半在终端上，先确认目标窗口真的处于焦点。
 - 不带 `save` 的调用（`screenshot.sh`、`region`、`window`）是给人用的交互流程：会拉起框选、写剪贴板、弹标注通知，不要在自动化里用。
 
