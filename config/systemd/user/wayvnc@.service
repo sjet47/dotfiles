@@ -1,0 +1,22 @@
+[Unit]
+Description=VNC server for wlroots-based Wayland compositors (output %i)
+Documentation=man:wayvnc(1)
+After=graphical-session.target
+
+# 模板单元,实例名 = 要推的显示器: systemctl --user start wayvnc@DP-1
+# 按需启停,不 enable。
+#
+# 为什么把 output 定死在启动参数里而不是运行时切:
+#   实测 wayvncctl output-set 会让 wayvnc 撞上 wayland 协议错误直接崩掉
+#   ("not a valid new object id ... Failed to dispatch pending"),换屏只能重启服务。
+#
+# 端口固定 5900,所以同时只能推一块屏(第二个实例会 bind 失败)。真要两块屏同屏看,
+# 给其中一个加 drop-in 覆盖 ExecStart 换 --port=5901,隧道那边再多转一个端口。
+#
+# systemd-inhibit --what=idle: hypridle 15min dpms off 会让 wayvnc "Pausing frame
+# capture" 抓不到帧。hypridle 默认遵守 systemd inhibit,包一层即可让它在本服务运行
+# 期间不倒计时,服务一停自动恢复,不用去动 hypridle 本身。
+[Service]
+ExecStart=/usr/bin/systemd-inhibit --what=idle --who=wayvnc --why=remote-desktop /usr/bin/wayvnc --output=%i
+Restart=on-failure
+RestartSec=1
