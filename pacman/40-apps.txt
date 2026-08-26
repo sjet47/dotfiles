@@ -66,6 +66,7 @@ gnu-netcat        # [AUR] GNU rewrite of netcat, the network piping application
 sniffnet          # Application to comfortably monitor your network traffic
 wireshark-qt      # Network traffic and protocol analyzer/sniffer - Qt GUI
 nali-go-bin       # [AUR] An offline tool for querying IP geographic information and CDN p
+ethtool  # 网卡链路状态/offload/ring buffer 诊断
 
 # ── 数据库 / API 客户端 ─────────────────────────────────────────────────
 mongodb-compass-bin  # [AUR] The official GUI for MongoDB - binary version

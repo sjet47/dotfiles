@@ -86,6 +86,8 @@ bcc-libbpf-tools      # BPF Compiler Collection (Tools)
 bpftool-bin           # [AUR] bpftool is a tool for inspection and simple manipulation of eBPF
 xdp-tools             # Utilities and example programs for use with XDP
 binaryninja-personal  # [AUR] An interactive decompiler, disassembler, debugger, and binary an
+nasm      # 汇编器 + ndisasm 反汇编
+patchelf  # 改二进制的 rpath/interpreter
 
 # ── AI / Agent ────────────────────────────────────────────────────
 llama.cpp             # Port of Facebook's LLaMA model in C/C++ (with system ggml suppor

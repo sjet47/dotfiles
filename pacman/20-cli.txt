@@ -79,3 +79,6 @@ tldr             # Command line client for tldr, a collection of simplified man 
 gum              # A tool for glamorous shell scripts
 zoxide           # A smarter cd command for your terminal
 tree-sitter-cli  # CLI tool for developing, testing, and using Tree-sitter parsers
+inotify-tools  # inotifywait/inotifywatch,脚本里监听文件变更
+trash-cli      # trash-put/list/restore/empty,命令行走回收站而不是真删
+yamllint       # YAML lint(ruff 管 Python,shfmt 管 shell,这个补 YAML)

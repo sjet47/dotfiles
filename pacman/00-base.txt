@@ -27,6 +27,7 @@ pacman-contrib       # Contributed scripts and tools for pacman systems
 expac                # alpm data (pacman database) extraction utility
 reflector            # A Python 3 module and script to retrieve and filter the latest P
 kernel-modules-hook  # Keeps your system fully functional after a kernel upgrade
+rate-mirrors  # 按测速重排 mirrorlist(当前那份生成于 2025-05,该重跑了)
 
 # ── 网络基础 ──────────────────────────────────────────────────────────
 networkmanager        # Network connection manager and user applications
