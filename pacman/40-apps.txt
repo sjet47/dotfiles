@@ -1,93 +1,96 @@
 # 40-apps.txt — GUI 应用与专项工具 —— 迁移时按实际需要挑
 #
-# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
 # ── 浏览器 / 邮件 ──────────────────────────────────────────────────────
-google-chrome  # [AUR] The popular web browser by Google (Stable Channel)
-thunderbird    # Standalone mail and news reader from mozilla.org
+google-chrome  # [AUR] 主力浏览器;.desktop 里加了 Wayland 相关 flag
+thunderbird    # 邮件客户端;mimeapps.list 里是 mailto 默认
 
 # ── 笔记 / 阅读 / 文献 ──────────────────────────────────────────────────
-obsidian    # A powerful knowledge base that works on top of a local folder of
-zotero-bin  # Zotero Standalone. Is a free, easy-to-use tool to help you colle
-foliate     # A simple and modern GTK eBook reader
-anki-bin    # [AUR] Helps you remember facts (like words/phrases in a foreign langua
+obsidian    # 知识库
+zotero-bin  # 文献管理
+foliate     # EPUB 阅读器
+anki-bin    # [AUR] 间隔重复记忆
 
 # ── 办公 / 创作 ───────────────────────────────────────────────────────
-libreoffice-still  # LibreOffice maintenance branch
-gimp               # GNU Image Manipulation Program
-audacity           # A program that lets you manipulate digital audio waveforms
-obs-studio         # Free, open source software for live streaming and recording
-fontforge          # Outline and bitmap font editor
+libreoffice-still  # 办公套件(维护分支,比 fresh 稳)
+gimp               # 图像编辑
+audacity           # 音频编辑
+obs-studio         # 直播/录制
+fontforge          # 字体编辑
 
 # ── 影音播放 ──────────────────────────────────────────────────────────
-mpv              # a free, open source, and cross-platform media player
-mpv-mpris        # MPRIS plugin for mpv
-vlc-plugins-all  # Free and open source cross-platform multimedia player and framew
+mpv              # 视频播放;windowrules.lua 里有它的规则
+mpv-mpris        # 让 mpv 接入 MPRIS,媒体键和状态栏才能控制它
+vlc-plugins-all  # VLC 全解码器,冷门格式兜底
 vlc              # VLC 顶层包:拥有 vlc.desktop 启动器入口(二进制其实在 vlc-cli)
 
 # ── 下载 / 局域网传输 ────────────────────────────────────────────────────
-qbittorrent    # An advanced BitTorrent client programmed in C++, based on Qt too
-localsend-bin  # [AUR] An open source cross-platform alternative to AirDrop
+qbittorrent    # BT 下载
+localsend-bin  # [AUR] 局域网互传文件(AirDrop 替代)
 
 # ── 通讯 ────────────────────────────────────────────────────────────
-telegram-desktop-bin  # [AUR] Official desktop version of Telegram messaging app - Static bina
-discord               # All-in-one voice and text chat for gamers
-feishu-bin            # [AUR] Linux client of Feishu (Lark) from Bytedance.
+telegram-desktop-bin  # [AUR] Telegram 桌面端
+discord               # Discord 语音/文字聊天
+feishu-bin            # [AUR] 飞书;工作沟通,告警通知也从这来
 
 # ── 密码 / 硬件密钥 ─────────────────────────────────────────────────────
 keepassxc        # 密码管理(autostart + windowrules)
-yubikey-manager  # Python library and command line tool for configuring a YubiKey
+yubikey-manager  # 配置 YubiKey
 
 # ── 代理 / VPN ──────────────────────────────────────────────────────
-v2raya                      # A web GUI client of Project V which supports VMess, VLESS, SS, S
-cgproxy-git                 # A transparent proxy program powered by cgroup2 and tproxy
-tailscale                   # A mesh VPN that makes it easy to connect your devices, wherever 
-frpc                        # A fast reverse proxy to help you expose a local server behind a 
-openvpn                     # An easy-to-use, robust and highly configurable VPN (Virtual Priv
+v2raya                      # 代理客户端的 Web GUI;用独立 xray-core,注意版本校验那个坑
+cgproxy-git                 # 基于 cgroup2 的透明代理,按进程分流
+tailscale                   # 组网 VPN;已装未启用
+frpc                        # 内网穿透客户端;wayvnc 跨公网就走它
+openvpn                     # OpenVPN 客户端
 openvpn3        # [AUR] OpenVPN 3 客户端。**必须用干净 PATH 构建**:
                 #   PATH="/usr/bin:$PATH" paru -S --rebuild openvpn3
                 #   否则项目里的旧 protoc 会盖住系统版本导致编译失败,见 README 坑 12;
                 #   abseil/protobuf 升级后还需重建,见坑 11
-openconnect                 # Open client for Cisco AnyConnect VPN
-networkmanager-openvpn      # NetworkManager VPN plugin for OpenVPN (with GUI)
-networkmanager-openconnect  # NetworkManager VPN plugin for OpenConnect (with GUI)
+openconnect                 # AnyConnect 兼容客户端
+networkmanager-openvpn      # 让 NetworkManager 能管 OpenVPN 连接
+networkmanager-openconnect  # 同上,OpenConnect
 
 # ── 网络诊断 / 抓包 ─────────────────────────────────────────────────────
-nmap              # Utility for network discovery and security auditing
-tcpdump           # Powerful command-line packet analyzer
-tcpreplay         # Gives the ability to replay previously captured traffic in a lib
-ssldump           # [AUR] SSLv3/TLS network protocol analyzer
-mtr               # Combines the functionality of traceroute and ping into one tool 
-traceroute        # Tracks the route taken by packets over an IP network
-trippy            # A network diagnostic tool
-bind              # A complete, highly portable implementation of the DNS protocol
-gnu-netcat        # [AUR] GNU rewrite of netcat, the network piping application
-sniffnet          # Application to comfortably monitor your network traffic
-wireshark-qt      # Network traffic and protocol analyzer/sniffer - Qt GUI
-nali-go-bin       # [AUR] An offline tool for querying IP geographic information and CDN p
+nmap              # 端口扫描/主机发现
+tcpdump           # 命令行抓包
+tcpreplay         # 重放 pcap
+ssldump           # [AUR] 解析 TLS 握手
+mtr               # 路由+丢包连续探测
+traceroute        # 路由跟踪
+trippy            # 更现代的 mtr 替代
+bind              # dig/host 等 DNS 查询工具
+gnu-netcat        # [AUR] 网络管道瑞士刀
+sniffnet          # 图形化流量监控
+wireshark-qt      # 图形化抓包分析
+nali-go-bin       # [AUR] 离线查 IP 归属地/CDN 厂商;alias/utils 里在用
 ethtool  # 网卡链路状态/offload/ring buffer 诊断
 
 # ── 数据库 / API 客户端 ─────────────────────────────────────────────────
-mongodb-compass-bin  # [AUR] The official GUI for MongoDB - binary version
-reqable-bin          # [AUR] A cross platform professional HTTP development and Debugger that
+mongodb-compass-bin  # [AUR] MongoDB 图形客户端
+reqable-bin          # [AUR] HTTP 抓包与调试
 
 # ── 虚拟化 / 磁盘 / 硬件 ─────────────────────────────────────────────────
-virtualbox  # Powerful x86 virtualization for enterprise as well as home use
-gparted     # A Partition Magic clone, frontend to GNU Parted
-qflipper    # Desktop application for updating Flipper Zero firmware via PC
+virtualbox  # 虚拟机
+gparted     # 图形化分区
+qflipper    # 给 Flipper Zero 刷固件
 
 # ── 游戏 / 手柄 ───────────────────────────────────────────────────────
-steam               # Valve's digital software delivery system
-minecraft-launcher  # Official Minecraft Launcher
-prismlauncher       # Minecraft launcher with ability to manage multiple instances
-protonhax           # [AUR] Program to help executing outside programs in proton
-mcrcon              # [AUR] Console based remote console (rcon) client for Minecraft servers
-xone-dkms-git       # Modern Linux driver for Xbox One and Xbox Series X|S controllers
-xpadneo-dkms        # Advanced Linux Driver for Xbox One Wireless Gamepad
-xboxdrv             # [AUR] Userspace Xbox gamepad driver and input remapper
+steam               # 游戏平台
+minecraft-launcher  # 官方 MC 启动器
+prismlauncher       # MC 多实例启动器
+protonhax           # [AUR] 在 Proton 容器里执行外部程序
+mcrcon              # [AUR] MC 服务器 RCON 客户端
+xone-dkms-git       # Xbox 手柄驱动(有线/无线适配器)
+xpadneo-dkms        # Xbox 蓝牙手柄驱动
+xboxdrv             # [AUR] 用户态手柄驱动与按键重映射
 
 # ── Steam/Proton 32 位运行时 ────────────────────────────────────────
+# 整批为跑 32 位游戏装的,单个拆开看没有意义,所以不逐个写注释。
+# 都是显式安装且 Required By 为空 —— 不显式的话会被当孤儿扫掉,游戏就起不来。
+# 不玩游戏的机器整块跳过即可。
 # Wine/Proton 在运行时按名加载这些,不体现为任何包的依赖 —— 孤儿清理会
 # 一次性扫光(音频 openal/libpulse/mpg123、输入 libx*、DX12 翻译 vkd3d)。
 # 已 pacman -D --asexplicit 钉住,勿改回 asdeps。

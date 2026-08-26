@@ -1,95 +1,95 @@
 # 30-dev.txt — 开发工具链 —— 按需裁剪,不写代码的机器可以整组跳过
 #
-# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
 # ── 语言与运行时 ────────────────────────────────────────────────────────
-go              # Core compiler tools for the Go programming language
-go-tools        # Developer tools for the Go programming language
-nodejs          # Evented I/O for V8 javascript ("Current" release)
-npm             # JavaScript package manager
-bun             # Incredibly fast JavaScript runtime, bundler, test runner, and pa
-typescript      # JavaScript with syntax for types
-rustup          # The Rust toolchain installer
-cargo-binstall  # Binary installation for Rust projects
-zig             # a general-purpose programming language and toolchain for maintai
-ocaml           # A functional language with OO extensions
-opam            # OCaml package manager
-mlton           # Whole-program optimizing Standard ML compiler
-ghcup-hs-bin    # an installer for the general purpose language Haskell
+go              # Go 编译器;工作项目主力语言
+go-tools        # gopls 等 Go 开发工具
+nodejs          # Node 运行时;pi-agent 的扩展跑在上面
+npm             # Node 包管理
+bun             # 更快的 JS 运行时/打包器
+typescript      # tsc 编译器
+rustup          # Rust 工具链管理(cargo 由它提供)
+cargo-binstall  # 直接装 Rust 工具的预编译二进制,免去本地编译
+zig             # Zig 编译器;也可当 C 交叉编译器用
+ocaml           # OCaml 编译器
+opam            # OCaml 包管理;zshrc 里有它的环境初始化
+mlton           # Standard ML 全程序优化编译器
+ghcup-hs-bin    # Haskell 工具链安装器
 
 # ── Python 生态 ─────────────────────────────────────────────────────
-python-pip                       # The PyPA recommended tool for installing Python packages
-python-pipx                      # Install and Run Python Applications in Isolated Environments
-python-setuptools                # Easily download, build, install, upgrade, and uninstall Python p
-python-pdm                       # A modern Python package and dependency manager supporting the la
-uv                               # An extremely fast Python package installer and resolver written 
-ruff                             # An extremely fast Python linter, written in Rust
-python-playwright                # A Python library to automate Chromium, Firefox and WebKit browse
-python-weasyprint                # Utility to render HTML and CSS to PDF
-python-redis                     # The Python interface to the Redis key-value store
-python-grpcio                    # Python language bindings for grpc, remote procedure call (RPC) f
-python-googleapis-common-protos  # Python classes generated from the common protos in the googleapi
+python-pip                       # Python 包安装
+python-pipx                      # 把 Python 命令行工具装进独立环境,避免污染全局
+python-setuptools                # Python 构建基础
+python-pdm                       # Python 依赖管理
+uv                               # 极快的 Python 包管理;新项目主力
+ruff                             # Python 的 linter 兼 formatter,极快
+python-playwright                # 浏览器自动化
+python-weasyprint                # HTML/CSS 转 PDF
+python-redis                     # Redis 的 Python 客户端
+python-grpcio                    # gRPC 的 Python 绑定
+python-googleapis-common-protos  # gRPC 用的通用 proto 定义
 
 # ── 构建 / 编译 ───────────────────────────────────────────────────────
-llvm        # Compiler infrastructure
-cmake       # A cross-platform open-source make system
-meson       # High productivity build system
-ninja       # Small build system with a focus on speed
-bear        # A tool to generate compilation database for clang tooling
-ctags       # Generates an index file of language objects found in source file
-cppunit     # A C++ unit testing framework
-rapidjson   # Fast JSON parser/generator for C++ with both SAX/DOM style API
-pre-commit  # A framework for managing and maintaining multi-language pre-comm
-mise        # The front-end to your dev env
+llvm        # clang 工具链基础设施
+cmake       # 跨平台构建系统
+meson       # 构建系统
+ninja       # 构建后端,配合 cmake/meson
+bear        # 给 clangd 生成 compile_commands.json
+ctags       # 生成代码索引
+cppunit     # C++ 单元测试框架
+rapidjson   # C++ JSON 库
+pre-commit  # 提交前钩子框架
+mise        # 多语言版本管理与任务运行
 
 # ── 编辑器 / 文档 ──────────────────────────────────────────────────────
-neovim                  # Fork of Vim aiming to improve user experience, plugins, and GUIs
-vim                     # Vi Improved, a highly configurable, improved version of the vi t
-visual-studio-code-bin  # [AUR] Visual Studio Code (vscode): Editor for building and debugging m
-zeal-git                # A simple documentation browser
+neovim                  # 主力编辑器
+vim                     # 兜底编辑器;配置在 vimrc
+visual-studio-code-bin  # [AUR] VS Code;.desktop 有 Wayland 覆盖
+zeal-git                # 离线 API 文档浏览
 
 # ── 容器 / Kubernetes ───────────────────────────────────────────────
-docker          # Pack, ship and run any application as a lightweight container
-docker-buildx   # Docker CLI plugin for extended build capabilities with BuildKit
-docker-compose  # Fast, isolated development environments using Docker
-dive            # A tool for exploring layers in a docker image
-lazydocker      # A simple terminal UI for docker and docker-compose, written in G
-kubectl         # A command line tool for communicating with a Kubernetes API serv
-helm            # The Kubernetes Package Manager
-cilium-cli      # install, manage & troubleshoot Kubernetes clusters running Ciliu
+docker          # 容器运行时;alias/docker 里有一堆封装
+docker-buildx   # 多平台镜像构建
+docker-compose  # 多容器编排
+dive            # 逐层分析镜像体积
+lazydocker      # docker 的 TUI
+kubectl         # k8s 命令行;alias/kubernetes 里有封装
+helm            # k8s 包管理
+cilium-cli      # Cilium 网络插件的运维命令行
 
 # ── 运维 / 服务 ───────────────────────────────────────────────────────
-supervisor    # A system for controlling process state under UNIX
-nginx         # Lightweight HTTP server and IMAP/POP3 proxy server
-subversion    # A Modern Concurrent Version Control System
+supervisor    # 进程守护
+nginx         # 本地起 HTTP 服务;vicinae 里有个 code-nginx 脚本
+subversion    # SVN;偶尔要拉老仓库
 
 # ── 数据库 / 监控导出 ────────────────────────────────────────────────────
-postgresql                 # Sophisticated object-relational DBMS
-pgcli                      # A command line interface for PostgreSQL with auto-completion and
-redis                      # [AUR] An in-memory database that persists on disk
-prometheus-node-exporter   # Exporter for machine metrics
-prometheus-redis-exporter  # Prometheus exporter for ValKey & Redis metrics
+postgresql                 # 本地 PostgreSQL
+pgcli                      # 带补全的 psql 替代
+redis                      # [AUR] 本地 Redis
+prometheus-node-exporter   # 机器指标采集
+prometheus-redis-exporter  # Redis 指标采集
 
 # ── RPC / HTTP 调试 ─────────────────────────────────────────────────
-protoc-gen-go  # [AUR] Go support for Google's protocol buffers
-grpcurl        # [AUR] Like cURL, but for gRPC: Command-line tool for interacting with 
-websocat       # Command-line client for web sockets, like netcat/curl/socat for 
-httpie         # human-friendly CLI HTTP client for the API era
+protoc-gen-go  # [AUR] protobuf 的 Go 代码生成插件
+grpcurl        # [AUR] gRPC 版的 curl,调试服务用
+websocat       # WebSocket 版的 netcat
+httpie         # 更友好的 HTTP 命令行客户端
 
 # ── 性能剖析 / 逆向 ─────────────────────────────────────────────────────
-perf                  # Linux kernel performance auditing tool
-flamegraph            # [AUR] Flame Graphs visualize profiled code
-strace                # A diagnostic, debugging and instructional userspace tracer
-rr-git                # a nondeterministic debugger
-bcc-libbpf-tools      # BPF Compiler Collection (Tools)
-bpftool-bin           # [AUR] bpftool is a tool for inspection and simple manipulation of eBPF
-xdp-tools             # Utilities and example programs for use with XDP
-binaryninja-personal  # [AUR] An interactive decompiler, disassembler, debugger, and binary an
+perf                  # 内核级性能剖析
+flamegraph            # [AUR] 把剖析结果画成火焰图
+strace                # 跟踪系统调用
+rr-git                # 可回放的调试器,查偶现 bug 用
+bcc-libbpf-tools      # eBPF 现成工具集(查 I/O、调度延迟等)
+bpftool-bin           # [AUR] 检查/操作 eBPF 程序
+xdp-tools             # XDP 数据面工具
+binaryninja-personal  # [AUR] 逆向分析;已改 .desktop 强制走 Wayland 原生
 nasm      # 汇编器 + ndisasm 反汇编
 patchelf  # 改二进制的 rpath/interpreter
 
 # ── AI / Agent ────────────────────────────────────────────────────
-llama.cpp             # Port of Facebook's LLaMA model in C/C++ (with system ggml suppor
-claude-desktop        # [AUR] Official Claude AI desktop app from Anthropic — Chat, Cowork, an
-herdr-bin             # [AUR] Supervise multiple coding agents in one terminal
+llama.cpp             # 本地跑 LLM 推理
+claude-desktop        # [AUR] Claude 桌面端;autostart 里进 scratchpad 工作区
+herdr-bin             # [AUR] 在一个终端里管多个 coding agent

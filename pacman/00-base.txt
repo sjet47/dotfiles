@@ -1,75 +1,75 @@
 # 00-base.txt — 系统底座 —— 装机第一步,缺了开不了机或联不上网
 #
-# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
 # ── 内核 / 固件 / 微码 ──────────────────────────────────────────────────
-base            # Minimal package set to define a basic Arch Linux installation
-base-devel      # Basic tools to build Arch Linux packages
-linux           # The Linux kernel and modules
-linux-headers   # Headers and scripts for building modules for the Linux kernel
-linux-firmware  # Firmware files for Linux - Default set
-amd-ucode       # Microcode update image for AMD CPUs
-alsa-firmware   # Firmware binaries for loader programs in alsa-tools and hotplug 
-sof-firmware    # Sound Open Firmware
+base            # Arch 基础包组,系统最小集
+base-devel      # 编译工具链;paru 构建 AUR 包必需
+linux           # 内核
+linux-headers   # 编译内核模块用;xone/xpadneo 等 DKMS 驱动必需
+linux-firmware  # 各类硬件固件
+amd-ucode       # AMD CPU 微码更新(引导时加载)
+alsa-firmware   # 部分声卡的加载器固件
+sof-firmware    # Intel/AMD 数字麦克风与音频 DSP 固件
 
 # ── 引导 / AMD 显卡驱动 ─────────────────────────────────────────────────
-refind               # An EFI boot manager
-vulkan-radeon        # Open-source Vulkan driver for AMD GPUs
-lib32-vulkan-radeon  # Open-source Vulkan driver for AMD GPUs - 32-bit
-lib32-mesa           # Open-source OpenGL drivers - 32-bit
-xf86-video-amdgpu    # X.org amdgpu video driver
+refind               # EFI 引导管理器;要加内核参数(如将来补 resume=)在它的配置里改
+vulkan-radeon        # AMD 显卡的 Vulkan 驱动
+lib32-vulkan-radeon  # 32 位 Vulkan;Steam 里的 32 位游戏要用
+lib32-mesa           # 32 位 OpenGL;同上
+xf86-video-amdgpu    # XWayland 下的 amdgpu 驱动
 
 # ── 包管理 ───────────────────────────────────────────────────────────
-archlinuxcn-keyring  # Arch Linux CN PGP keyring
-paru                 # Feature packed AUR helper
-pacman-contrib       # Contributed scripts and tools for pacman systems
-expac                # alpm data (pacman database) extraction utility
-reflector            # A Python 3 module and script to retrieve and filter the latest P
-kernel-modules-hook  # Keeps your system fully functional after a kernel upgrade
+archlinuxcn-keyring  # archlinuxcn 仓库的签名密钥;不装则该仓库的包全部验签失败
+paru                 # AUR helper;pkg-sync install 用它装 [AUR] 标记的包
+pacman-contrib       # paccache 清缓存 / checkupdates 安全查更新 / pactree 查依赖树
+expac                # 查询包元数据;pkg-sync 生成清单时用过
+reflector            # 按速度筛选并重排官方 mirrorlist
+kernel-modules-hook  # 滚内核后保留旧模块目录,不重启也能加载模块(DKMS 驱动多,必需)
 rate-mirrors  # 按测速重排 mirrorlist(当前那份生成于 2025-05,该重跑了)
 
 # ── 网络基础 ──────────────────────────────────────────────────────────
-networkmanager        # Network connection manager and user applications
-nm-connection-editor  # NetworkManager GUI connection editor and widgets
-dhcpcd                # DHCP/ IPv4LL/ IPv6RA/ DHCPv6 client
-iwd                   # Internet Wireless Daemon
-openssh               # SSH protocol implementation for remote login, command execution 
-net-tools             # Configuration tools for Linux networking
-inetutils             # A collection of common network programs
-wget                  # Network utility to retrieve files from the web
+networkmanager        # 网络连接管理;waybar 网络模块与 nmcli 都依赖它
+nm-connection-editor  # 图形化编辑连接(windowrules.lua 里有它的浮窗规则)
+dhcpcd                # DHCP 客户端
+iwd                   # 无线守护;本机有线为主,留作备用
+openssh               # ssh 客户端与 sshd;wayvnc 走 ssh 隧道也靠它
+net-tools             # ifconfig/route 等老式网络工具(alias/utils 里在用)
+inetutils             # hostname/ftp 等基础网络程序
+wget                  # 命令行下载
 
 # ── 文件系统 / 存储 ─────────────────────────────────────────────────────
-ntfs-3g    # NTFS FUSE driver
-nfs-utils  # Support programs for Network File Systems
-sshfs      # FUSE client based on the SSH File Transfer Protocol
-usbutils   # A collection of USB tools to query connected USB devices
-rsync      # A fast and versatile file copying tool for remote and local file
+ntfs-3g    # 读写 NTFS 分区(挂 Windows 盘或 U 盘)
+nfs-utils  # 挂载 NFS 共享
+sshfs      # 用 ssh 挂远程目录(alias/utils 里有封装)
+usbutils   # lsusb 查 USB 设备
+rsync      # 增量同步/备份(alias/utils 里在用)
 smartmontools  # 磁盘 SMART 健康检测(smartctl)
 btrfs-progs  # 根分区是 btrfs;缺了 mkinitcpio 的 fsck hook 会报 No fsck helpers found
 
 # ── 归档解压 ──────────────────────────────────────────────────────────
-7zip   # File archiver for extremely high compression
-zip    # Compressor/archiver for creating and modifying zipfiles
-unzip  # For extracting and viewing files in .zip archives
-unrar  # The RAR uncompression program
-cpio   # A tool to copy files into or out of a cpio or tar archive
+7zip   # 7z 解压
+zip    # 生成 zip(mimeapps.list 里关联了压缩包)
+unzip  # 解 zip
+unrar  # 解 rar
+cpio   # mkinitcpio 生成 initramfs 需要
 
 # ── 系统基础工具 ────────────────────────────────────────────────────────
-cronie                 # Daemon that runs specified programs at scheduled times and relat
-man-db                 # A utility for reading man pages
-man-pages              # Linux man pages
-words                  # A collection of International 'words' files for /usr/share/dict
-less                   # A terminal based program for viewing text files
-tree                   # A directory listing program displaying a depth indented list of 
-plocate                # Alternative to locate, faster and compatible with mlocate's data
+cronie                 # 定时任务守护
+man-db                 # man 手册
+man-pages              # Linux 系统调用等手册页
+words                  # /usr/share/dict 词表;拼写检查类工具会读
+less                   # 分页器;man 和 git 的默认 pager
+tree                   # 目录树
+plocate                # 秒级 locate 文件查找
 power-profiles-daemon  # 电源模式切换
 
 # ── 打印 ────────────────────────────────────────────────────────────
-cups      # OpenPrinting CUPS - daemon package
-cups-pdf  # PDF printer for cups
+cups      # 打印服务守护
+cups-pdf  # 虚拟"打印成 PDF"打印机
 print-manager  # 图形化打印机配置(未装 system-config-printer,删了只剩 CUPS 网页版)
 
 # ── 蓝牙 ────────────────────────────────────────────────────────────
-bluez-utils  # bluetoothctl 等
+bluez-utils  # bluetoothctl 等蓝牙命令行工具
 bluez-obex   # 蓝牙文件传输

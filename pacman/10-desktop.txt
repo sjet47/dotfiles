@@ -1,6 +1,6 @@
 # 10-desktop.txt — Hyprland 桌面环境 —— 装完这组就有可用图形界面
 #
-# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
 # ── Hyprland 核心 / 会话 / 锁屏 ─────────────────────────────────────────
@@ -25,35 +25,35 @@ vicinae-bin  # [AUR] 应用启动器(AUR,配置里默认用它)
 grim                 # 截图后端
 slurp                # 区域选择
 tensaku              # [AUR] 截图标注(AUR,satty fork,支持滚动长截图)
-spectacle            # KDE screenshot capture utility
-gpu-screen-recorder  # A shadowplay-like screen recorder for Linux. The fastest screen 
+spectacle            # KDE 截图工具;主力是 hypr/scripts/screenshot.sh,这个作备用
+gpu-screen-recorder  # 硬件加速录屏(screenrecord.sh 用的是 wl-screenrec,这个作备用)
 wl-screenrec-git     # 录屏(archlinuxcn / AUR)
-wl-clipboard         # wl-copy / wl-paste
+wl-clipboard         # wl-copy / wl-paste;截图脚本和 alias/git 都在用
 cliphist             # 剪贴板历史
-wtype                # xdotool type for wayland
+wtype                # Wayland 下模拟键盘输入;注意它不触发 Hyprland keybind
 zbar                 # zbarimg 二维码解码(screenshot.sh qr 模式)
 
 # ── 密钥环 ───────────────────────────────────────────────────────────
 gnome-keyring  # 密钥环 / SSH agent(autostart + env.lua 的 SSH_AUTH_SOCK)
-seahorse       # GNOME application for managing PGP keys
-lssecret-git   # [AUR] utility to list all secret items in a secret service using libse
+seahorse       # 图形化管理 gnome-keyring 里的密钥
+lssecret-git   # [AUR] 命令行列出 secret service 里的条目,排查 keyring 用
 
 # ── KDE 应用 ────────────────────────────────────────────────────────
 dolphin         # 文件管理器(vars.lua,SUPER+E)
-gwenview        # A fast and easy to use image viewer
-okular          # Document Viewer
-filelight       # View disk usage information
-isoimagewriter  # Program to write hybrid ISO files onto USB disks
+gwenview        # 看图;mimeapps.list 里是图片的默认打开方式
+okular          # 看 PDF;mimeapps.list 里是文档默认
+filelight       # 图形化磁盘占用分析
+isoimagewriter  # 把 ISO 写进 U 盘做启动盘
 ark             # 压缩包 GUI。卸 plasma 后 zip 的默认关联掉给了 PrismLauncher,
                 # tar/gz/rar/7z 直接无默认;装它零新增依赖(KF6 库 dolphin 已拉着)
 kimageformats  # 给 Qt 应用补 AVIF/HEIF/JXL 图片格式(gwenview 打开这些格式靠它)
 breeze-gtk  # GTK 应用的 Breeze 主题(gtk-theme-name=Breeze 靠它;已从 plasma 依赖转显式)
 
 # ── 远程桌面 (见 HANDOFF: wayvnc 走 frp+ssh 隧道) ─────────────────────────
-wayvnc    # VNC server for wlroots-based Wayland compositors
-tigervnc  # Suite of VNC servers and clients based on the VNC 4 branch of Ti
-krdc      # Remote Desktop Client
-krfb      # Desktop Sharing
+wayvnc    # wlroots 的 VNC 服务端;只绑 127.0.0.1,跨公网走 frp+ssh 隧道
+tigervnc  # VNC 客户端,连别的机器用
+krdc      # KDE 远程桌面客户端(RDP/VNC)
+krfb      # KDE 桌面共享服务端
 
 # ── 亮度 ──────────────────────────────────────────────────────────────
 ddcutil  # 外接显示器 DDC/CI 亮度(scripts/brightness.sh 直接调用)
@@ -61,49 +61,49 @@ ddcutil  # 外接显示器 DDC/CI 亮度(scripts/brightness.sh 直接调用)
 # ── 音频 / 蓝牙前端 ─────────────────────────────────────────────────────
 pavucontrol      # 图形音量面板
 pamixer          # 音量控制(备用)
-easyeffects      # Audio Effects for Pipewire applications
-lsp-plugins-lv2  # Collection of open-source plugins - LV2
+easyeffects      # PipeWire 音效处理(均衡器/降噪)
+lsp-plugins-lv2  # easyeffects 用的 LV2 插件集
 blueman          # 蓝牙托盘
-bluetui          # TUI for managing bluetooth devices
+bluetui          # 终端里管蓝牙;blueman 的命令行替代
 pipewire        # 音频/视频服务端(原先非显式,依赖链经 kwin,plasma 移除后有孤儿风险)
 pipewire-pulse  # PulseAudio 兼容层
 wireplumber     # pipewire 会话管理(wireplumber.service enabled,音量快捷键的 wpctl 来自它)
 
 # ── 托盘 / 全局菜单兼容 ───────────────────────────────────────────────────
-appmenu-gtk-module  # Application Menu GTK Module
-libdbusmenu-glib    # Library for passing menus over DBus
-libdbusmenu-gtk3    # Library for passing menus over DBus (GTK+ 3 library)
-libdbusmenu-qt5     # A library that provides a Qt implementation of the DBusMenu spec
+appmenu-gtk-module  # GTK 应用把菜单导出到 DBus,给全局菜单用
+libdbusmenu-glib    # DBus 菜单协议库
+libdbusmenu-gtk3    # 同上,GTK3 侧
+libdbusmenu-qt5     # 同上,Qt5 侧
 gtk2  # 遗留 GTK2 应用的运行时
 
 # ── 输入法 (fcitx5) ──────────────────────────────────────────────────
 fcitx5                 # 输入法框架
-fcitx5-anthy           # Anthy Wrapper for Fcitx5
+fcitx5-anthy           # fcitx5 的日文输入
 fcitx5-chinese-addons  # 拼音/中文输入
 fcitx5-configtool      # 图形配置
 fcitx5-gtk             # GTK 应用集成
 fcitx5-qt              # Qt 应用集成
-fcitx5-material-color  # Material color theme for fcitx5
+fcitx5-material-color  # fcitx5 候选框主题
 
 # ── 光标 / 音效主题 ──────────────────────────────────────────────────────
 adwaita-cursors         # 光标主题(gtk settings.ini + XCURSOR_THEME 都指向 Adwaita)
 sound-theme-freedesktop # GTK 提示音(gtk-sound-theme-name=freedesktop)
 
 # ── 字体 ────────────────────────────────────────────────────────────
-adobe-source-han-serif-cn-fonts  # Adobe Source Han Serif Subset OTF - Simplified Chinese OpenType/
-noto-fonts-cjk                   # Google Noto CJK fonts
-noto-fonts-extra                 # Google Noto TTF fonts - additional variants
-wqy-zenhei                       # A Hei Ti Style (sans-serif) Chinese Outline Font.
-ttf-apple-emoji                  # [AUR] Apple Color Emoji is a color typeface used by iOS and macOS to d
-ttf-cascadia-code                # A monospaced font by Microsoft that includes programming ligatur
-ttf-cascadia-code-nerd           # Patched font Cascadia Code (Caskaydia) from nerd fonts library
-ttf-jetbrains-mono               # Typeface for developers, by JetBrains
-ttf-jetbrains-mono-nerd          # Patched font JetBrains Mono from nerd fonts library
+adobe-source-han-serif-cn-fonts  # 思源宋体简中;正文衬线字体
+noto-fonts-cjk                   # 中日韩字形兜底,缺了大量汉字显示成方框
+noto-fonts-extra                 # Noto 的额外字重/变体
+wqy-zenhei                       # 文泉驿正黑;老程序指定该字体时的兜底
+ttf-apple-emoji                  # [AUR] 彩色 emoji;waybar 和终端都在 fontconfig 里指定了它
+ttf-cascadia-code                # 等宽编程字体
+ttf-cascadia-code-nerd           # 同上的 Nerd Font 补丁版(带图标字形)
+ttf-jetbrains-mono               # 等宽编程字体
+ttf-jetbrains-mono-nerd          # quickshell 的 OSD/通知/电源菜单图标就用它
 ttf-maplemono-nf-cn-unhinted     # Maple Mono NF CN(kitty 默认字体,自带 Nerd/CJK)
-ttf-nunito                       # Sans serif font with rounded tips by Vernon Adams
+ttf-nunito                       # 圆头无衬线;界面点缀用
 adobe-source-code-pro-fonts  # 部分应用按名引用
 cantarell-fonts              # GNOME 默认 UI 字体,GTK 应用可能回落到它
 
 # ── 默认终端 / 缩略图 / 系统监视 ─────────────────────────────────────────────
 kitty              # 配置里默认终端
-ffmpegthumbnailer  # Lightweight video thumbnailer that can be used by file managers
+ffmpegthumbnailer  # dolphin 里显示视频缩略图(录屏文件多,没它只有一片空白图标)

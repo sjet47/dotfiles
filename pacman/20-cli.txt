@@ -1,84 +1,84 @@
 # 20-cli.txt — 日常 CLI —— 交互习惯全靠这组,迁移后第一时间要有
 #
-# 行尾注释是 pacman 自带的包描述,仅供辨认;逐步替换成"我为什么需要它"更有价值。
+# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
 # ── shell / 多路复用 / 历史 ─────────────────────────────────────────────
-zsh       # A very advanced and programmable command interpreter (shell) for
-tmux      # Terminal multiplexer
-zellij    # A terminal multiplexer
-starship  # The cross-shell prompt for astronauts
-atuin     # Magical shell history
+zsh       # 默认 shell;配置在 zshrc,插件用 submodule 不走 OMZ
+tmux      # 终端复用;配置 tmux.conf,带 resurrect 会话恢复
+zellij    # 另一个终端复用,备选
+starship  # 跨 shell 提示符
+atuin     # shell 历史(可同步、可搜索)
 
 # ── 文件浏览与列表 ───────────────────────────────────────────────────────
-lsd   # Modern ls with a lot of pretty colors and awesome icons
-yazi  # Blazing fast terminal file manager written in Rust, based on asy
-fd    # Simple, fast and user-friendly alternative to find
+lsd   # 带图标的 ls 替代
+yazi  # 终端文件管理器
+fd    # find 的现代替代
 
 # ── 搜索 / 查看 ───────────────────────────────────────────────────────
-ripgrep   # A search tool that combines the usability of ag with the raw spe
-ugrep     # ultra fast grep with interactive TUI, fuzzy search, boolean quer
-ast-grep  # CLI tool for code structural search, lint and rewriting
-bat       # Cat clone with syntax highlighting and git integration
-fzf       # Command-line fuzzy finder
-hexyl     # Colored command-line hex viewer
+ripgrep   # 主力全文搜索
+ugrep     # 带交互 TUI 的 grep,复杂查询时用
+ast-grep  # 按语法树结构搜索/重写代码,跨文件重构用
+bat       # 带语法高亮的 cat
+fzf       # 模糊选择器;shell 和一堆脚本的交互基座
+hexyl     # 十六进制查看;排查换行符之类的字节问题
 
 # ── JSON / YAML / Markdown ────────────────────────────────────────
 jq       # 脚本解析 hyprctl JSON(截图/录屏选区)
-yq       # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML
-gron     # Makes JSON greppable
-jnv-bin  # [AUR] Interactive JSON filter using jq
-mdq      # [AUR] like jq but for Markdown: find specific elements in a md doc
-glow     # Command-line markdown renderer
+yq       # YAML/XML/TOML 版的 jq
+gron     # 把 JSON 拍平成可 grep 的行
+jnv-bin  # [AUR] 交互式 jq,边写边看结果
+mdq      # [AUR] Markdown 版的 jq
+glow     # 终端里渲染 Markdown
 
 # ── git 工具链 ───────────────────────────────────────────────────────
-lazygit       # Simple terminal UI for git commands
-github-cli    # The GitHub CLI
-glab          # Cli tool to help work seamlessly with GitLab from the command li
-git-delta     # Syntax-highlighting pager for git and diff output
-difftastic    # An experimental diff tool that compares files based on their syn
-lucky-commit  # Customize your git commit hashes
-tokei         # A blazingly fast CLOC (Count Lines Of Code) program
+lazygit       # git 的 TUI;配置在 config/lazygit,diff 用 difftastic
+github-cli    # GitHub 的 PR/issue 命令行
+glab          # GitLab 的 MR/CI 命令行(日常主要用这个)
+git-delta     # git diff 的高亮分页器
+difftastic    # 按语法树比对的 diff,lazygit 里配成了外部 differ
+lucky-commit  # 定制 commit hash 前缀
+tokei         # 代码行数统计
 
 # ── 系统观测 ──────────────────────────────────────────────────────────
-htop                 # Interactive process viewer
-btop                 # A monitor of system resources, bpytop ported to C++
-iotop                # View I/O usage of processes
-smem                 # [AUR] Generate reports on memory usage.
-duf                  # Disk Usage/Free Utility
-dust                 # A more intuitive version of du in rust
-lnav                 # A curses-based tool for viewing and analyzing log files
-hl                   # A fast and powerful log viewer and processor
-systemd-manager-tui  # [AUR] A TUI for managing systemd services
+htop                 # 进程查看
+btop                 # 资源监视;windowrules.lua 里有它的浮窗规则
+iotop                # 看磁盘 I/O 占用
+smem                 # [AUR] 按 PSS 统计内存,比 RSS 准
+duf                  # 磁盘占用总览
+dust                 # 目录占用排行
+lnav                 # 日志查看与分析
+hl                   # 结构化日志查看(JSON 日志友好)
+systemd-manager-tui  # [AUR] 终端里管 systemd 单元
 fastfetch            # 系统信息
-cpufetch             # Simple yet fancy CPU architecture fetching tool
-hwinfo               # Hardware detection tool from openSUSE
-impala               # TUI for managing wifi
+cpufetch             # 看 CPU 架构信息
+hwinfo               # 硬件探测;排查驱动问题时用
+impala               # 终端里连 WiFi
 dmidecode  # 读 BIOS/主板/内存槽位硬件信息
 
 # ── 文档 / 图形 / 排版 ──────────────────────────────────────────────────
-graphviz        # Graph visualization software
-graphicsmagick  # Image processing system
-resvg           # SVG rendering library and CLI
-typst           # A markup-based typesetting system for the sciences
-hugo            # Fast and Flexible Static Site Generator in Go
-presenterm      # A markdown terminal slideshow tool
+graphviz        # dot 画图;文档和调试图用
+graphicsmagick  # 批量图片处理
+resvg           # SVG 转 PNG
+typst           # 排版;写 PDF 文档用
+hugo            # 静态站点生成
+presenterm      # 终端里放 Markdown 幻灯片
 
 # ── 传输 / 下载 ───────────────────────────────────────────────────────
-rclone  # rsync for cloud storage
-qrcp    # [AUR] Transfer files over WiFi from computer to mobile by scanning a Q
-yt-dlp  # A youtube-dl fork with additional features and fixes
+rclone  # 同步云存储
+qrcp    # [AUR] 扫码在手机和电脑间传文件
+yt-dlp  # 下载视频;scripts/ytd 是它的封装
 
 # ── 杂项 ────────────────────────────────────────────────────────────
-moreutils        # A growing collection of the unix tools that nobody thought to wr
-pv               # A terminal-based tool for monitoring the progress of data throug
-bc               # An arbitrary precision calculator language
-just             # A handy way to save and run project-specific commands
-shfmt            # Format shell programs
-tldr             # Command line client for tldr, a collection of simplified man pag
-gum              # A tool for glamorous shell scripts
-zoxide           # A smarter cd command for your terminal
-tree-sitter-cli  # CLI tool for developing, testing, and using Tree-sitter parsers
+moreutils        # sponge/ts/parallel 等零碎 unix 工具
+pv               # 管道进度条
+bc               # 命令行计算器;脚本里做浮点运算
+just             # 项目级命令入口(替代 make 跑任务)
+shfmt            # shell 脚本格式化
+tldr             # 命令的常用示例,比 man 快
+gum              # 给 shell 脚本做交互组件(选择/输入/确认)
+zoxide           # 按频率跳目录的 cd 替代
+tree-sitter-cli  # neovim 的语法解析器构建/调试
 inotify-tools  # inotifywait/inotifywatch,脚本里监听文件变更
 trash-cli      # trash-put/list/restore/empty,命令行走回收站而不是真删
 yamllint       # YAML lint(ruff 管 Python,shfmt 管 shell,这个补 YAML)
