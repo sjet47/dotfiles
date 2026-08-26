@@ -8,11 +8,13 @@
 #   ./pkg-sync install 30-dev ...  只装指定组
 #   ./pkg-sync install --skip-repo-check ...   跳过仓库检查(明知选中组不需要时)
 #
-# 清单文件 = 本目录下的 NN-*.txt,是包清单的唯一事实来源。
+# 清单文件 = 仓库 pacman/ 下的 NN-*.txt,是包清单的唯一事实来源。
+# 本脚本放在 scripts/(已在 PATH 里),所以任意目录下直接敲 pkg-sync 即可。
 # 格式:每行一个包名,# 之后为注释。
 
 set -euo pipefail
-cd "$(dirname "$(readlink -f "$0")")"
+# readlink -f 解析软链,所以即使被 symlink 到别处也能找到仓库里的清单
+cd "$(dirname "$(readlink -f "$0")")/../pacman"
 
 # 清单里的包分布在这些仓库。core/extra 是默认开启的,
 # multilib 默认被注释掉,archlinuxcn 需要手动添加 —— 迁移时这两个是最常踩的坑:

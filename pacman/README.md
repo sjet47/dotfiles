@@ -12,7 +12,7 @@
 | `30-dev.txt` | 语言链、容器、数据库、性能剖析、AI agent |
 | `40-apps.txt` | GUI 应用、代理 VPN、抓包、游戏 |
 | `90-optional.txt` | 备选方案 / 一次性尝试 / 玩具，**迁移时整组跳过** |
-| `pkg-sync` | 对账 + 安装 |
+| `../scripts/pkg-sync` | 对账 + 安装（在 PATH 里，可直接敲 `pkg-sync`）|
 
 清单只收 `pacman -Qqe`（显式安装）的包，依赖由 pacman 自动拉齐，不入库。
 
@@ -22,10 +22,10 @@
 ## 日常用法
 
 ```bash
-./pacman/pkg-sync              # 双向对账
-./pacman/pkg-sync repos        # 只检查前置仓库
-./pacman/pkg-sync install      # 装 00~40 组(跳过 90-optional)
-./pacman/pkg-sync install 30-dev 40-apps   # 只装指定组
+pkg-sync              # 双向对账
+pkg-sync repos        # 只检查前置仓库
+pkg-sync install      # 装 00~40 组(跳过 90-optional)
+pkg-sync install 30-dev 40-apps   # 只装指定组
 ```
 
 装了新包之后随手跑一次对账，它会报出「系统里有、清单里没有」，把包补进对应分组即可。
@@ -34,8 +34,8 @@
 ## 迁移到新机器
 
 1. 先启用 `multilib` 和 `archlinuxcn` 仓库（见下方第 5 条坑），装好 `paru`
-2. `./pacman/pkg-sync install 00-base` → 能开机联网
-3. `./pacman/pkg-sync install 10-desktop` → 有图形界面
+2. `pkg-sync install 00-base` → 能开机联网
+3. `pkg-sync install 10-desktop` → 有图形界面
 4. 剩下的按需装，`90-optional` 想清楚再单独挑
 
 ---
