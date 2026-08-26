@@ -7,6 +7,7 @@
 // 组成:
 //   Osd.qml            音量 / 亮度 OSD      IPC target: osd
 //   Notifications.qml  通知守护(替代 mako)  IPC target: notif
+//   Power.qml          电源菜单(替代 wlogout) IPC target: power
 //
 pragma ComponentBehavior: Bound
 
@@ -31,4 +32,5 @@ ShellRoot {
 
     Osd { activeMonitor: root.activeMonitor }
     Notifications { activeMonitor: root.activeMonitor }
+    Power { activeMonitor: root.activeMonitor }
 }

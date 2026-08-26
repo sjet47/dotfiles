@@ -7,6 +7,7 @@
 | `shell.qml` | 入口。共用的聚焦显示器播种放在这里 | — |
 | `Osd.qml` | 音量 / 亮度 OSD | `osd` |
 | `Notifications.qml` | 通知守护（替代 mako） | `notif` |
+| `Power.qml` | 电源菜单（替代 wlogout） | `power` |
 
 放在 `~/.config/quickshell/shell.qml` 就是 quickshell 的 "default" 配置 —— 注意此时**同目录下的子目录不会再被当成独立配置**。
 
@@ -19,11 +20,27 @@ qs ipc call notif dndStatus
 qs ipc call notif history            # 历史 JSON
 qs ipc call notif invoke             # 触发最新一条的 default action(对应 makoctl invoke)
 qs ipc call notif dismissAll         # 清空(对应 makoctl dismiss --all)
+qs ipc call power toggle             # 电源菜单,绑在 SUPER + ALT + M
+qs ipc call power open / hide
 ```
 
 waybar 的 `custom/notifications` 模块经 `waybar/scripts/notifications.sh` 调用后三个。
 
 音量不需要接口：直接监听 PipeWire，任何途径改音量都会弹。亮度没有便宜的读取方式（DDC 的 `getvcp` 一次 ~200ms），所以由 `brightness.sh` 维护缓存后推过来。
+
+## 电源菜单
+
+5 个动作：锁屏 / 注销 / 挂起 / 重启 / 关机，字母快捷键 `l e u r s` 沿用 wlogout 默认，
+方向键 + Enter 也可以，Esc 取消。相对 wlogout 的默认布局改了两处：
+
+- **去掉 Hibernate**。本机有 64G swap 但没配 resume（`/sys/power/resume = 0:0`，
+  内核参数里也没有 `resume=`），按下去会写盘关机却无法恢复，等于丢会话。
+  以后要恢复这个按钮，得先在 refind 里补 `resume=` 再验证。
+- **Logout 用 `hyprctl dispatch exit`**，不是 wlogout 默认的 `loginctl terminate-user`。
+  会话由 `start-hyprland` 拉起、不归 uwsm 管（`wayland-wm@hyprland.service` 是 inactive），
+  让合成器自己退出比杀掉整个 user 干净。
+
+Lock 保持 `loginctl lock-session`：走标准会话锁语义，由 hypridle 的 `lock_cmd` 拉起 hyprlock。
 
 ## 与 mako 的关系
 
@@ -121,7 +138,23 @@ n.closed.connect(function () { notif.drop(n); });
 
 它只在收到 `focusedmon` 事件时才赋值，实测启动 3 秒后仍是 undefined。启动时用 `hyprctl monitors -j` 播种一次，之后交给事件流。这段在 `shell.qml` 里，两个组件共用。
 
-### 15. 内存代价
+### 15. IPC 函数不能叫 `show`
+
+`qs ipc` 自己有 `show` 子命令，所以 `qs ipc call <target> show` 会被解析成 introspection、
+打印函数列表，**函数本身根本调不到**，而且不报错。电源菜单那个改名成了 `open`。
+`hide` / `toggle` 之类没有冲突。
+
+### 16. 要吃键盘的面板得设 `keyboardFocus`
+
+OSD 和通知都是 `WlrKeyboardFocus.None`（默认），电源菜单需要 Esc / 方向键 / 字母快捷键，
+所以设成 `Exclusive`。**它会独占键盘** —— 万一 Esc 分支写错，人就被锁在菜单里了，
+所以 Esc 一定要放在 `Keys.onPressed` 的第一个分支。
+
+验证键盘可以用 `wtype`（它注入的按键不触发 Hyprland keybind，但能进有焦点的 layer surface）。
+测字母快捷键时别直接按 `r` / `s` —— 把 `execDetached` 临时换成 `console.log` 打索引再逐个试，
+顺带能验证字母到动作的映射没串位。注意 `strings` 会过滤掉中文，日志里只打 ASCII。
+
+### 17. 内存代价
 
 单实例约 **200MB** 起步，重度用图后收敛在 ~370MB（增长有界，不是泄漏）。对照 mako ~10MB。这是 Qt runtime + QML + GPU scene graph 的固定成本，评估要不要把更多组件迁过来时要算进去。
 
