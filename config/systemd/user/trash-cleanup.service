@@ -1,6 +1,10 @@
 [Unit]
 Description=Prune XDG trash entries older than 90 days
+Documentation=man:trash-empty(1)
 
 [Service]
 Type=oneshot
-ExecStart=%h/dotfiles/scripts/trash-prune 90
+# 回收站是 freedesktop 规范,但过期策略的执行者是桌面环境:~/.config/ktrashrc
+# 配的 Days=7 由 plasma 会话服务执行,Hyprland 下 plasmashell 不启动 → 无人执行。
+# 这个 timer 就是补上这个角色。-f 是免交互确认,systemd 环境下必须带。
+ExecStart=/usr/bin/trash-empty 90 -f
