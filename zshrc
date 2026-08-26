@@ -129,6 +129,7 @@ if [[ ! $__ZSH_LOAD_ONCE ]]; then
     ghcup
     ocaml
     pi-cmd
+    cd-stack
   )
 
   for setup in "${__plugin_setups[@]}"; do

@@ -1,0 +1,21 @@
+# Alt+C: 列出目录栈，按数字键直接跳过去
+cd-stack() {
+  local -a stack=("${(@f)$(dirs -pl)}")
+  (( $#stack > 1 )) || { zle -M '目录栈是空的'; return }
+
+  local i n=$(( $#stack < 10 ? $#stack : 10 )) list=
+  for ((i = 2; i <= n; i++)); do
+    list+="  $((i - 1))  ${stack[i]/#$HOME/~}"$'\n'
+  done
+  zle -M "${list%$'\n'}"
+  zle -R
+
+  local k
+  read -sk1 k
+  if [[ $k == [1-9] ]] && (( k < n )); then
+    cd -$k >/dev/null
+  fi
+  zle reset-prompt   # 顺带擦掉 zle -M 的列表
+}
+zle -N cd-stack
+bindkey '^[c' cd-stack
