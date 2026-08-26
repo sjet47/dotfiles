@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#
+# 按删除时间修剪 XDG 回收站(~/.local/share/Trash)。
+#
+# 为什么需要它:回收站是 freedesktop 规范,规范只定义目录布局,不负责过期。
+# KDE 把过期策略放在 ~/.config/ktrashrc,但执行者是 plasma 会话服务 ——
+# 跑 Hyprland 时 plasmashell 不启动,策略配了也是空转,于是无限增长
+# (本机曾攒到 18 个月 / 29 GiB)。这个脚本 + 同名 timer 就是补上这个角色。
+#
+# 用法: trash-prune [保留天数]   默认 90
+#
+set -uo pipefail
+
+DAYS=${1:-90}
+T="${XDG_DATA_HOME:-$HOME/.local/share}/Trash"
+[[ -d "$T/info" && -d "$T/files" ]] || exit 0
+
+cutoff=$(date -d "-${DAYS} days" +%s) || exit 1
+n=0
+
+shopt -s nullglob
+
+# 1. 按 .trashinfo 里记录的删除时间修剪,info 与 files 成对删除
+for info in "$T"/info/*.trashinfo; do
+  date_str=$(sed -n 's/^DeletionDate=//p' "$info" | head -1)
+  [[ -n $date_str ]] || continue
+  ts=$(date -d "$date_str" +%s 2>/dev/null) || continue
+  (( ts < cutoff )) || continue
+  rm -rf -- "$T/files/$(basename "$info" .trashinfo)" "$info"
+  n=$((n + 1))
+done
+
+# 2. 孤立条目:files/ 里有、info/ 里没有对应记录。
+#    这类在文件管理器里看不见也还原不了,但仍占空间。同样只清超期的,
+#    避免和"刚删除、info 还没落盘"的瞬间状态抢跑。
+for f in "$T"/files/*; do
+  [[ -e "$T/info/$(basename "$f").trashinfo" ]] && continue   # info 恒为普通文件,-e 够用
+  mt=$(stat -c %Y "$f" 2>/dev/null) || continue
+  (( mt < cutoff )) || continue
+  rm -rf -- "$f"
+  n=$((n + 1))
+done
+
+# 3. 反向孤立:info/ 里有记录、files/ 里文件已不在。占空间极小,但文件管理器
+#    会显示成打不开的条目。这类无条件清,因为记录本身已经失去意义。
+for info in "$T"/info/*.trashinfo; do
+  # 必须带 -L:回收站里存在断链符号链接(原本指向相对路径),对它们 -e 返回 false,
+  # 只用 -e 会把这些条目的记录当成"文件已不在"误删。
+  f="$T/files/$(basename "$info" .trashinfo)"
+  [[ -e $f || -L $f ]] && continue
+  rm -f -- "$info"
+  n=$((n + 1))
+done
+
+# 4. KDE 用的目录大小缓存,条目删了它就过期了,删掉让其重建
+rm -f "$T/directorysizes"
+
+echo "trash-prune: 清理了 $n 个早于 ${DAYS} 天的条目"

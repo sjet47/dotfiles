@@ -62,6 +62,8 @@ config/hypr/hyprland.conf
 # 顺带排掉 systemctl --user enable 生成的 *.target.wants/ symlinks。
 # agent-ticket / go2rtc-cloud-relay / hy-mt2 维持原状,不入库。
 config/systemd/user/*
+!config/systemd/user/trash-cleanup.service
+!config/systemd/user/trash-cleanup.timer
 !config/systemd/user/tmux-resurrect-cleanup.service
 !config/systemd/user/tmux-resurrect-cleanup.timer
 !config/systemd/user/waybar.service

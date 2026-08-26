@@ -1,0 +1,6 @@
+[Unit]
+Description=Prune XDG trash entries older than 90 days
+
+[Service]
+Type=oneshot
+ExecStart=%h/dotfiles/scripts/trash-prune 90
