@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+#
+# wayvnc-window —— 只把某一个窗口推给 VNC,而不是整个桌面
+#
+#   wayvnc-window                  转发当前活动窗口
+#   wayvnc-window chrome           转发 class/title 匹配 'chrome' 的第一个窗口
+#   wayvnc-window --size 1080x2340 指定虚拟屏尺寸(默认 1280x800)
+#   wayvnc-window --keep-bar       别把窗口全屏,留出 waybar
+#   wayvnc-window --stop           收工:窗口移回原处,虚拟屏拆掉
+#   wayvnc-window --status         看当前转的是哪个窗口
+#
+# 连法跟整屏转发一样,还是走 ssh 隧道(见 config/wayvnc/config 里的注释)。
+#
+# ---8<--- 以下是设计说明,不进 --help
+#
+# 为什么要绕这么一圈开块虚拟屏,而不是让 wayvnc 直接抓那一个窗口:
+#
+#   wayvnc 确实有 -T/--toplevel,但一是 0.10.1/master 有个复制粘贴 bug 让它压根用不了
+#   (main.c 里 toplevel 分支把 image_source_type 错写成 IMAGE_SOURCE_TYPE_OUTPUT,
+#   于是拿 toplevel id 去显示器列表里找,必然 "No such output");二是就算把那行改对
+#   重新编译(实测画面确实只有那一个窗口),它也是只读的 —— client_init_pointer 开头
+#   对 toplevel 直接 return,上游自己标着 TODO,根本不创建虚拟指针。虚拟键盘倒是会建,
+#   但那是发给 seat 焦点窗口的,也就是本机焦点在哪就打进哪,不是被抓的那个窗口,更糟。
+#
+#   往深一层说这不是 wayvnc 偷懒:Wayland 的输入注入本质是全局的,虚拟指针发的是绝对
+#   坐标,落到哪个窗口由合成器按坐标判定。所以"只推一个窗口还要能点"在协议层就要求
+#   这个窗口独占一块可点区域。给它开一块只有它的 headless 屏,捕获和注入对着同一块屏,
+#   坐标天然对齐,窗口被别的窗口遮挡的问题也一并没有了。
+
+set -euo pipefail
+
+SIZE="1280x800"
+MATCH=""
+ACTION="start"
+FULLSCREEN=1
+STATE="${XDG_RUNTIME_DIR:-/tmp}/wayvnc-window.state"
+
+die() { echo "wayvnc-window: $*" >&2; exit 1; }
+# 帮助正文就是文件头的注释,截到 ---8<--- 为止,省得两处各写一遍再写岔
+usage() { awk '/^# ---8<---/ { exit } NR > 2 && /^#/ { sub(/^# ?/, ""); print }' "$(readlink -f "$0")"; }
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --stop)     ACTION="stop"; shift ;;
+        --status)   ACTION="status"; shift ;;
+        --size)     SIZE="${2:-}"; [ -n "$SIZE" ] || die "--size 缺参数"; shift 2 ;;
+        --keep-bar) FULLSCREEN=0; shift ;;
+        -h|--help)  usage; exit 0 ;;
+        -*)         die "未知选项 $1" ;;
+        *)          MATCH="$1"; shift ;;
+    esac
+done
+
+# 这脚本多半是从另一台机器 ssh 回来跑的(人不在本机才需要远程转发),而 ssh 会话里没有
+# HYPRLAND_INSTANCE_SIGNATURE,hyprctl 会直接报 "is hyprland running?"。
+# 优先问 systemd user manager 要 —— uwsm 把图形会话的环境导进去了,拿到的就是当前会话
+# 那个实例;万一没有(没走 uwsm),再退回去扫运行时目录,逐个试哪个 socket 还活着。
+# 注:systemctl --user 本身在 ssh 下是好的,只要 XDG_RUNTIME_DIR 在(pam_systemd 会设),
+# 所以 wayvnc 服务能正常拉起来,它继承的是 systemd 的环境而不是这个 ssh 会话的。
+if [ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+    sig=$(systemctl --user show-environment 2>/dev/null |
+              sed -n 's/^HYPRLAND_INSTANCE_SIGNATURE=//p')
+    if [ -z "$sig" ]; then
+        for cand in $(ls -t "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/hypr" 2>/dev/null); do
+            if HYPRLAND_INSTANCE_SIGNATURE="$cand" hyprctl version >/dev/null 2>&1; then
+                sig="$cand"; break
+            fi
+        done
+    fi
+    [ -n "$sig" ] || die "找不到运行中的 Hyprland 实例"
+    export HYPRLAND_INSTANCE_SIGNATURE="$sig"
+fi
+
+win_exists() { hyprctl clients -j | jq -e --arg a "$1" 'any(.[]; .address == $a)' >/dev/null; }
+
+# 移窗口到指定工作区。follow=false 就是旧的 movetoworkspacesilent —— 不夺焦点,
+# 免得本机的焦点跟着跳到那块看不见的虚拟屏上去。
+move_window() {
+    local addr="$1" ws="$2"
+    hyprctl dispatch \
+        "hl.dsp.window.move({ workspace = $ws, follow = false, window = hl.get_window('address:$addr') })" \
+        >/dev/null
+}
+
+# 工作区选择器:special 工作区(id 是负数)必须按 name 传,普通工作区用 id 数字。
+ws_selector() {
+    case "$1" in
+        special:*) printf "'%s'" "$1" ;;
+        *)         printf '%s' "$2" ;;
+    esac
+}
+
+case "$ACTION" in
+status)
+    [ -f "$STATE" ] || { echo "没有正在转发的窗口"; exit 1; }
+    # shellcheck disable=SC1090
+    . "$STATE"
+    echo "输出: $OUT (${SIZE_USED})"
+    echo "窗口: $TITLE"
+    echo "原位: $WS_NAME"
+    systemctl --user is-active "wayvnc@$OUT" >/dev/null \
+        && echo "服务: 运行中" || echo "服务: 未运行"
+    ;;
+
+stop)
+    [ -f "$STATE" ] || die "没有正在转发的窗口"
+    # shellcheck disable=SC1090
+    . "$STATE"
+    systemctl --user stop "wayvnc@$OUT" 2>/dev/null || true
+    # 窗口可能已经被自己关掉了。移不回去不该拦着拆虚拟屏,否则屏就永远留在那儿了。
+    if win_exists "$ADDR"; then
+        if [ "$RESTORE_FS" = 1 ]; then
+            hyprctl dispatch \
+                "hl.dsp.window.fullscreen_state({ internal = 0, client = 0, window = hl.get_window('address:$ADDR') })" \
+                >/dev/null
+        fi
+        move_window "$ADDR" "$(ws_selector "$WS_NAME" "$WS_ID")"
+    else
+        echo "原窗口已经不在了,只拆虚拟屏" >&2
+    fi
+    # 屏可能已经不在了(比如中途重启过 Hyprland),这时也要把状态文件清掉,不然就卡死了
+    hyprctl output remove "$OUT" >/dev/null 2>&1 || true
+    rm -f "$STATE"
+    echo "已收工,窗口回到 $WS_NAME"
+    ;;
+
+start)
+    if [ -f "$STATE" ]; then die "已经在转一个窗口了,先 --stop(看 --status)"; fi
+    # 端口固定 5900,已经在推别的屏就别再起一个 —— 否则 systemd 这边显示启动成功,
+    # wayvnc 那边 bind 失败退出再被 Restart=on-failure 反复拉起,现象很难懂。
+    busy=$(systemctl --user list-units 'wayvnc@*' --state=active --no-legend | awk '{print $1}')
+    if [ -n "$busy" ]; then die "$busy 正在占用 5900,先把它停掉"; fi
+    [[ "$SIZE" =~ ^[0-9]+x[0-9]+$ ]] || die "--size 要写成 1280x800 这样"
+
+    # 从 ssh 里跑却不给关键字是个陷阱:这时 hyprctl activewindow 返回的是本机当下的焦点
+    # 窗口 —— 多半就是操作者自己那个终端,一转发就被搬到看不见的虚拟屏上去了(真踩过)。
+    # 人在本机时这个默认很顺手,所以只在不像图形会话的时候拦。
+    if [ -z "$MATCH" ] && [ -z "${WAYLAND_DISPLAY:-}" ]; then
+        die "看着不像在图形会话里(ssh?),这时必须指定窗口关键字 —— 否则转走的是本机当前焦点窗口"
+    fi
+
+    if [ -n "$MATCH" ]; then
+        win=$(hyprctl clients -j | jq -c --arg m "$MATCH" \
+            'first(.[] | select((.class | test($m;"i")) or (.title | test($m;"i")))) // empty')
+        [ -n "$win" ] || die "没有窗口的 class/title 匹配 '$MATCH'"
+    else
+        win=$(hyprctl activewindow -j)
+    fi
+
+    addr=$(jq -r '.address // empty' <<<"$win")
+    [ -n "$addr" ] || die "找不到目标窗口(没有活动窗口就传个 class 关键字)"
+    ws_name=$(jq -r '.workspace.name' <<<"$win")
+    ws_id=$(jq -r '.workspace.id' <<<"$win")
+    title=$(jq -r '"[\(.class)] \(.title)"' <<<"$win")
+    # 只有"全屏是我们加的"才在收工时撤掉:窗口本来就全屏、或者用了 --keep-bar,都不该动它
+    restore_fs=0
+    if [ "$FULLSCREEN" = 1 ] && [ "$(jq -r '.fullscreen' <<<"$win")" = 0 ]; then restore_fs=1; fi
+
+    before=$(hyprctl monitors -j | jq -r '.[].name' | sort)
+    hyprctl output create headless >/dev/null
+    # 建屏是异步的,轮询等新名字冒出来(而不是假定它一定叫 HEADLESS-1)
+    out=""
+    for _ in $(seq 20); do
+        out=$(comm -13 <(echo "$before") <(hyprctl monitors -j | jq -r '.[].name' | sort))
+        [ -n "$out" ] && break
+        sleep 0.1
+    done
+    [ -n "$out" ] || die "虚拟屏没建起来"
+
+    # position=auto 让 Hyprland 自己把它排到现有屏右边,省得手算逻辑坐标(各屏 scale 不同);
+    # scale=1 则是让 --size 就是窗口实际拿到的逻辑分辨率,所见即所得。
+    # 注意这里必须走 hyprctl eval:本仓库是 lua 配置,hyprctl keyword 会报 non-legacy parsers。
+    hyprctl eval "hl.monitor({ output = '$out', mode = '${SIZE}@60', position = 'auto', scale = 1 })" >/dev/null
+
+    target_ws=$(hyprctl monitors -j | jq -r --arg o "$out" '.[] | select(.name == $o) | .activeWorkspace.id')
+    move_window "$addr" "$target_ws"
+
+    # 铺满是为了吃掉 gaps/边框,顺带盖住跟到虚拟屏上来的 waybar —— 这块屏本来就只为这一个
+    # 窗口存在,没必要留边(实测不铺满只能拿到 1266x754,还被 waybar 顶下去 39px)。
+    #
+    # 用 fullscreen_state 而不是 fullscreen:internal=2 是合成器侧全屏,client=0 是不告诉
+    # 客户端它全屏了,于是浏览器之类不会切进自己的 F11 视图,页面布局跟平时一样。
+    # (顺带一提 fullscreen 的 mode 语义容易记反:mode=0 才是真全屏,mode=1 是 maximize,
+    # 后者保留 layer-shell 的 waybar 区和 gaps。)想留着 waybar 看时间就 --keep-bar。
+    if [ "$FULLSCREEN" = 1 ]; then
+        hyprctl dispatch \
+            "hl.dsp.window.fullscreen_state({ internal = 2, client = 0, window = hl.get_window('address:$addr') })" \
+            >/dev/null
+    fi
+
+    cat > "$STATE" <<EOF
+OUT='$out'
+ADDR='$addr'
+WS_NAME='$ws_name'
+WS_ID='$ws_id'
+TITLE='${title//\'/}'
+SIZE_USED='$SIZE'
+RESTORE_FS='$restore_fs'
+EOF
+
+    systemctl --user start "wayvnc@$out"
+    echo "$title"
+    echo "→ $out ($SIZE),wayvnc@$out 已启动;收工敲 wayvnc-window --stop"
+    # 移窗口时刻意没夺焦点(不然人还在本机的话焦点就跳到看不见的屏上去了),代价是
+    # 远程刚连上时键盘焦点还在本机那个窗口上。点一下就带过来了,提醒一句免得踩。
+    echo "   (远程连上先点一下画面再打字,键盘焦点才跟过去)"
+    ;;
+esac

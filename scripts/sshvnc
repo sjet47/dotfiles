@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# sshvnc <ssh目标> <窗口关键字> —— 一条命令搞定远程单窗口转发:
+# 建隧道 + 在那头起 wayvnc-window + 按回车自动收工。
+#
+#   sshvnc frp-home chrome
+#   sshvnc sjet@192.168.1.10 飞书
+#
+# 看到提示后在本地开 VNC 客户端连 localhost:5901(本地 5901 → 远端 5900,
+# 错开是因为自连时 ssh 会先占住本地那个端口,wayvnc 就 bind 不上远端的 5900 了)。
+#
+# 关键字必须在**本地**展开后拼进远程命令里,所以下面用双引号包整条命令。
+# 写成单引号的话 $1/$2 是留给远程 shell 的位置参数(那边是空的),wayvnc-window
+# 就退化成"转发本机当前焦点窗口" —— 也就是操作者自己这个终端,一回车它就被搬到
+# 看不见的虚拟屏上去了。(wayvnc-window 那边现在也加了防呆,ssh 会话里不给关键字会直接拒绝。)
+
+set -euo pipefail
+
+if [ $# -lt 2 ]; then
+    echo "用法: sshvnc <ssh目标> <窗口关键字>" >&2
+    exit 1
+fi
+
+host=$1; shift
+kw="$*"
+
+# ~ 留给远程 shell 展开;关键字用单引号裹住,含空格的标题(比如 'YouTube Music')也不会被拆开。
+# 不能靠远程的 PATH:那是在 zshrc 里设的,而 ssh 执行命令走的是非交互 shell,读不到。
+ssh -t -L 5901:127.0.0.1:5900 "$host" \
+    "~/dotfiles/scripts/wayvnc-window '$kw' && { echo '→ vncviewer localhost:5901 ,用完回车收工'; read -r; ~/dotfiles/scripts/wayvnc-window --stop; }"
