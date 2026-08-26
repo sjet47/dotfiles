@@ -36,6 +36,7 @@ pi-agent/*
 !config/krunnerrc
 !config/feishu-flags.conf
 !config/code-flags.conf
+!config/mimeapps.list
 !pi-agent/hermes-memory-config.json
 !pi-agent/mcp.json
 !pi-agent/pi-sub-core-settings.json

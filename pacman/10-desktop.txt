@@ -45,6 +45,8 @@ gwenview        # A fast and easy to use image viewer
 okular          # Document Viewer
 filelight       # View disk usage information
 isoimagewriter  # Program to write hybrid ISO files onto USB disks
+ark             # 压缩包 GUI。卸 plasma 后 zip 的默认关联掉给了 PrismLauncher,
+                # tar/gz/rar/7z 直接无默认;装它零新增依赖(KF6 库 dolphin 已拉着)
 kimageformats  # 给 Qt 应用补 AVIF/HEIF/JXL 图片格式(gwenview 打开这些格式靠它)
 breeze-gtk  # GTK 应用的 Breeze 主题(gtk-theme-name=Breeze 靠它;已从 plasma 依赖转显式)
 
