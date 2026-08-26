@@ -4,16 +4,20 @@
 // 放在 ~/.config/quickshell/shell.qml 就是 quickshell 的 "default" 配置;
 // 注意此时同目录下的子目录不会再被当成独立配置。
 //
-// 组成:
-//   Osd.qml            音量 / 亮度 OSD      IPC target: osd
-//   Notifications.qml  通知守护(替代 mako)  IPC target: notif
-//   Power.qml          电源菜单(替代 wlogout) IPC target: power
+// 组成(都在 osd/ 子目录下,都是转瞬即逝的屏上覆盖层):
+//   osd/Osd.qml            音量 / 亮度 / 麦克风    IPC target: osd
+//   osd/Notifications.qml  通知守护(替代 mako)     IPC target: notif
+//   osd/Power.qml          电源菜单(替代 wlogout)  IPC target: power
+//
+// 子目录不会被 quickshell 当成独立配置(default 配置存在时它不扫子目录),
+// 这里是靠 QML 的目录导入把里面的组件拿进来。
 //
 pragma ComponentBehavior: Bound
 
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import "osd"
 
 ShellRoot {
     id: root

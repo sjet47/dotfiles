@@ -5,11 +5,15 @@
 | 文件 | 内容 | IPC target |
 | --- | --- | --- |
 | `shell.qml` | 入口。共用的聚焦显示器播种放在这里 | — |
-| `Osd.qml` | 音量 / 亮度 / 麦克风 OSD | `osd` |
-| `Notifications.qml` | 通知守护（替代 mako） | `notif` |
-| `Power.qml` | 电源菜单（替代 wlogout） | `power` |
+| `osd/Osd.qml` | 音量 / 亮度 / 麦克风 OSD | `osd` |
+| `osd/Notifications.qml` | 通知守护（替代 mako） | `notif` |
+| `osd/Power.qml` | 电源菜单（替代 wlogout） | `power` |
 
-放在 `~/.config/quickshell/shell.qml` 就是 quickshell 的 "default" 配置 —— 注意此时**同目录下的子目录不会再被当成独立配置**。
+`osd/` 放的是转瞬即逝的屏上覆盖层。将来做常驻组件（比如 waybar 的替代）另开目录。
+
+放在 `~/.config/quickshell/shell.qml` 就是 quickshell 的 "default" 配置 —— 此时**子目录不会再被
+当成独立配置**，但那只影响"配置发现"，不影响 QML 自己的目录导入：`shell.qml` 里一句
+`import "osd"` 就能把里面的组件按文件名当类型用，`required property` 照常传。
 
 ## 对外接口
 
@@ -51,7 +55,7 @@ Lock 保持 `loginctl lock-session`：走标准会话锁语义，由 hypridle �
 已完全替代，**mako 的包和配置都已删除**，没有回退路径了。
 
 配色、位置、超时、免打扰规则当初是逐项照 `config/mako/config` 对齐的。那个文件已经不在，所以
-`Notifications.qml` 里那些 `// mako border-radius=12`、`// mako text-color` 之类的行尾注释
+`osd/Notifications.qml` 里那些 `// mako border-radius=12`、`// mako text-color` 之类的行尾注释
 是这些数值的唯一出处记录 —— 改样式时它们就是基准，别顺手删掉。
 
 ---
@@ -140,7 +144,7 @@ n.closed.connect(function () { notif.drop(n); });
 
 ### 14. `Hyprland.focusedMonitor` 启动时是 null
 
-它只在收到 `focusedmon` 事件时才赋值，实测启动 3 秒后仍是 undefined。启动时用 `hyprctl monitors -j` 播种一次，之后交给事件流。这段在 `shell.qml` 里，两个组件共用。
+它只在收到 `focusedmon` 事件时才赋值，实测启动 3 秒后仍是 undefined。启动时用 `hyprctl monitors -j` 播种一次，之后交给事件流。这段在 `shell.qml` 里，三个组件共用。
 
 ### 15. IPC 函数不能叫 `show`
 
