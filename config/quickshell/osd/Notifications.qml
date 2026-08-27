@@ -329,7 +329,7 @@ Scope {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Layout.preferredHeight: 40
+                            Layout.preferredHeight: 36   // 40 太重、32 太小,36 是试出来的平衡点
                             visible: card.actionList.length > 0
                             spacing: 0
 
