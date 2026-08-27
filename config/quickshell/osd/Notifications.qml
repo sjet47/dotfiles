@@ -220,8 +220,12 @@ Scope {
                             return (i.startsWith("/") || i.startsWith("file:")) ? i : Quickshell.iconPath(i, true);
                         }
 
+                        // 非 default 的 action —— default 不画按钮,它是"点卡片"那一下
+                        readonly property var actionList:
+                            (card.n.actions ?? []).filter(a => a.identifier !== "default")
+
                         width: parent.width
-                        implicitHeight: row.implicitHeight + 20   // mako padding=10,15 的上下部分
+                        implicitHeight: layout.implicitHeight
                         radius: 12                                // mako border-radius=12
                         // mako 的 #f5f5f7d9 是 RRGGBBAA,而 Qt 的八位色是 AARRGGBB ——
                         // 照抄字符串会被读成 96% 不透明的米黄色,要换序。
@@ -254,10 +258,18 @@ Scope {
                             }
                         }
 
+                        ColumnLayout {
+                            id: layout
+                            anchors.fill: parent
+                            spacing: 0
+
                         RowLayout {
                             id: row
-                            anchors { left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter
-                                      leftMargin: 15; rightMargin: 15 }   // mako padding 的左右部分
+                            Layout.fillWidth: true
+                            Layout.leftMargin: 15    // mako padding 的左右部分
+                            Layout.rightMargin: 15
+                            Layout.topMargin: 10     // mako padding 的上下部分
+                            Layout.bottomMargin: 10
                             spacing: 12
 
                             Image {
@@ -297,48 +309,76 @@ Scope {
                                     font.pixelSize: 14
                                     textFormat: Text.StyledText          // 通知规范的 Pango 子集,mako 亦然
                                     wrapMode: Text.Wrap
-                                    maximumLineCount: 6
+                                    maximumLineCount: 3
                                     elide: Text.ElideRight
                                 }
 
-                                // 非 default 的 action 画成按钮 —— mako 做不到,只能配快捷键
-                                Flow {
+                            }
+                        }
+
+                        // 按钮不做成卡片里浮着的独立方块,而是把胶囊下半部分切出来:
+                        // 一条横线分隔,按钮之间用竖线分,于是它们读起来是胶囊的一部分。
+                        Rectangle {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 1
+                            visible: card.actionList.length > 0
+                            // 用黑色 alpha 而不是固定灰:卡片是半透明的,合成后约 rgb(213,213,215),
+                            // 跟边框色 #d2d2d7(210,210,215)几乎同色 —— 那样画出来根本看不见。
+                            color: "#26000000"
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 40
+                            visible: card.actionList.length > 0
+                            spacing: 0
+
+                            Repeater {
+                                model: card.actionList
+
+                                delegate: Item {
+                                    id: btn
+                                    required property var modelData
+                                    required property int index
+
                                     Layout.fillWidth: true
-                                    Layout.topMargin: 4
-                                    spacing: 6
-                                    visible: actions.count > 0
+                                    Layout.fillHeight: true
 
-                                    Repeater {
-                                        id: actions
-                                        model: (card.n.actions ?? []).filter(a => a.identifier !== "default")
+                                    // 悬停高亮要按位置带上卡片的下角圆角,否则方角会捅出胶囊外。
+                                    // Qt 6.7+ 才有单角圆角(本机 6.11)。
+                                    Rectangle {
+                                        anchors.fill: parent
+                                        color: hover.containsMouse ? "#14000000" : "transparent"
+                                        bottomLeftRadius:  btn.index === 0 ? card.radius : 0
+                                        bottomRightRadius: btn.index === card.actionList.length - 1 ? card.radius : 0
+                                        Behavior on color { ColorAnimation { duration: 100 } }
+                                    }
 
-                                        delegate: Rectangle {
-                                            id: btn
-                                            required property var modelData
-                                            width: label.implicitWidth + 18
-                                            height: label.implicitHeight + 8
-                                            radius: 6
-                                            color: hover.containsMouse ? "#e0e0e5" : "#ebebf0"
-                                            border { width: 1; color: "#d2d2d7" }
+                                    // 竖分隔线:第一个按钮左边不画
+                                    Rectangle {
+                                        visible: btn.index > 0
+                                        width: 1
+                                        height: parent.height
+                                        color: "#26000000"
+                                    }
 
-                                            Text {
-                                                id: label
-                                                anchors.centerIn: parent
-                                                text: btn.modelData.text
-                                                color: "#1d1d1f"
-                                                font.family: "Noto Sans"
-                                                font.pixelSize: 13
-                                            }
-                                            MouseArea {
-                                                id: hover
-                                                anchors.fill: parent
-                                                hoverEnabled: true
-                                                onClicked: card.close(() => btn.modelData.invoke())
-                                            }
-                                        }
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: btn.modelData.text
+                                        color: "#1d1d1f"
+                                        font.family: "Noto Sans"
+                                        font.pixelSize: 13
+                                    }
+
+                                    MouseArea {
+                                        id: hover
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        onClicked: card.close(() => btn.modelData.invoke())
                                     }
                                 }
                             }
+                        }
                         }
                     }
                 }
