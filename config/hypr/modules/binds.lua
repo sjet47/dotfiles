@@ -10,6 +10,7 @@ local mod  = vars.mainMod
 ----------------------------------------------------------------------
 
 hl.bind(mod .. " + ALT + L", hl.dsp.exec_cmd("hyprlock"))
+hl.bind(mod .. " + SHIFT + L", hl.dsp.exec_cmd("qs ipc call saver preview"))
 -- 电源菜单:wlogout → quickshell(config/quickshell/osd/Power.qml)
 hl.bind(mod .. " + ALT + M", hl.dsp.exec_cmd("qs ipc call power toggle"))
 

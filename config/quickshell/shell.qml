@@ -9,6 +9,9 @@
 //   osd/Notifications.qml  通知守护(替代 mako)     IPC target: notif
 //   osd/Power.qml          电源菜单(替代 wlogout)  IPC target: power
 //
+// 另有常驻但平时不占资源的:
+//   screensaver/           空闲 300s 的 matrix 雨屏保      IPC target: saver
+//
 // 子目录不会被 quickshell 当成独立配置(default 配置存在时它不扫子目录),
 // 这里是靠 QML 的目录导入把里面的组件拿进来。
 //
@@ -18,6 +21,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 import "osd"
+import "screensaver"
 
 ShellRoot {
     id: root
@@ -37,4 +41,12 @@ ShellRoot {
     Osd { activeMonitor: root.activeMonitor }
     Notifications { activeMonitor: root.activeMonitor }
     Power { activeMonitor: root.activeMonitor }
+
+    // 不吃 activeMonitor:屏保要盖住每一块屏,不是只跟着焦点走。
+    //
+    // 这里的声明顺序不决定它和通知谁在上。同为 overlay 层时合成器按 surface 创建先后叠,
+    // 而通知的 surface 是收到通知那一刻才建的,永远比常驻的屏保晚 —— 所以**通知会浮在雨上面**
+    // (已实测:雨铺满时 notify-send 一条,卡片正常压在雨上)。这正是想要的:屏保期间来消息
+    // 仍看得见。真要让雨盖住通知,得去调 Notifications 的层级,挪这行没用。
+    Screensaver {}
 }

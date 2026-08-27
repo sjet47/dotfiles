@@ -8,8 +8,11 @@
 | `osd/Osd.qml` | 音量 / 亮度 / 麦克风 OSD | `osd` |
 | `osd/Notifications.qml` | 通知守护（替代 mako） | `notif` |
 | `osd/Power.qml` | 电源菜单（替代 wlogout） | `power` |
+| `screensaver/Screensaver.qml` | matrix 雨屏保（空闲 300s） | `saver` |
+| `screensaver/MatrixRain.qml` | 雨的画面本体，不管什么时候该出现 | — |
 
-`osd/` 放的是转瞬即逝的屏上覆盖层。将来做常驻组件（比如 waybar 的替代）另开目录。
+`osd/` 放的是转瞬即逝的屏上覆盖层。`screensaver/` 是常驻但平时零成本的组件——不下雨时
+整棵对象树都不存在（`LazyLoader`）。将来做真·常驻组件（比如 waybar 的替代）再另开目录。
 
 放在 `~/.config/quickshell/shell.qml` 就是 quickshell 的 "default" 配置 —— 此时**子目录不会再被
 当成独立配置**，但那只影响"配置发现"，不影响 QML 自己的目录导入：`shell.qml` 里一句
@@ -26,6 +29,8 @@ qs ipc call notif invoke             # 触发最新一条的 default action(对�
 qs ipc call notif dismissAll         # 清空(对应 makoctl dismiss --all)
 qs ipc call power toggle             # 电源菜单,绑在 SUPER + ALT + M
 qs ipc call power open / hide
+qs ipc call saver preview            # 立刻下雨,调样式时不用真坐等 300s
+qs ipc call saver dismiss            # 收起
 ```
 
 waybar 的 `custom/notifications` 模块经 `waybar/scripts/notifications.sh` 调用后三个。
@@ -49,6 +54,135 @@ waybar 的 `custom/notifications` 模块经 `waybar/scripts/notifications.sh` �
   让合成器自己退出比杀掉整个 user 干净。
 
 Lock 保持 `loginctl lock-session`：走标准会话锁语义，由 hypridle 的 `lock_cmd` 拉起 hyprlock。
+
+## 屏保
+
+空闲 300s 铺满每块屏的 matrix 雨。**纯装饰**：不做认证、不替代锁屏，任意输入即退。
+
+时间轴横跨两份配置，`hypr/hypridle.conf` 改了这边也要跟着改：
+
+| 时刻 | 事件 | 配置在哪 |
+| --- | --- | --- |
+| 300s | 下雨 | `Screensaver.idleTimeout` |
+| 880s | 停画，整棵对象树卸掉 | `Screensaver.stopTimeout` |
+| 900s | `dpms off` | hypridle |
+| 1800s | `loginctl lock-session` → hyprlock | hypridle |
+
+880 这个数不是随便取的：hypridle 900s 直接关屏，再往黑屏上渲染纯属白烧 GPU，提前 20s 收工。
+
+### 雨怎么画的
+
+**整屏一个 `ShaderEffect`**（`matrix.frag`）。每个像素自己算落在哪个格子、那一格该多亮、
+显示哪个字形；每列的速度 / 亮尾长度 / 明暗 / 相位由**列号 hash 出来**，不从 CPU 传任何
+per-column 数据，CPU 每帧只更新一个 `time`。字形来自一张运行时生成的图集——半角片假名加数字排成一横条，`ShaderEffectSource` 烤成纹理，
+再由 shader 以 nearest 放大成像素块（见坑 25）。
+
+两条设计上的要点：
+
+- **字符是钉在网格上不动的，动的只有亮度。** 这是 matrix 雨的本质，也是最容易做反的地方。
+  直觉写法是"一条字符流整体向下平移"，但那样拖尾里的字符会跟着一起走，看着是一整块在滑动；
+  对照 cmatrix——格子里的字符不动，是**亮点逐个把它们点亮、再让它们暗下去**。
+- **相邻两列可以一起下雨，但亮尾要在垂直方向错开**（`headGap`）——并排没问题，一个在上
+  一个在下就不难看。实现上有三个点，每一个都是踩出来的：
+  - **判断锚在"这一趟开始的那一刻"，不是"此刻"。** 用此刻的话决定会在半途翻转：一列正
+    下到一半、邻居一冲突它当场消失，冲突过去又当场出现在半屏中间——表现就是"闪一下就
+    没了"和"凭空急速下滑"。锚住之后整趟共用一个决定。
+  - **必须预判整趟，而不是只看开跑那一刻。** 两列速度不同，下落途中相对位置一路漂移；
+    一趟好几秒、速度差能有十几格/秒，开跑时错开二十格的两条雨半途照样追平。所以沿整趟
+    采样若干时刻，任何一刻会撞上就整趟不出。
+  - 判断用邻居的**名义**位置（不管邻居自己是否也在让位），所以是纯函数、不会递归。
+    代价是偶尔保守：邻居其实因为它自己的邻居没下雨，这一列也白让了一趟。
+- **`overlapBelow` 是密度旋钮。** 尾梢暗到一定程度后压在一起根本看不出来，放它过去能换回
+  成倍的密度。4K 横屏实测（"亮部"指绿色分量 >110 的那截）：
+
+  | `overlapBelow` | 有雨的列 | 任意重叠 | **亮部**重叠 |
+  | --- | --- | --- | --- |
+  | 0（整条都不许重叠） | 11% | 0 | 0 |
+  | **0.35**（当前） | **24%** | 6 对 | **0 对** |
+  | 0.55 | 31% | 38 对 | 26 对 |
+
+  0.35 是甜点：密度翻倍而亮的部分一次都没撞上；再松就开始出现真正难看的并排了。
+- **点亮是硬边，熄灭是渐变。** 磷光体被电子束扫到才亮，所以亮点前方不发光；余晖只在后面，
+  按幂次衰减。（试过让亮点前方"预热"渐亮，不像 CRT，已否掉。）
+- **一格的字符在一整趟雨里是固定的**，亮着时绝不变；等这趟走完、亮尾归零、格子早看不见了，
+  下一趟才换新的。别图省事按固定频率闪——那样亮着的字符会当着眼前变掉。种子取
+  `hash(格子, 第几趟)`，"第几趟"是 `floor(t / cycle)`，天然满足这个约束。
+
+改完 `matrix.frag` **必须重新编译**，QML 加载的是 `.qsb` 不是 `.frag`：
+
+```bash
+/usr/lib/qt6/bin/qsb --qt6 -o matrix.frag.qsb matrix.frag
+```
+
+`.qsb` 是编译产物但**必须入库**：`~/.config` 是软链过去的，没有安装步骤，运行时得能直接读到；
+也不该要求每台机器都装 `qt6-shadertools`。
+
+### 调参
+
+全部在 `MatrixRain.qml` 顶部，按用途分了组。**改这些只要存盘**——QML 热重载，
+不需要重新编译 shader（只有改 `matrix.frag` 才要，见上）。
+
+| 想调什么 | 改哪个 | 说明 |
+| --- | --- | --- |
+| **密度（空间）** | `cellW` / `cellH` | 格子间距，调小 = 更多行列 = 更密。**不影响性能**（shader 逐像素，与格子多少无关），也不再牵连字号 |
+| **列避让** | `headGap` | 相邻列的亮尾至少错开几行。0 = 不管 |
+| **避让松紧** | `overlapBelow` | 亮度低于它的尾梢允许和邻居重叠。**这是密度旋钮**，见下表 |
+| **荧光** | `glow` / `glowRadius` | 字形周围洇出来的一圈柔光。`glow: 0` 关掉 |
+| **扫描线** | `scanline` | 老显示器的横向条纹。0 关，0.15~0.3 比较像，再大就闪 |
+| **密度（时间）** | `gapMin` / `gapMax` | 一趟雨走完后空几格再开下一趟。`0` = 一趟接一趟（当前值），调大则列上出现空窗，整屏更稀 |
+| **字号** | `fontScale` | 字占格子的比例，常用 0.8~0.95。**想让字更大又不想变稀，调这个而不是 `cellH`** |
+| **字体** | `fontFamily` | 必须覆盖半角片假名，见下 |
+| **像素感** | `glyphPixels` | 字形烤进图集的高度。调小 = 像素块更大更颗粒。**必须整除 `cellH`** |
+| **日文比重** | `digitWeight` | 数字整组重复几次。45 个假名配 3 组数字 ≈ 6:4，嫌日文多就调大 |
+| **硬边** | `sharpen` | 字形 alpha 的二值化阈值，消抗锯齿灰边。设 `0` 关掉（矢量字体想要平滑时） |
+| **速度** | `minSpeed` / `maxSpeed` | 单位是**格/秒**，不是像素/秒 |
+| **亮尾长度** | `minLen` / `maxLen` | 单位是格 |
+| **亮度** | `dimMin` / `dimMax` | 每条流的整体明暗，层次靠它 |
+| **颜色** | `color` / `headColor` | 雨的颜色 / 亮点的颜色 |
+
+几点提醒：
+
+- **"密度"有三个方向**，别混。`cellW`/`cellH` 决定屏幕上塞多少行列；`gapMin`/`gapMax` 决定
+  同一列多久来一趟；`avoidAdjacent` 则会挤掉一部分（相邻冲突时奇数列让位）。
+  开着避让时实测每帧有雨的列在 31%~40% 之间浮动——**想让整屏更满就加大 `gap`**：
+  偶数列的空窗期变长，奇数列才有更多机会补进去。
+- `cellW` 只改列间距，**不改字号**——字号只由 `cellH`/`glyphPixels` 那条链决定，
+  `cellW` 变大只是把同样大的字形放进更宽的格子里居中。用偶数，否则图集单元宽会被四舍五入。
+- **`minLen`/`maxLen` 的跨度要大。** 等长会让所有尾巴末端连成一条整齐的横线，一眼假。
+  速度、明暗同理——随机性的任何一维退化成定值，出来的就是一层一层的横纹而不是雨。
+- **`dimMin` 别调低。** 太低整屏发灰，观感上的"密度不够"多半是亮度问题不是列数问题。
+- **换字体前先确认它覆盖你用到的字符**，否则整屏豆腐块——而且 fontconfig 会悄悄 fallback，
+  不报任何错：
+
+  ```bash
+  fc-list ':charset=ff71' family | grep -i <字体名>    # 有输出才行
+  ```
+
+  注意 `:charset=` 要作为**查询条件**放在 pattern 位置。写成 `fc-list "某字体" :charset=ff71`
+  是把它当成了要输出的字段，那样永远有输出，等于没查——这里踩过。
+- 当前用的 `Maple Mono NF CN` **其实不覆盖片假名**，假名会 fallback 到 Noto Sans Mono CJK，
+  也就是数字是 Maple、假名是 Noto 混着。这是挑字形观感时选定的，不是漏网之鱼；
+  想让整套统一就换 `Noto Sans Mono CJK SC`。
+- 字符集用**半角**片假名 U+FF71..FF9D。半角区天然只有清音——浊音在半角里要靠组合符号
+  ﾞﾟ 拼，所以不像全角区 U+30A1..30F6 那样一取一整段就把 ゾ ヅ ボ ジ 和小写假名全带进来，
+  点又多又碎、整屏看着脏。
+- 改了 `cellW`/`cellH` 的**比例**不用管字形拉伸，图集单元格会自动跟着算。但 `cellH` 必须是
+  `glyphPixels` 的**整数倍**，见坑 25。
+
+### 其他
+
+- **空闲检测用 `IdleMonitor`（ext-idle-notify-v1），和 hypridle 同一个协议**，不用自己数时间。
+  它的 `respectInhibitors` 属性直接白送"看视频不弹屏保"——应用申请的 idle-inhibit 会被尊重。
+- **层级选 `Overlay` 是为了盖住 waybar**。waybar 是 Top 层的 layer surface，kitty + cmatrix
+  那种普通 toplevel 窗口压根盖不住它。要反过来让 waybar 露在雨上面，把 `WlrLayershell.layer`
+  改成 `WlrLayer.Bottom`。
+- 另一个 kitty + cmatrix 给不了的好处：**layer surface 不参与 dwindle 平铺**，屏保每隔几分钟
+  弹一次也不会把布局搅乱（普通窗口会，见长期记忆 `hyprland-dwindle-silent-focus`）。
+- **通知会浮在雨上面**（已实测）。同为 overlay 层时合成器按 surface 创建先后叠，而通知的
+  surface 是收到通知那一刻才建的，永远比常驻的屏保晚。调 `shell.qml` 里的声明顺序没用。
+- 排查"屏保怎么不出现"用 `qs ipc call saver state`：idle / forced / dismissed 三个状态位
+  肉眼看不出来，它能直接区分"压根没触发"和"刚被一次输入收起了"。**自动化截图尤其要注意**——
+  屏保会被任何输入收起，脚本跑到一半人动一下鼠标，拍到的就是桌面。
 
 ## 与 mako 的关系
 
@@ -165,6 +299,156 @@ OSD 和通知都是 `WlrKeyboardFocus.None`（默认），电源菜单需要 Esc
 ### 17. 内存代价
 
 单实例约 **200MB** 起步，重度用图后收敛在 ~370MB（增长有界，不是泄漏）。对照 mako ~10MB。这是 Qt runtime + QML + GPU scene graph 的固定成本，评估要不要把更多组件迁过来时要算进去。
+
+### 18. `Keys` 挂不上 `PanelWindow`
+
+`PanelWindow` 不是 `Item`，直接在它里面写 `Keys.onPressed` 只会得到一句
+
+```
+Could not attach Keys property to: ...WaylandPanelInterface... is not an Item
+```
+
+**是 WARN 不是 ERROR**，面板照样独占键盘，只是没人处理按键——兜底静默失效。要在里面放个
+`FocusScope { focus: true }` 再挂 `Keys`（`Power.qml` 和 `Screensaver.qml` 都是这么写的）。
+
+### 19. 别在 `SequentialAnimation` 的 `ScriptAction` 里改这个动画组自己的属性
+
+想让一条流循环"随机参数 → 下落 → 再随机"，很自然会写成
+`SequentialAnimation { loops: Infinite; ScriptAction { script: 改 from/to/duration } ... }`。
+结果是 `RangeError: Maximum call stack size exceeded`：改正在运行的动画组的子动画属性会让
+Qt 把动画组重启，于是又回到 `ScriptAction`，同步递归到爆栈。
+
+改成由 `NumberAnimation.onFinished` 驱动下一轮（改属性时动画一定是停的）。顺带一个独立的雷：
+动画 `duration` 取整成 0 会让整条流一闪而过，算出来的时长要设下限。
+
+### 20. 面板尺寸是**分步**就位的，`> 0` 的门控挡不住
+
+`anchors.fill: parent` 异步生效，面板刚创建那一刻是 0x0，delegate 里任何"按屏幕高度算"的
+初始化都会拿到 0。所以门控写在 model 上：
+
+```qml
+model: (rain.width > 0 && rain.height > 0) ? rain.cols : 0
+```
+
+**但这只挡得住第一步。**`height` 会先变成一个很小的非零值再跳到全屏，门控那一刻就放行了，
+而 `rows = max(1, ceil(height / cellH))` 此时还是 1。屏保的表现是：首轮把流的终点算成
+第 `1 + len` 行，于是流下到不到半屏就"走完"消失，且**只在刚亮的头几秒出现**。
+更阴的是 `rows` 被 `max(1, …)` 兜着，从 0 到小值根本不触发 `rowsChanged`，加日志都看不见中间态。
+
+可靠的做法是不信任"创建那一刻"的尺寸，而是尺寸一变就重置：
+
+```qml
+Connections {
+    target: rain
+    function onRowsChanged(): void { fall.stop(); col.first = true; col.cycle(); }
+}
+```
+
+（`stop()` 不会发 `finished`，不用担心递归。）
+
+现在的 shader 版天然免疫这个——`rows`/`cols` 只是 uniform，变了下一帧就生效，没有
+"创建那一刻算好的 per-column 状态"。但凡是在 `Component.onCompleted` 里读尺寸的代码都要当心。
+
+### 21. 空闲组件的"已取消"标志要挂在 idle **开始**，不能挂 resume
+
+屏保被按键收起时，同一次按键既让合成器发 idle resume、又走面板的 `Keys` 兜底，两者顺序不定。
+把"清除已取消标志"挂在 `isIdle` 转 false（resume）上，resume 先到就会被随后的 `dismiss()`
+重新置位——标志从此卡死，屏保再也不出现，而且不报任何错。挂在 `isIdle` 转 **true**
+（新一轮空闲开始）上就没有竞态。
+
+### 22. QML 逐格更新画不动整屏动画——这是上 shader 的理由
+
+屏保最初用 QML 实现"每个格子一个 `Text`，亮点扫过时改 `opacity`"，4K 双屏踩了三个坑，
+每个都值一条经验，但合起来说明这条路本身有天花板：
+
+1. **别把逐格属性绑定在"一直在动的量"上。** 把 `opacity` 绑定到亮点位置 `head`，
+   亮点每跨一格就要重算整列 `rows` 个格子的绑定，全屏约 1.7M 次求值/秒，实测 8fps。
+   绑定按"依赖变了就重算"工作，而你知道绝大多数格子的结果根本没变——改成主动更新窗口内
+   那十几个格子，一步到 25fps+。
+2. **增量更新必须扛得住"一次跳多步"。** 只熄灭 `head - len` 那一格是不够的：掉帧时
+   `head` 一次跳好几格，中间被点亮过的格子就再没人熄灭。而且它**自我强化**——亮格子越积
+   越多 → 渲染越慢 → 跳得更多，帧率从 27 一路衰减到 4 并伴随 400ms 尖峰。凡是"每次事件
+   推进一步"的增量逻辑，都要先问：事件漏了或合并了会怎样。
+3. **格子尺寸变成了帧率旋钮。** `Text` 总数 = `cols x rows`，压倒性地决定帧率：
+   `14x19` 23fps、`18x24` 44~62fps、`20x27` 稳 62fps。想更密就得牺牲流畅。
+
+即便三个都修好，稳态也只有 48~62fps 且**肉眼可见地忽快忽慢**——JS 执行、GC、Timer 调度的
+抖动全看得见。换成 shader 后稳定 62.5fps，密度还免费。
+
+测帧率用 `FrameAnimation`（Qt 6.4+），`PanelWindow` 没有 `frameSwapped` 可用：
+
+```qml
+FrameAnimation { id: fa; running: true }   // 1 / fa.smoothFrameTime 就是 FPS
+```
+
+这次三个性能问题全靠它定位——"观感卡"不变成数字，就只能瞎猜。
+
+### 23. `ShaderEffect` 的 uniform 按名字匹配，对齐不用自己操心
+
+QML 里声明的属性按**名字**对应 `matrix.frag` 里 uniform block 的成员——改名要两边一起改，
+少写一个属性也不报错（那个 uniform 就是 0）。
+
+布局虽然是 std140，但每个成员的 offset 由编译器算好写进 `.qsb` 的 reflection，Qt 照着绑，
+所以**增删成员是安全的，不用手动数对齐**。想确认实际布局：
+
+```bash
+/usr/lib/qt6/bin/qsb --dump matrix.frag.qsb   # Reflection info 里有每个成员的 offset
+```
+
+另外 `fragColor` 要输出 premultiplied alpha（`vec4(rgb * a, a)`），Qt 期望的是这个。
+
+### 24. 逐格的时间过渡，区间必须跨过一格以上
+
+给格子做"渐亮"这类时间过渡时，过渡区间窄于一格是无效的：相邻格子到亮点的距离正好差 1，
+区间窄于一格时同一时刻永远只有一格处在过渡中间，空间上看就是硬切；时间上也只持续
+（区间宽 / 速度）秒——0.9 格配 18~58 格/秒只有 15~50ms，等于没有。
+
+验证这种"只在时间维度可见"的效果，别靠肉眼看截图：用 PIL 沿亮尾取一条**垂直亮度剖面**，
+逐格打印数值，是阶跃还是渐变一目了然。
+
+### 25. 「像素化但清晰」，三个条件缺一不可
+
+屏保的像素感不依赖点阵字体——机制是**低分辨率烘焙 + nearest 放大 + 二值化**，任何字体都能
+人工点阵化（`glyphPixels` 控制烘焙到多少行，`sharpen` 控制二值化阈值）。但要清晰，三件事缺一不可：
+
+1. **`cellH` 必须是 `glyphPixels` 的整数倍。** 图集单元被 nearest 放大到格子大小，非整数倍时
+   有的源像素占 2 个屏幕像素、有的占 3 个，像素块宽窄不匀——这就是"糊"的主因。
+2. **`ShaderEffectSource { smooth: false }`。** 不关线性过滤，放大出来只是一张糊图。
+3. **shader 里二值化**（`sharpen`）。字形烘焙时带抗锯齿灰边，放大后就是一圈毛边，
+   `a = step(sharpen, a)` 一行解决。
+
+另外 `Text` 要加 `renderType: Text.NativeRendering`——默认的 distance field 渲染会给字形
+加抗锯齿，一糊就白用了。
+
+想要**真**点阵字体：换 `Unifont`（`otf-unifont`，已在包清单里）并把 `glyphPixels` 设成 16
+（它的原生点阵高度）。注意它半角只有 8x16——宽度只有 8 个点，笔画稍多的假名会挤成一团；
+全角是 16x16，但那要求格子也是正方形，同样宽度只能塞一半的列。
+
+判断像素化到底行不行，别靠肉眼看全屏截图：裁一小块用 **NEAREST 放大**看，
+像素块是不是方的、边是不是硬的，一眼就知道。
+
+```python
+Image.open("shot.png").crop((1500,400,1800,740)).resize((900,1020), Image.NEAREST).save("zoom.png")
+```
+
+### 26. 整数索引 ÷ 步长再取整，先挪到格子中心
+
+早先的列稀疏实现要把列号 `c` 分槽：`slot = floor(c / stride)`。这行在 `stride` 取 2 或 4 时
+完全正常，取 3 就有大片本该有雨的列全空——因为 `c` 是整数、**正好落在槽边界上**，而 `c/3`
+在浮点里有舍入误差，往下掉一点点 `c=3` 就被算进了 slot 0，那个槽于是没有任何列匹配。
+2 和 4 是 2 的幂、除法精确，所以看不出问题。
+
+```glsl
+float slot = floor((c + 0.5) / stride);   // +0.5 挪到格子中心，对任何步长都稳
+```
+
+那版实现后来被 `avoidAdjacent` 换掉了（语义不同，见上），但这个坑本身是通用的：凡是
+"整数索引 ÷ 步长再取整"都会撞上，而且**只在特定步长下暴露**，很容易漏测。
+验证要覆盖非 2 的幂。
+
+顺带一个排查手法：这类"分组/判定"的 bug，光看渲染结果分不清"判定错了"还是"判定对了但
+恰好不可见"。往 shader 里塞一行 `fragColor = vec4(0,0.25,0,0.25); return;` 让判定通过的
+列整列涂色，直接数出来，一次就定位了。
 
 ---
 
