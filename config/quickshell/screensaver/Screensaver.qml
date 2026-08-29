@@ -100,6 +100,9 @@ Scope {
 
                 // 面板刚出现时鼠标多半正停在它上面,hoverEnabled 的 enter 会立刻发一次
                 // positionChanged —— 不设这道门,屏保会出现即消失。
+                // 注意这道门只能用来**忽略事件**,不能拿它给 MouseArea 关 enabled:
+                // hover enter 是在 MouseArea 变 enabled 的那一刻才补发的,拿 enabled 挡
+                // 等于把那次假 position 精确地推迟到门开的瞬间,屏保照样自己收起。
                 Timer { id: armed; interval: 600; running: true }
 
                 // Keys 必须挂在 Item 上。直接写在 PanelWindow 里只会得到一句
@@ -118,13 +121,28 @@ Scope {
                     MatrixRain { anchors.fill: parent }
 
                     MouseArea {
+                        id: input
+                        // 收到的第一个 position 事件是 hover enter 合成的,只拿来当基准点。
+                        // 之后位移超过阈值才算"用户动了鼠标" —— 光靠 armed 计时不保险:
+                        // enter 什么时候到取决于合成器,慢一点就会落到门开之后。
+                        property real baseX: NaN
+                        property real baseY: NaN
+
                         anchors.fill: parent
-                        enabled: !armed.running
                         hoverEnabled: true
                         acceptedButtons: Qt.AllButtons
-                        onPositionChanged: saver.dismiss()
-                        onPressed: saver.dismiss()
-                        onWheel: saver.dismiss()
+
+                        onPositionChanged: event => {
+                            if (armed.running || isNaN(input.baseX)) {
+                                input.baseX = event.x;
+                                input.baseY = event.y;
+                                return;
+                            }
+                            if (Math.hypot(event.x - input.baseX, event.y - input.baseY) > 4)
+                                saver.dismiss();
+                        }
+                        onPressed: if (!armed.running) saver.dismiss()
+                        onWheel: if (!armed.running) saver.dismiss()
                     }
                 }
             }
