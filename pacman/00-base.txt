@@ -27,7 +27,7 @@ pacman-contrib       # paccache 清缓存 / checkupdates 安全查更新 / pactr
 expac                # 查询包元数据;pkg-sync 生成清单时用过
 reflector            # 按速度筛选并重排官方 mirrorlist
 kernel-modules-hook  # 滚内核后保留旧模块目录,不重启也能加载模块(DKMS 驱动多,必需)
-rate-mirrors  # 按测速重排 mirrorlist(当前那份生成于 2025-05,该重跑了)
+rate-mirrors         # 按测速重排 mirrorlist
 
 # ── 网络基础 ──────────────────────────────────────────────────────────
 networkmanager        # 网络连接管理;waybar 网络模块与 nmcli 都依赖它
@@ -40,13 +40,13 @@ inetutils             # hostname/ftp 等基础网络程序
 wget                  # 命令行下载
 
 # ── 文件系统 / 存储 ─────────────────────────────────────────────────────
-ntfs-3g    # 读写 NTFS 分区(挂 Windows 盘或 U 盘)
-nfs-utils  # 挂载 NFS 共享
-sshfs      # 用 ssh 挂远程目录(alias/utils 里有封装)
-usbutils   # lsusb 查 USB 设备
-rsync      # 增量同步/备份(alias/utils 里在用)
+ntfs-3g        # 读写 NTFS 分区(挂 Windows 盘或 U 盘)
+nfs-utils      # 挂载 NFS 共享
+sshfs          # 用 ssh 挂远程目录(alias/utils 里有封装)
+usbutils       # lsusb 查 USB 设备
+rsync          # 增量同步/备份(alias/utils 里在用)
 smartmontools  # 磁盘 SMART 健康检测(smartctl)
-btrfs-progs  # 根分区是 btrfs;缺了 mkinitcpio 的 fsck hook 会报 No fsck helpers found
+btrfs-progs    # 根分区是 btrfs;缺了 mkinitcpio 的 fsck hook 会报 No fsck helpers found
 
 # ── 归档解压 ──────────────────────────────────────────────────────────
 7zip   # 7z 解压

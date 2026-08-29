@@ -11,8 +11,6 @@ npm             # Node 包管理
 bun             # 更快的 JS 运行时/打包器
 typescript      # tsc 编译器
 rustup          # Rust 工具链管理(cargo 由它提供)
-cargo-binstall  # 直接装 Rust 工具的预编译二进制,免去本地编译
-zig             # Zig 编译器;也可当 C 交叉编译器用
 ocaml           # OCaml 编译器
 opam            # OCaml 包管理;zshrc 里有它的环境初始化
 mlton           # Standard ML 全程序优化编译器
@@ -59,11 +57,6 @@ kubectl         # k8s 命令行;alias/kubernetes 里有封装
 helm            # k8s 包管理
 cilium-cli      # Cilium 网络插件的运维命令行
 
-# ── 运维 / 服务 ───────────────────────────────────────────────────────
-supervisor    # 进程守护
-nginx         # 本地起 HTTP 服务;vicinae 里有个 code-nginx 脚本
-subversion    # SVN;偶尔要拉老仓库
-
 # ── 数据库 / 监控导出 ────────────────────────────────────────────────────
 postgresql                 # 本地 PostgreSQL
 pgcli                      # 带补全的 psql 替代
@@ -86,8 +79,8 @@ bcc-libbpf-tools      # eBPF 现成工具集(查 I/O、调度延迟等)
 bpftool-bin           # [AUR] 检查/操作 eBPF 程序
 xdp-tools             # XDP 数据面工具
 binaryninja-personal  # [AUR] 逆向分析;已改 .desktop 强制走 Wayland 原生
-nasm      # 汇编器 + ndisasm 反汇编
-patchelf  # 改二进制的 rpath/interpreter
+nasm                  # 汇编器 + ndisasm 反汇编
+patchelf              # 改二进制的 rpath/interpreter
 
 # ── AI / Agent ────────────────────────────────────────────────────
 llama.cpp             # 本地跑 LLM 推理

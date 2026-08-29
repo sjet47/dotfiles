@@ -4,13 +4,9 @@
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
 # ── 备选终端 (默认终端是 kitty,见 10-desktop) ───────────────────────────────
-ghostty          # 备选终端
-konsole          # KDE 终端,随 KDE 应用带进来的
-yakuake          # 下拉式终端
 cool-retro-term  # CRT 效果终端,纯玩具
 
 # ── 一次性尝试 / 玩具 ────────────────────────────────────────────────────
-xf86-input-wacom  # 数位板驱动,当前无设备,保守保留
 lolcat          # 彩虹色输出,玩具
 imgcat          # [AUR] 终端里显示图片
 gitlogue        # 把 git 历史放成动画
@@ -19,5 +15,4 @@ geogebra        # 动态几何/代数软件
 z-library-bin   # [AUR] Z-Library 客户端
 electron32-bin  # [AUR] Electron 32 运行时;某个自打包应用需要
 cmatrix         # 终端 matrix 雨屏保
-unimatrix-git   # [AUR] matrix 雨屏保(unicode 版)
 ttfx            # [AUR] 终端文字特效/屏保(Omarchy 的 terminaltexteffects Rust 移植)

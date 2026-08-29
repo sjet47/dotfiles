@@ -16,19 +16,18 @@ yazi  # 终端文件管理器
 fd    # find 的现代替代
 
 # ── 搜索 / 查看 ───────────────────────────────────────────────────────
-ripgrep   # 主力全文搜索
-ugrep     # 带交互 TUI 的 grep,复杂查询时用
-ast-grep  # 按语法树结构搜索/重写代码,跨文件重构用
-bat       # 带语法高亮的 cat
-fzf       # 模糊选择器;shell 和一堆脚本的交互基座
-hexyl     # 十六进制查看;排查换行符之类的字节问题
+ripgrep       # 主力全文搜索
+ugrep         # 带交互 TUI 的 grep,复杂查询时用
+ast-grep-bin  # 按语法树结构搜索/重写代码,跨文件重构用
+bat           # 带语法高亮的 cat
+fzf           # 模糊选择器;shell 和一堆脚本的交互基座
+hexyl         # 十六进制查看;排查换行符之类的字节问题
 
 # ── JSON / YAML / Markdown ────────────────────────────────────────
 jq       # 脚本解析 hyprctl JSON(截图/录屏选区)
 yq       # YAML/XML/TOML 版的 jq
 gron     # 把 JSON 拍平成可 grep 的行
 jnv-bin  # [AUR] 交互式 jq,边写边看结果
-mdq      # [AUR] Markdown 版的 jq
 glow     # 终端里渲染 Markdown
 
 # ── git 工具链 ───────────────────────────────────────────────────────

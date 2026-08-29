@@ -11,7 +11,7 @@ thunderbird    # 邮件客户端;mimeapps.list 里是 mailto 默认
 obsidian    # 知识库
 zotero-bin  # 文献管理
 foliate     # EPUB 阅读器
-anki-bin    # [AUR] 间隔重复记忆
+anki        # 间隔重复记忆
 
 # ── 办公 / 创作 ───────────────────────────────────────────────────────
 libreoffice-still  # 办公套件(维护分支,比 fresh 稳)
@@ -44,14 +44,10 @@ v2raya                      # 代理客户端的 Web GUI;用独立 xray-core,注
 cgproxy-git                 # 基于 cgroup2 的透明代理,按进程分流
 tailscale                   # 组网 VPN;已装未启用
 frpc                        # 内网穿透客户端;wayvnc 跨公网就走它
-openvpn                     # OpenVPN 客户端
-openvpn3        # [AUR] OpenVPN 3 客户端。**必须用干净 PATH 构建**:
-                #   PATH="/usr/bin:$PATH" paru -S --rebuild openvpn3
-                #   否则项目里的旧 protoc 会盖住系统版本导致编译失败,见 README 坑 12;
-                #   abseil/protobuf 升级后还需重建,见坑 11
-openconnect                 # AnyConnect 兼容客户端
-networkmanager-openvpn      # 让 NetworkManager 能管 OpenVPN 连接
-networkmanager-openconnect  # 同上,OpenConnect
+openvpn3                    # [AUR] OpenVPN 3 客户端。**必须用干净 PATH 构建**:
+                            #   PATH="/usr/bin:$PATH" paru -S --rebuild openvpn3
+                            #   否则项目里的旧 protoc 会盖住系统版本导致编译失败,见 README 坑 12;
+                            #   abseil/protobuf 升级后还需重建,见坑 11
 
 # ── 网络诊断 / 抓包 ─────────────────────────────────────────────────────
 nmap              # 端口扫描/主机发现
@@ -66,7 +62,7 @@ gnu-netcat        # [AUR] 网络管道瑞士刀
 sniffnet          # 图形化流量监控
 wireshark-qt      # 图形化抓包分析
 nali-go-bin       # [AUR] 离线查 IP 归属地/CDN 厂商;alias/utils 里在用
-ethtool  # 网卡链路状态/offload/ring buffer 诊断
+ethtool           # 网卡链路状态/offload/ring buffer 诊断
 
 # ── 数据库 / API 客户端 ─────────────────────────────────────────────────
 mongodb-compass-bin  # [AUR] MongoDB 图形客户端

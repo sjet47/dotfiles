@@ -24,7 +24,7 @@ vicinae-bin  # [AUR] 应用启动器(AUR,配置里默认用它)
 # ── 截图 / 录屏 / 剪贴板 ─────────────────────────────────────────────────
 grim                 # 截图后端
 slurp                # 区域选择
-tensaku              # [AUR] 截图标注(AUR,satty fork,支持滚动长截图)
+tensaku-bin          # [AUR] 截图标注(AUR,satty fork,支持滚动长截图)
 spectacle            # KDE 截图工具;主力是 hypr/scripts/screenshot.sh,这个作备用
 gpu-screen-recorder  # 硬件加速录屏(screenrecord.sh 用的是 wl-screenrec,这个作备用)
 wl-screenrec-git     # 录屏(archlinuxcn / AUR)
@@ -46,14 +46,12 @@ filelight       # 图形化磁盘占用分析
 isoimagewriter  # 把 ISO 写进 U 盘做启动盘
 ark             # 压缩包 GUI。卸 plasma 后 zip 的默认关联掉给了 PrismLauncher,
                 # tar/gz/rar/7z 直接无默认;装它零新增依赖(KF6 库 dolphin 已拉着)
-kimageformats  # 给 Qt 应用补 AVIF/HEIF/JXL 图片格式(gwenview 打开这些格式靠它)
-breeze-gtk  # GTK 应用的 Breeze 主题(gtk-theme-name=Breeze 靠它;已从 plasma 依赖转显式)
+kimageformats   # 给 Qt 应用补 AVIF/HEIF/JXL 图片格式(gwenview 打开这些格式靠它)
+breeze-gtk      # GTK 应用的 Breeze 主题(gtk-theme-name=Breeze 靠它;已从 plasma 依赖转显式)
 
 # ── 远程桌面 (见 HANDOFF: wayvnc 走 frp+ssh 隧道) ─────────────────────────
 wayvnc    # wlroots 的 VNC 服务端;只绑 127.0.0.1,跨公网走 frp+ssh 隧道
 tigervnc  # VNC 客户端,连别的机器用
-krdc      # KDE 远程桌面客户端(RDP/VNC)
-krfb      # KDE 桌面共享服务端
 
 # ── 亮度 ──────────────────────────────────────────────────────────────
 ddcutil  # 外接显示器 DDC/CI 亮度(scripts/brightness.sh 直接调用)
@@ -65,16 +63,16 @@ easyeffects      # PipeWire 音效处理(均衡器/降噪)
 lsp-plugins-lv2  # easyeffects 用的 LV2 插件集
 blueman          # 蓝牙托盘
 bluetui          # 终端里管蓝牙;blueman 的命令行替代
-pipewire        # 音频/视频服务端(原先非显式,依赖链经 kwin,plasma 移除后有孤儿风险)
-pipewire-pulse  # PulseAudio 兼容层
-wireplumber     # pipewire 会话管理(wireplumber.service enabled,音量快捷键的 wpctl 来自它)
+pipewire         # 音频/视频服务端(原先非显式,依赖链经 kwin,plasma 移除后有孤儿风险)
+pipewire-pulse   # PulseAudio 兼容层
+wireplumber      # pipewire 会话管理(wireplumber.service enabled,音量快捷键的 wpctl 来自它)
 
 # ── 托盘 / 全局菜单兼容 ───────────────────────────────────────────────────
 appmenu-gtk-module  # GTK 应用把菜单导出到 DBus,给全局菜单用
 libdbusmenu-glib    # DBus 菜单协议库
 libdbusmenu-gtk3    # 同上,GTK3 侧
 libdbusmenu-qt5     # 同上,Qt5 侧
-gtk2  # 遗留 GTK2 应用的运行时
+gtk2                # 遗留 GTK2 应用的运行时
 
 # ── 输入法 (fcitx5) ──────────────────────────────────────────────────
 fcitx5                 # 输入法框架
@@ -101,8 +99,8 @@ ttf-jetbrains-mono               # 等宽编程字体
 ttf-jetbrains-mono-nerd          # quickshell 的 OSD/通知/电源菜单图标就用它
 ttf-maplemono-nf-cn-unhinted     # Maple Mono NF CN(kitty 默认字体,自带 Nerd/CJK)
 ttf-nunito                       # 圆头无衬线;界面点缀用
-adobe-source-code-pro-fonts  # 部分应用按名引用
-cantarell-fonts              # GNOME 默认 UI 字体,GTK 应用可能回落到它
+adobe-source-code-pro-fonts      # 部分应用按名引用
+cantarell-fonts                  # GNOME 默认 UI 字体,GTK 应用可能回落到它
 
 # ── 默认终端 / 缩略图 / 系统监视 ─────────────────────────────────────────────
 kitty              # 配置里默认终端
