@@ -18,8 +18,8 @@ wqy-zenhei                       # 文泉驿正黑;老程序指定该字体时�
 
 # ── 兜底字形 —— 上面几个都没有的字符,靠这层才不变成豆腐块 ─────────────────────
 otf-unifont  # GNU Unifont;覆盖整个 Unicode BMP 的点阵兜底,最后一道防线
-# ttf-jigmo  # 日文生僻汉字(约 8 万字)。想要的话装这个,别装 ttf-hanazono ——
-#            # 后者是 2017 年停更的 AUR 包,ttf-jigmo 是它的官方继任者且在 extra 里
+ttf-jigmo    # 日文生僻汉字(约 8 万字)。别装 ttf-hanazono —— 后者是 2017 年停更的
+             # AUR 包,ttf-jigmo 是它的官方继任者,extra 里就有
 
 # ── emoji ───────────────────────────────────────────────────────────
 ttf-apple-emoji  # [AUR] 彩色 emoji;waybar 和终端都在 fontconfig 里指定了它

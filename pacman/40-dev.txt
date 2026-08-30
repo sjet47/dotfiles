@@ -55,7 +55,7 @@ pre-commit  # 提交前钩子框架
 neovim                  # 主力编辑器
 vim                     # 兜底编辑器;配置在 vimrc
 visual-studio-code-bin  # [AUR] VS Code;.desktop 有 Wayland 覆盖
-zeal-git                # 离线 API 文档浏览
+zeal                    # 离线 API 文档浏览
 qt6-doc                 # Qt6 离线文档;写 quickshell 的 QML 时查 API
 
 # ── 容器 / Kubernetes ───────────────────────────────────────────────
@@ -73,7 +73,9 @@ cilium-cli      # Cilium 网络插件的运维命令行
 # ── 数据库 / 监控导出 ────────────────────────────────────────────────────
 postgresql                 # 本地 PostgreSQL
 pgcli                      # 带补全的 psql 替代
-redis                      # [AUR] 本地 Redis
+valkey                     # 本地 Redis;Redis 2024 改 license 后被移出官方仓库,
+                           # valkey 是 Linux 基金会的 fork,协议与 redis-cli 全兼容,
+                           # prometheus-redis-exporter 直接照用
 prometheus-node-exporter   # 机器指标采集
 prometheus-redis-exporter  # Redis 指标采集
 

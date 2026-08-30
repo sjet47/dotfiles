@@ -29,8 +29,8 @@ nm-connection-editor  # 图形化编辑连接(windowrules.lua 里有它的浮窗
 dhcpcd                # DHCP 客户端
 iwd                   # 无线守护;本机有线为主,留作备用
 openssh               # ssh 客户端与 sshd;wayvnc 走 ssh 隧道也靠它
-net-tools             # ifconfig/route 等老式网络工具(alias/utils 里在用)
-inetutils             # hostname/ftp 等基础网络程序
+inetutils             # 提供 /usr/bin/hostname —— xdg-open、parallel、nvidia-bug-report.sh
+                      # 等一批系统脚本直接调它,systemd 的 hostnamectl 顶不了这个位
 wget                  # 命令行下载
 
 # ── 文件系统 / 存储 ─────────────────────────────────────────────────────

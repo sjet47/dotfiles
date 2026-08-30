@@ -50,6 +50,7 @@ v2raya          # 代理客户端的 Web GUI;用独立 xray-core,注意版本校
 xray            # v2raya 的实际内核
 v2ray           # 老 v2ray-core;个别只认它的配置还在用
 hysteria        # 基于 QUIC 的代理;丢包高的网络下比 TCP 系稳
+sing-box        # 通用代理内核;部分订阅只给 sing-box 格式的配置
 gost            # 通用隧道/端口转发,临时搭链路
 cgproxy-git     # 基于 cgroup2 的透明代理,按进程分流
 frpc            # 内网穿透客户端;wayvnc 跨公网就走它
@@ -69,7 +70,8 @@ traceroute    # 路由跟踪
 trippy        # 更现代的 mtr 替代
 nexttrace     # 带地理可视化的路由追踪;查跨境线路绕行
 bind          # dig/host 等 DNS 查询工具
-gnu-netcat    # [AUR] 网络管道瑞士刀
+openbsd-netcat # 网络管道瑞士刀。官方仓库版,取代过去的 gnu-netcat ——
+              # 后者上游 2004 年后再没动过,且不支持 unix socket
 geoip         # IP 归属地库;代理规则和 nexttrace 都会读
 sniffnet      # 图形化流量监控
 wireshark-qt  # 图形化抓包分析

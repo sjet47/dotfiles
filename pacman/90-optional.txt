@@ -4,19 +4,16 @@
 # pkg-sync 对这一组只做单向对账:装了不会报"未记录",没装也不会报"缺包" ——
 # 所以这里既能停放"装着但随时能删"的包,也能停放"记着但暂时不装"的包。
 #
-# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
+# 正因为对账是单向的,脚本永远不会提醒这里的注释与现实脱节 ——
+# 所以行尾注释只写"这个包是干嘛的、什么情况下才需要它",不写本机装没装。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
-# ── 已装但被更好的方案取代 —— 删了不影响日常,是清理时的下一批候选 ────────────────
-# 2026-08-30 已清掉一轮:mako(被 quickshell 取代)、swappy(无配置引用)、
-# dmenu(配置里的 dmenu 全是 vicinae 子命令,跟这个包无关)、mcfly(主力是 atuin)、
-# kplotting5(Required By 为空的残留)。下面这几个还留着,理由写在行尾。
-
+# ── 被更好的方案取代 —— 留作备选,删了不影响日常 ──────────────────────────────
 pnpm  # Node 包管理;主力是 npm + bun,atuin config 里那段补全定义不装它也不报错
 
-# ── 上游坏掉、当前装不上的 —— 修好了再挪回 50-apps 的 32 位运行时那批 ──────────────
+# ── 上游坏掉、构建不过的 —— 修好了再挪回 50-apps 的 32 位运行时那批 ──────────────
 # 这两个原本属于 Steam/Proton 的 32 位运行时,multilib 已经不再提供,只剩 AUR,
-# 而 AUR 那两份现在都构建失败(2026-08-30 复核):
+# 而 AUR 那两份都构建失败(2026-08-30 复核):
 lib32-libcanberra  # [AUR] 源码托管在 git.0pointer.net,该站 TLS 证书域名不匹配,拉不下来
 lib32-openal       # [AUR] PKGBUILD 拿 64 位的 /usr/lib/libmysofa.so 去链 32 位目标,
                    # 报 "file in wrong format";multilib 里没有 lib32-libmysofa
@@ -25,42 +22,43 @@ lib32-openal       # [AUR] PKGBUILD 拿 64 位的 /usr/lib/libmysofa.so 去链 3
 wezterm          # 仓库里有 wezterm.lua 和 alias/wezterm,想切随时能装回来
 cool-retro-term  # CRT 效果终端,纯玩具
 
-# ── 阅读 / 通讯 / 隧道(记着但当前没装) ──────────────────────────────────────
+# ── 阅读 / 通讯 / 隧道 ───────────────────────────────────────────────────
 calibre           # 电子书库管理与格式转换;主力阅读是 foliate,只有推书到阅读器才用得上
+wechat-bin        # [AUR] 微信;体积近 700 MiB,只在需要用微信的机器上装
 linuxqq-appimage  # [AUR] QQ(Electron 版);PKGBUILD 里的下载地址跟着腾讯版本号走,常腐烂
 cloudflared-bin   # [AUR] Cloudflare Tunnel;内网穿透主力是 frpc,这个是备选
 rpi-imager        # 给树莓派烧系统卡
 usbimager         # [AUR] 极简镜像写盘;rpi-imager 不认在线镜像列表时的替代
-tiny              # 终端 IRC 客户端;现在基本不上 IRC 了
+tiny              # 终端 IRC 客户端
 
 # ── KDE 小应用 / 教育 ────────────────────────────────────────────────────
 kstars    # 桌面天文馆
 marble    # 桌面地球仪
 ktouch    # 打字练习
 
-# ── 加密 / 逆向 / 专用硬件(记着但当前没装) ──────────────────────────────────
-binaryninja-personal  # [AUR] 逆向分析;要买 license,新机器上不自动装
-mongodb-compass-bin   # [AUR] MongoDB 图形客户端;本机没跑 MongoDB
+# ── 加密 / 逆向 / 专用硬件 ────────────────────────────────────────────────
+binaryninja-personal  # [AUR] 逆向分析;要买 license
+mongodb-compass-bin   # [AUR] MongoDB 图形客户端;跑 MongoDB 的机器才用得上
 qflipper              # 给 Flipper Zero 刷固件;有这个硬件再装
 xboxdrv               # [AUR] 用户态手柄驱动;xone + xpadneo 已覆盖,只在它们失灵时顶上
 
-# ── 冷门语言链(记着但当前没装) ─────────────────────────────────────────────
+# ── 冷门语言链 ──────────────────────────────────────────────────────────
 mlton  # Standard ML 全程序优化编译器
 
-# ── 交叉编译 / 嵌入式(装着,但只为一次性项目) ─────────────────────────────────
+# ── 交叉编译 / 嵌入式 —— 只为一次性项目 ────────────────────────────────────
 riscv64-linux-gnu-binutils    # RISC-V Linux 目标的汇编/链接工具
 riscv64-unknown-elf-binutils  # RISC-V 裸机目标的汇编/链接工具
 riscv64-unknown-elf-gcc       # RISC-V 裸机交叉编译器
 
-# ── 加密货币(装着,但不是日常工具链的一部分) ───────────────────────────────────
+# ── 加密货币 —— 不是日常工具链的一部分 ─────────────────────────────────────
 bitcoin-qt  # 全验证节点 + 钱包 GUI;同步全链要几百 GB
 electrum    # 轻钱包,不用同步全链
 
-# ── 自建服务(装着,但不是每台机器都要跑) ───────────────────────────────────
+# ── 自建服务 —— 不是每台机器都要跑 ────────────────────────────────────────
 jellyfin-server  # 媒体库服务端;局域网里看片
 jellyfin-web     # Jellyfin 的 Web 前端(服务端单独一个包)
 
-# ── 虚拟化(装着,但只在需要跑虚拟机的机器上) ─────────────────────────────────
+# ── 虚拟化 —— 只在需要跑虚拟机的机器上 ─────────────────────────────────────
 # host 模块二选一:DKMS 版跟着内核滚动重建,预编译版(virtualbox-host-modules-arch)
 # 只配官方 linux 内核 —— 这是每台机器的选择,所以整块放这里而不是入库清单。
 virtualbox            # 虚拟机
@@ -68,12 +66,12 @@ virtualbox-host-dkms  # 内核模块(DKMS 版)
 virtualbox-guest-iso  # Guest Additions 光盘镜像,装完虚拟机第一件事
 virtualbox-ext-vnc    # 让虚拟机的显示走 VNC,不开 GUI 也能连
 
-# ── 云 / 运维 CLI(记着但当前没装) ────────────────────────────────────────
+# ── 云 / 运维 CLI ───────────────────────────────────────────────────────
 gcx  # [AUR] Grafana Cloud 资源管理 CLI,官方说是为 agent 调用优化的
 
 # ── 一次性尝试 / 玩具 ────────────────────────────────────────────────────
 nvtop           # GPU 进程与显存占用;btop 和 nvidia-settings 已能覆盖,不是必需
-exercism        # [AUR] 刷 exercism.io 的题目;想起来才用一次
+exercism        # [AUR] 刷 exercism.io 的题目
 lolcat          # 彩虹色输出,玩具
 imgcat          # [AUR] 终端里显示图片
 jp2a            # JPG 转 ASCII art
@@ -82,5 +80,4 @@ gitlogue        # 把 git 历史放成动画
 gource          # 版本库演化可视化
 geogebra        # 动态几何/代数软件
 z-library-bin   # [AUR] Z-Library 客户端
-electron32-bin  # [AUR] Electron 32 运行时;某个自打包应用需要
 cmatrix         # 终端 matrix 雨屏保

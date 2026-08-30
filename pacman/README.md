@@ -60,8 +60,9 @@ cp pacman/00-local.example.txt pacman/00-local.txt   # 然后按自己的硬件�
 ## 日常用法
 
 ```bash
-pkg-sync              # 双向对账
+pkg-sync              # 三向对账
 pkg-sync repos        # 只检查前置仓库
+pkg-sync orphans      # 列出全部孤儿包(按体积排序)
 pkg-sync install      # 装 00~50 组(跳过 90-optional)
 pkg-sync install 40-dev 50-apps   # 只装指定组
 ```
@@ -81,6 +82,28 @@ pkg-sync install 40-dev 50-apps   # 只装指定组
 
 2. **真的没装** —— 要么装上，要么想清楚不装、挪进 `90-optional.txt`。
 3. **清单腐烂**（包被弃用、改名、或从仓库下架）—— 删掉对应行，换成继任者。
+
+### 第三个方向：孤儿层
+
+前两个方向对的都是**显式包**（`pacman -Qqe`）。任何以「依赖」身份装进来的东西不在这个
+视野里 —— 不管是 AUR 的 makedepends 残留，还是一个 717 MiB 的 GUI 程序，对账都会一路
+报「一致」。2026-08-30 那次盘点就是这么发现的：`wechat-bin`、`sing-box` 装在机器上、
+清单里查无此人，而 `pkg-sync` 从没提过一句。
+
+所以 `pkg-sync` 现在会同时报孤儿层（`pacman -Qdt`：没人依赖它、当初又是当依赖装的），
+默认只摘体积最大的 5 个，完整列表走 `pkg-sync orphans`。
+
+**这一层不要一键清理。** 构建残留和真应用在 `-Qdt` 的输出里长得完全一样：
+
+- 要留的 → `sudo pacman -D --asexplicit <包名>`，再补进对应清单。不转显式的话，
+  下次孤儿清理照样扫掉。
+- 大批 `gcc*` / `llvm*` / `electron*` / `qt5-doc` 堆在这里 → 是 paru 没清 makedepends，
+  在 `/etc/paru.conf` 的 `[options]` 下加 `RemoveMake` 和 `CleanAfter` 堵源头，
+  否则清完过几个月原样长回来。
+
+顺带一提，占地大头往往不是包而是**缓存**：`/var/cache/pacman/pkg` 和 `~/.cache/paru`
+都不受任何对账约束。`paccache -dk3` 先 dry-run 看看能省多少，
+`systemctl enable --now paccache.timer` 挂上定期清理。
 
 ## 迁移到新机器
 

@@ -2,8 +2,9 @@
 #
 # pkg-sync —— 分组包清单的对账与安装
 #
-#   ./pkg-sync                     双向对账:清单与系统的差异(附带仓库检查)
+#   ./pkg-sync                     三向对账:清单与系统的差异 + 孤儿层(附带仓库检查)
 #   ./pkg-sync repos               只检查前置仓库是否就绪
+#   ./pkg-sync orphans             列出全部孤儿包(按体积排序)
 #   ./pkg-sync install             安装 00~50 组(跳过 90-optional)
 #   ./pkg-sync install 40-dev ...  只装指定组
 #   ./pkg-sync install --skip-repo-check ...   跳过仓库检查(明知选中组不需要时)
@@ -18,10 +19,18 @@
 #                  参与对账和安装,只是版本库里没有它 —— 新机器照 00-local.example.txt 抄。
 #   *.example.txt  模板,永远不当清单读。
 #   90-optional    单向对账:装了不报"未记录",没装也不报"缺包"。
+#
+# 对账有三个方向,第三个是后加的:清单只记显式包(pacman -Qqe),
+# 所以任何以"依赖"身份装进来的东西 —— 不管是 AUR 的 makedepends 残留,
+# 还是 700 MiB 的 GUI 程序 —— 都在清单的视野之外,对账会一直报"一致"。
+# 孤儿层(pacman -Qdt)就是补这个盲区的。
 
 set -euo pipefail
-# readlink -f 解析软链,所以即使被 symlink 到别处也能找到仓库里的清单
-cd "$(dirname "$(readlink -f "$0")")/../pacman"
+# readlink -f 解析软链,所以即使被 symlink 到别处也能找到仓库里的清单。
+# 先把自身绝对路径存下来:下面这个 cd 一走,相对路径的 $0(./pkg-sync)就失效了,
+# 末尾打印用法时还要读回自己。
+SELF=$(readlink -f "$0")
+cd "$(dirname "$SELF")/../pacman"
 
 # 清单里的包分布在这些仓库。core/extra 是默认开启的,
 # multilib 默认被注释掉,archlinuxcn 需要手动添加 —— 迁移时这两个是最常踩的坑:
@@ -75,6 +84,55 @@ cmd_repos() {
     return 1
 }
 
+# 孤儿包 = 当初以"依赖"身份装进来、如今没有任何包依赖它(pacman -Qdt)。
+# 输出 "体积(MiB)<TAB>包名",按体积倒序。
+orphan_list() {
+    local pkgs
+    pkgs=$(pacman -Qdtq 2>/dev/null) || return 0
+    [[ -z $pkgs ]] && return 0
+    # 一次 pacman -Qi 查全部。别在循环里逐个调 —— 两百来个包会卡出感觉。
+    # LC_ALL=C 钉住字段名:pacman -Qi 的 "Installed Size" 会跟着 locale 变。
+    # shellcheck disable=SC2086
+    LC_ALL=C pacman -Qi $pkgs | awk -F': +' '
+        /^Name/           { name = $2 }
+        /^Installed Size/ {
+            split($2, a, " "); n = a[1]
+            if (a[2] == "B")   n /= 1048576
+            if (a[2] == "KiB") n /= 1024
+            if (a[2] == "GiB") n *= 1024
+            printf "%.0f\t%s\n", n, name
+        }' | sort -rn
+}
+
+orphan_total() { awk -F'\t' '{t+=$1} END{printf "%.2f GiB", t/1024}'; }
+
+# 这里只报账,不给"一键清理"的命令 —— 那正是最容易出事的地方,理由见结尾提示。
+cmd_orphans() {
+    local list count
+    list=$(orphan_list)
+    if [[ -z $list ]]; then
+        echo "没有孤儿包。"
+        return 0
+    fi
+    count=$(wc -l <<<"$list")
+
+    echo "孤儿包 $count 个 / $(orphan_total <<<"$list")："
+    awk -F'\t' '{printf "  %6s MiB  %s\n", ($1 < 1 ? "<1" : $1), $2}' <<<"$list"
+    orphan_warning
+}
+
+orphan_warning() {
+    cat <<'WARN'
+
+  别直接 pacman -Rns 一扫。以"依赖"身份装进来的真应用,跟 AUR 的构建残留在这个
+  列表里长得一模一样(wechat-bin、sing-box 都这么潜伏过,一个 717 MiB)。
+  要留的先转显式,再记进对应清单,否则下次清理照样被扫掉:
+      sudo pacman -D --asexplicit <包名>
+  如果这里堆着大批 gcc*/llvm*/electron*/qt5-doc 这类,是 paru 没清 makedepends,
+  在 /etc/paru.conf 的 [options] 下加 RemoveMake 和 CleanAfter 堵住源头。
+WARN
+}
+
 cmd_check() {
     local listed required sys untracked missing
     # 两个方向用不同的清单范围:90-optional 里的包装了算数(不报未记录),
@@ -102,6 +160,19 @@ cmd_check() {
         echo
     fi
     [[ -z $untracked && -z $missing ]] && echo "清单与系统一致（$(echo "$sys" | wc -l) 个显式包）。"
+
+    # 第三个方向:清单照不到的孤儿层。这里只摘前 5 大的报个账,
+    # 免得日常对账被两百行淹掉;完整列表走 pkg-sync orphans。
+    local orph
+    orph=$(orphan_list)
+    if [[ -n $orph ]]; then
+        echo
+        echo "孤儿包 $(wc -l <<<"$orph") 个 / $(orphan_total <<<"$orph")（清单只记显式包,照不到这一层）："
+        awk -F'\t' 'NR<=5 {printf "  ? %6s MiB  %s\n", ($1 < 1 ? "<1" : $1), $2}' <<<"$orph"
+        (( $(wc -l <<<"$orph") > 5 )) && echo "  … 完整列表: pkg-sync orphans"
+        orphan_warning
+        echo
+    fi
 
     cmd_repos || true      # 对账时仓库问题只提示,不改变退出码
 }
@@ -139,6 +210,9 @@ cmd_install() {
 case "${1:-check}" in
     check)   cmd_check ;;
     repos)   cmd_repos ;;
+    orphans) cmd_orphans ;;
     install) shift; cmd_install "$@" ;;
-    *)       sed -n '2,16p' "$0" | sed 's/^# \?//'; exit 1 ;;
+    # 用法 = 文件开头那段注释。按行号截(过去是 '2,16p')会随着注释增删而错位,
+    # 所以改成"从第 2 行读到第一个非注释行为止"。
+    *)       awk 'NR>1 { if (!/^#/) exit; sub(/^# ?/, ""); print }' "$SELF"; exit 1 ;;
 esac
