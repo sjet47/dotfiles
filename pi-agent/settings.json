@@ -19,12 +19,13 @@
   ],
   "enabledModels": [
     "sub2api-openai/gpt-5.6-sol",
-    "sub2api-openai/deepseek-v4-pro",
     "sub2api-openai/deepseek-v4-flash",
     "sub2api-grok/grok-4.6",
     "sub2api-openai/gpt-5.6-luna",
     "sub2api-openai/kimi-k3",
-    "sub2api-openai/deepseek-v4-flash-vision-exp"
+    "sub2api-openai/deepseek-v4-flash-vision-exp",
+    "sub2api-openai/GLM-5.3-Flash",
+    "sub2api-openai/grok-4.6"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
@@ -58,6 +59,17 @@
   "doubleEscapeAction": "tree",
   "images": {
     "autoResize": false
+  },
+  "readseek": {
+    "overrideTools": [
+      "read",
+      "edit",
+      "write"
+    ],
+    "syntaxValidation": "off",
+    "display": {
+      "edit": "compact"
+    }
   },
   "showCacheMissNotices": true,
   "tuiMode": "fullscreen",
