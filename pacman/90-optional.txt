@@ -45,6 +45,9 @@ riscv64-unknown-elf-gcc       # RISC-V 裸机交叉编译器
 bitcoin-qt  # 全验证节点 + 钱包 GUI;同步全链要几百 GB
 electrum    # 轻钱包,不用同步全链
 
+# ── 云 / 运维 CLI(记着但当前没装) ────────────────────────────────────────
+gcx  # [AUR] Grafana Cloud 资源管理 CLI,官方说是为 agent 调用优化的
+
 # ── 一次性尝试 / 玩具 ────────────────────────────────────────────────────
 nvtop           # GPU 进程与显存占用;btop 和 nvidia-settings 已能覆盖,不是必需
 exercism        # [AUR] 刷 exercism.io 的题目;想起来才用一次
