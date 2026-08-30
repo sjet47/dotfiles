@@ -43,12 +43,12 @@ Item {
     property real headGap: 3
     // 亮度低于这个值的尾梢允许和邻居重叠 —— 太暗了,压在一起也看不出来,放它过去能换回
     // 不少密度。0 = 整条亮尾都不许重叠(最严,但整屏会很稀)。亮度范围见 dimMin/dimMax。
-    property real overlapBelow: 0.4
+    property real overlapBelow: 0.5
 
     // 一趟雨走完之后空几格再开下一趟。0 = 一趟接一趟,调大则列上出现空窗,整屏更稀疏。
     // 这是"时间上的密度",上面 cellW/colStride 是"空间上的",是两回事。
-    property real gapMin: 1
-    property real gapMax: 5
+    property real gapMin: 0
+    property real gapMax: 3
 
     // ---- 字形 ----
     // 字体**必须覆盖用到的字符**,否则整屏豆腐块 —— 而且 fontconfig 会悄悄 fallback,
@@ -94,8 +94,8 @@ Item {
 
     // ---- 亮尾与层次 ----
     // 亮尾长度(格)。跨度要大 —— 等长会让所有尾巴末端连成一条整齐的横线,一眼假
-    property real minLen: 18
-    property real maxLen: 40
+    property real minLen: 20
+    property real maxLen: 50
     // 每条流的整体明暗,远近层次全靠它。下限太低会整屏发灰,
     // 观感上的"密度不够"多半是亮度问题而不是列数问题
     property real dimMin: 0.8
