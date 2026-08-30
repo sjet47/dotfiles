@@ -1,0 +1,43 @@
+# 25-fonts.txt — 字体 —— 从 20-desktop 拆出来单列
+#
+# 编号取 25 而不是 60:字体是桌面的前置,不是"应用"。少了 CJK 字形,装完 20-desktop
+# 得到的是一个满屏方框的桌面。放在 20 和 30 之间,默认安装顺序里紧跟着桌面落地。
+#
+# 字体是纯数据包,跟硬件无关,两台机器应当一致 —— 所以整组入库,不进 00-local。
+#
+# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── CJK 正文 ──────────────────────────────────────────────────────────
+adobe-source-han-serif-cn-fonts  # 思源宋体简中;正文衬线字体
+noto-fonts-cjk                   # 中日韩字形兜底,缺了大量汉字显示成方框
+noto-fonts-extra                 # Noto 的额外字重/变体
+wqy-zenhei                       # 文泉驿正黑;老程序指定该字体时的兜底
+ttf-lxgw-wenkai                  # 霞鹜文楷;中文正文/阅读类应用看着比黑体舒服
+ttf-ms-win11-auto                # [AUR] 微软字体(宋体/微软雅黑/Calibri…);
+                                 # 收到的 Office 文档指定这些字体,缺了排版全乱
+
+# ── 兜底字形 —— 上面几个都没有的字符,靠这层才不变成豆腐块 ─────────────────────
+otf-unifont  # GNU Unifont;覆盖整个 Unicode BMP 的点阵兜底,最后一道防线
+# ttf-jigmo  # 日文生僻汉字(约 8 万字)。想要的话装这个,别装 ttf-hanazono ——
+#            # 后者是 2017 年停更的 AUR 包,ttf-jigmo 是它的官方继任者且在 extra 里
+
+# ── emoji ───────────────────────────────────────────────────────────
+ttf-apple-emoji  # [AUR] 彩色 emoji;waybar 和终端都在 fontconfig 里指定了它
+
+# ── 等宽 / 终端 ────────────────────────────────────────────────────────
+ttf-maplemono-nf-cn-unhinted  # Maple Mono NF CN(kitty 默认字体,自带 Nerd/CJK)
+ttf-jetbrains-mono-nerd       # quickshell 的 OSD/通知/电源菜单图标就用它
+ttf-jetbrains-mono            # 上面那个的无图标版
+ttf-cascadia-code             # 等宽编程字体
+ttf-cascadia-code-nerd        # 同上的 Nerd Font 补丁版(带图标字形)
+ttf-iosevka-nerd              # 窄字身等宽,同屏塞更多列;分屏写代码时换用
+ttf-ubuntu-mono-nerd          # 等宽备选
+ttf-monaco                    # 等宽备选(经典 Mac 终端字体)
+ttf-mononoki                  # [AUR] 等宽备选
+adobe-source-code-pro-fonts   # 部分应用按名引用
+
+# ── UI / 排版 ─────────────────────────────────────────────────────────
+cantarell-fonts  # GNOME 默认 UI 字体,GTK 应用可能回落到它
+ttf-nunito       # 圆头无衬线;界面点缀用
+otf-libertinus   # 带完整数学字形的衬线族;typst 排公式文档时用

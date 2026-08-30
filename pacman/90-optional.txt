@@ -45,6 +45,18 @@ riscv64-unknown-elf-gcc       # RISC-V 裸机交叉编译器
 bitcoin-qt  # 全验证节点 + 钱包 GUI;同步全链要几百 GB
 electrum    # 轻钱包,不用同步全链
 
+# ── 自建服务(装着,但不是每台机器都要跑) ───────────────────────────────────
+jellyfin-server  # 媒体库服务端;局域网里看片
+jellyfin-web     # Jellyfin 的 Web 前端(服务端单独一个包)
+
+# ── 虚拟化(装着,但只在需要跑虚拟机的机器上) ─────────────────────────────────
+# host 模块二选一:DKMS 版跟着内核滚动重建,预编译版(virtualbox-host-modules-arch)
+# 只配官方 linux 内核 —— 这是每台机器的选择,所以整块放这里而不是入库清单。
+virtualbox            # 虚拟机
+virtualbox-host-dkms  # 内核模块(DKMS 版)
+virtualbox-guest-iso  # Guest Additions 光盘镜像,装完虚拟机第一件事
+virtualbox-ext-vnc    # 让虚拟机的显示走 VNC,不开 GUI 也能连
+
 # ── 云 / 运维 CLI(记着但当前没装) ────────────────────────────────────────
 gcx  # [AUR] Grafana Cloud 资源管理 CLI,官方说是为 agent 调用优化的
 

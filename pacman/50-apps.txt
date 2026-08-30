@@ -32,8 +32,6 @@ vlc              # VLC 顶层包:拥有 vlc.desktop 启动器入口(二进制其
 mkvtool          # [AUR] mkv 内嵌字体子集化,压缩带字幕的片源体积
 
 # ── 自建服务 ──────────────────────────────────────────────────────────
-jellyfin-server  # 媒体库服务端;局域网里看片
-jellyfin-web     # Jellyfin 的 Web 前端(服务端单独一个包)
 
 # ── 下载 / 局域网传输 ────────────────────────────────────────────────────
 qbittorrent    # BT 下载
@@ -91,11 +89,8 @@ ethtool       # 网卡链路状态/offload/ring buffer 诊断
 # ── 数据库 / API 客户端 ─────────────────────────────────────────────────
 reqable-bin  # [AUR] HTTP 抓包与调试
 
-# ── 虚拟化 / 磁盘 / 硬件 ─────────────────────────────────────────────────
-virtualbox            # 虚拟机
-virtualbox-host-dkms  # VirtualBox 的内核模块(DKMS 版,跟着内核滚动重建)
-virtualbox-guest-iso  # Guest Additions 光盘镜像,装完虚拟机第一件事
-virtualbox-ext-vnc    # 让虚拟机的显示走 VNC,不开 GUI 也能连
+# ── 磁盘 / 硬件 ────────────────────────────────────────────────────────
+# 虚拟化(virtualbox 全套)挪到 90-optional 了。
 wine                  # 跑 Windows 程序
 gparted               # 图形化分区
 gnome-disk-utility    # 图形化查 SMART / 挂载 / 做镜像;比 gparted 日常

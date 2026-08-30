@@ -9,7 +9,8 @@
 | `00-local.txt` | **本机专属**：微码、显卡驱动栈、固件、引导、专属外设 + 本机的历史包袱 | ✗ |
 | `00-local.example.txt` | 上面那份的模板，新机器照着抄 | ✓ |
 | `10-base.txt` | 包管理、网络、文件系统、归档、打印 —— 装机第一步 | ✓ |
-| `20-desktop.txt` | Hyprland、KDE 应用、音频、输入法、字体 —— 装完有可用图形界面 | ✓ |
+| `20-desktop.txt` | Hyprland、KDE 应用、音频、输入法 —— 装完有可用图形界面 | ✓ |
+| `25-fonts.txt` | CJK / 兜底字形 / emoji / 等宽 / UI 字体 | ✓ |
 | `30-cli.txt` | 日常 CLI，交互习惯全在这 | ✓ |
 | `40-dev.txt` | 语言链、容器、数据库、性能剖析、AI agent | ✓ |
 | `50-apps.txt` | GUI 应用、代理 VPN、抓包、游戏、32 位运行时 | ✓ |
@@ -86,7 +87,7 @@ pkg-sync install 40-dev 50-apps   # 只装指定组
 1. 先启用 `multilib` 和 `archlinuxcn` 仓库（见下方第 5 条坑），装好 `paru`
 2. `cp 00-local.example.txt 00-local.txt`，按新机器的 CPU/GPU 改（`lscpu`、`lspci -k`）
 3. `pkg-sync install 00-local 10-base` → 能开机联网
-4. `pkg-sync install 20-desktop` → 有图形界面
+4. `pkg-sync install 20-desktop 25-fonts` → 有图形界面且不满屏方框
 5. 剩下的按需装，`90-optional` 想清楚再单独挑
 
 ---
@@ -401,3 +402,35 @@ done | sort -u
 > `python-textual-autocomplete 4.0.6-1`（本地构建、卡在 3.13、`import` 失败）和
 > `python-backports-zstd`（官方包，落在 3.13 是它的本职）两个都是 `Required By: None` 的孤儿，
 > 按坑 3 逐个 review 后再清。
+
+### 18. 入库清单不是"这台机器装了什么"，是"这套 dotfiles 需要什么"
+
+这两者的差距会在**第二台机器**上一次性结账。本仓库的实例：把一台机器的 130 个未记录包
+补进入库清单之后，另一台机器跑 `pkg-sync` 报出 **99 个缺包** —— 绝大多数不是那台机器缺东西，
+而是清单里混进了第一台机器的偶然状态（自建服务、裸 k8s 控制面、一整套代理栈、几十个
+一次性装的 Python 库）。
+
+判据 —— 一个包该进**入库**清单，当且仅当满足以下之一：
+
+1. **tracked 的配置或脚本直接调用它**，能 grep 出证据（`git`、`brightnessctl`、`wlogout`、
+   `xclip`、`playerctl` 属于这类）
+2. **没有它，某个 tracked 配置会静默降级** —— 字体、编解码器、输入法词库、GTK 主题。
+   不报错，只是变难看或缺字
+3. **它是 Arch 系统本身的底座** —— `base`、`networkmanager`、`btrfs-progs`
+
+不满足的去处：跟硬件/本机绑定的进 `00-local.txt`，其余进 `90-optional.txt`。
+
+第 1 条要用证据，不能靠印象。包名和命令名经常对不上（`bpf` 提供 `bpftool`），
+而且短包名 grep 会大量误报 —— 实测 `tiny` 命中的是 SVG 里的英文单词、`xray` 命中的是
+Hyprland 的 `debug:xray` 选项、`imagemagick` 命中的是 `convert`/`display`/`stream`
+这些常见词。所以要**限定文件类型**并逐条复核：
+
+```bash
+grep -rIlw --exclude-dir=.git --exclude-dir=pacman \
+  --include='*.sh' --include='*.lua' --include='*.zsh' --include='*.toml' \
+  --include='*.kdl' --include='*.jsonc' --include='*.qml' --include='*.list' \
+  "$pkg" .
+```
+
+**换机是唯一能验证清单的时机。** 第二台机器的 `pkg-sync` 输出不是"那台机器缺东西"的清单，
+而是"第一台机器污染了多少"的账单 —— 拿它来反向修剪入库清单，比在单机上凭空判断准得多。

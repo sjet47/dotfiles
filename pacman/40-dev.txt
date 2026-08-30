@@ -61,23 +61,16 @@ zeal-git                # 离线 API 文档浏览
 qt6-doc                 # Qt6 离线文档;写 quickshell 的 QML 时查 API
 
 # ── 容器 / Kubernetes ───────────────────────────────────────────────
+# 只留客户端。本地起集群那套(kind/minikube/etcd)和裸控制面(kubeadm/kubelet/
+# kube-*)2026-08-30 已整批卸除,alias/kubernetes 里对应的 ka/kl/mk/kd 也一并删了。
 docker          # 容器运行时;alias/docker 里有一堆封装
 docker-buildx   # 多平台镜像构建
 docker-compose  # 多容器编排
 dive            # 逐层分析镜像体积
 lazydocker      # docker 的 TUI
 kubectl         # k8s 命令行;alias/kubernetes 里有封装
-kubectl-convert-bin # [AUR] kubectl 插件,在 API 版本之间转 manifest
 helm            # k8s 包管理
 cilium-cli      # Cilium 网络插件的运维命令行
-
-# 自建控制面组件 —— 本机拿来手搭裸 k8s、复现线上拓扑,不是靠发行版包跑生产集群
-kubeadm                  # 引导集群
-kubelet                  # 节点代理
-kube-apiserver           # 控制面:API
-kube-controller-manager  # 控制面:控制器
-kube-scheduler           # 控制面:调度器
-kube-proxy               # 节点网络代理
 
 # ── 数据库 / 监控导出 ────────────────────────────────────────────────────
 postgresql                 # 本地 PostgreSQL
