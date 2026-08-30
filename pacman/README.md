@@ -258,7 +258,7 @@ for p in $(pacman -Qqem); do
 done
 ```
 
-> 已知无害的残留：`localsend-bin :: libdartjni.so 缺 libjvm.so` —— Dart 的 Java 互操作桥，
+> 已知无害的残留：`localsend :: libdartjni.so 缺 libjvm.so` —— Dart 的 Java 互操作桥，
 > LocalSend 在 Linux 上不使用，没装 JDK 就会报，可忽略。
 
 ### 12. PATH 里的项目工具链会污染 AUR 构建
@@ -342,8 +342,26 @@ sudo paccache -ruk0     # 再清已卸载包的缓存;刚做过大批卸载时�
 
 **官方仓库 → archlinuxcn → AUR 的 `-bin` → AUR 源码包**
 
-只有仓库里根本没有的，才轮得到 `-bin`。本机的 `vicinae-bin` / `herdr-bin` / `tensaku-bin` /
-`ast-grep-bin` / `localsend-bin` / `telegram-desktop-bin` 都属于这一类。
+只有仓库里根本没有的，才轮得到 `-bin`。本机的 `vicinae-bin` / `herdr-bin` / `tensaku-bin`
+属于这一类。
+
+**这条最初写错了举例**：曾把 `ast-grep-bin` / `localsend-bin` / `telegram-desktop-bin`
+也列进"仓库里没有"，实际三个都有（`extra/ast-grep`、`archlinuxcn/localsend`、
+`extra/telegram-desktop`，`telegram-desktop` 甚至与 AUR 同版本），`nali-go-bin` 同理。
+2026-08-31 已全部换成仓库版。所以判断不能凭印象，装 `-bin` 前先实际搜一遍：
+
+```bash
+# 对每个 pacman -Qm 的外部包，查同名及去掉 -bin/-git 后缀的名字
+for p in $(pacman -Qmq); do
+  b=${p%-bin}; b=${b%-git}
+  for c in "$p" "$b"; do
+    pacman -Si "$c" &>/dev/null && { echo "$p -> $(pacman -Si "$c" | awk -F': +' '/^Repository/{print $2;exit}')/$c"; break; }
+  done
+done
+```
+
+换过去要留意命令名可能不一致：`extra/ast-grep` 不装 `sg` 短名（与 util-linux 的 `sg`
+冲突），`telegram-desktop` 的二进制叫 `Telegram`。
 
 反过来，清单从别的机器抄过来时，`-bin` 这一栏最容易过期：
 

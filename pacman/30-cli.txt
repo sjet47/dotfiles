@@ -18,7 +18,8 @@ fd    # find 的现代替代
 # ── 搜索 / 查看 ───────────────────────────────────────────────────────
 ripgrep       # 主力全文搜索
 ugrep         # 带交互 TUI 的 grep,复杂查询时用
-ast-grep-bin  # [AUR] 按语法树结构搜索/重写代码,跨文件重构用;取 -bin 免本地编译
+ast-grep      # 按语法树结构搜索/重写代码,跨文件重构用。
+              # 官方包不提供 sg 短名(与 util-linux 的 sg 冲突),只有 ast-grep
 bat           # 带语法高亮的 cat
 fzf           # 模糊选择器;shell 和一堆脚本的交互基座
 hexyl         # 十六进制查看;排查换行符之类的字节问题
@@ -53,7 +54,6 @@ dust       # 目录占用排行
 lnav       # 日志查看与分析
 hl         # 结构化日志查看(JSON 日志友好)
 isd        # 交互式 systemd TUI;查/改单元状态(替代过去清单里的 systemd-manager-tui)
-libtree    # 树状展示 ELF 的动态库依赖;排查 README 坑 11 那类 SONAME 断链
 fastfetch  # 系统信息
 cpufetch   # 看 CPU 架构信息
 hwinfo     # 硬件探测;排查驱动问题时用
@@ -67,17 +67,18 @@ graphicsmagick      # ImageMagick 的 fork,gm 命令。批量跑比 magick 快�
                     # 而且 API 不像 ImageMagick 那样跨大版本乱改,老脚本能一直跑
 resvg               # SVG 转 PNG
 typst               # 排版;写 PDF 文档用
-typstfmt-bin        # [AUR] typst 源码格式化(装 -bin 版,源码版编译慢且没必要)
+typstyle            # typst 源码格式化。取代 typstfmt —— 后者上游 2024-06 已 archive,
+                    # AUR 包也成了 orphan;typstyle 在 extra 里,是社区继任者
 hugo                # 静态站点生成
 presenterm          # 终端里放 Markdown 幻灯片
 perl-image-exiftool # 读写 EXIF;截图/相机文件批量改元数据、清定位信息
 tesseract           # OCR 引擎;截图取字、python-tesserocr 的后端
+qpdf                # PDF 拆分/合并/解密/线性化;okular 只能看,改结构靠它
 
 # ── 传输 / 下载 ───────────────────────────────────────────────────────
 rclone         # 同步云存储
 qrcp           # [AUR] 扫码在手机和电脑间传文件
 yt-dlp         # 下载视频;scripts/ytd 是它的封装
-speedtest-cli  # 命令行测宽带;换网络/查限速时先跑它
 
 # ── 杂项 ────────────────────────────────────────────────────────────
 moreutils        # sponge/ts/parallel 等零碎 unix 工具

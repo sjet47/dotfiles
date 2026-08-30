@@ -31,10 +31,12 @@ mkvtool          # [AUR] mkv 内嵌字体子集化,压缩带字幕的片源体�
 
 # ── 下载 / 局域网传输 ────────────────────────────────────────────────────
 qbittorrent    # BT 下载
-localsend-bin  # [AUR] 局域网互传文件(AirDrop 替代)
+localsend      # 局域网互传文件(AirDrop 替代)。archlinuxcn 的版本比 AUR 那份新,
+               # 且 AUR 的 localsend-bin 长期挂着 out-of-date 标记
 
 # ── 通讯 ────────────────────────────────────────────────────────────
-telegram-desktop-bin  # [AUR] Telegram 桌面端
+telegram-desktop      # Telegram 桌面端。extra 里与 AUR -bin 同版本,没有用后者的理由。
+                      # 注意二进制名是 Telegram(大写),app_id 仍是 org.telegram.desktop
 discord               # Discord 语音/文字聊天
 feishu-bin            # [AUR] 飞书;工作沟通,告警通知也从这来
 
@@ -44,6 +46,7 @@ yubikey-manager           # 配置 YubiKey
 yubico-authenticator-bin  # [AUR] YubiKey 上的 TOTP 图形客户端
 yubico-pam                # 用 YubiKey 做 sudo/登录的第二因子
 pam-u2f                   # FIDO U2F 的 PAM 模块;插着钥匙才能解锁
+oath-toolkit              # oathtool 生成/校验 TOTP;命令行验一次性码,不用开图形客户端
 
 # ── 代理 / VPN ──────────────────────────────────────────────────────
 v2raya          # 代理客户端的 Web GUI;用独立 xray-core,注意版本校验那个坑
@@ -75,7 +78,7 @@ openbsd-netcat # 网络管道瑞士刀。官方仓库版,取代过去的 gnu-net
 geoip         # IP 归属地库;代理规则和 nexttrace 都会读
 sniffnet      # 图形化流量监控
 wireshark-qt  # 图形化抓包分析
-nali-go-bin   # [AUR] 离线查 IP 归属地/CDN 厂商;alias/utils 里在用
+nali-go       # 离线查 IP 归属地/CDN 厂商;alias/utils 的 myip 在用(命令名 nali)
 ethtool       # 网卡链路状态/offload/ring buffer 诊断
 
 # ── 数据库 / API 客户端 ─────────────────────────────────────────────────

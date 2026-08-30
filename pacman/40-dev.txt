@@ -61,14 +61,14 @@ qt6-doc                 # Qt6 离线文档;写 quickshell 的 QML 时查 API
 # ── 容器 / Kubernetes ───────────────────────────────────────────────
 # 只留客户端。本地起集群那套(kind/minikube/etcd)和裸控制面(kubeadm/kubelet/
 # kube-*)2026-08-30 已整批卸除,alias/kubernetes 里对应的 ka/kl/mk/kd 也一并删了。
+# helm 与 cilium-cli 2026-08-31 也删了 —— shell 历史里末次使用停在 2024-08,
+# 比裸控制面还早退休(cilium-cli 还占 184 MiB)。要用时 pacman -S 装回即可。
 docker          # 容器运行时;alias/docker 里有一堆封装
 docker-buildx   # 多平台镜像构建
 docker-compose  # 多容器编排
 dive            # 逐层分析镜像体积
 lazydocker      # docker 的 TUI
 kubectl         # k8s 命令行;alias/kubernetes 里有封装
-helm            # k8s 包管理
-cilium-cli      # Cilium 网络插件的运维命令行
 
 # ── 数据库 / 监控导出 ────────────────────────────────────────────────────
 postgresql                 # 本地 PostgreSQL
