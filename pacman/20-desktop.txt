@@ -69,9 +69,11 @@ playerctl      # MPRIS 播放控制;binds.lua 的播放/暂停/上下曲快捷�
 pipewire         # 音频/视频服务端(原先非显式,依赖链经 kwin,plasma 移除后有孤儿风险)
 pipewire-pulse   # PulseAudio 兼容层
 wireplumber      # pipewire 会话管理(wireplumber.service enabled,音量快捷键的 wpctl 来自它)
-pipewire-alsa    # ALSA 应用直接走 PipeWire(装 /etc/alsa/conf.d/ 的路由配置)。
-                 # 取代了旧的 pulseaudio-alsa —— 那条路径要绕一层 Pulse API;
-                 # 两者装同类配置,只能留一个。没有它 ALSA 老程序会独占声卡
+pipewire-audio   # ALSA 应用直接走 PipeWire:libasound_module_{pcm,ctl}_pipewire.so
+                 # 加 /etc/alsa/conf.d/50-pipewire.conf 路由配置,都在这个包里。
+                 # 取代了旧的 pulseaudio-alsa —— 那条路径要绕一层 Pulse API。
+                 # 别跟 pipewire-alsa 搞混:那个包现在只剩 5 KiB,单独补一份
+                 # 99-pipewire-default.conf 设 pcm.!default,实际路由不归它管
 alsa-utils       # alsamixer/aplay/speaker-test;声音出问题时从最底层往上查
 pavucontrol      # 图形音量面板
 pamixer          # 音量控制(备用)
