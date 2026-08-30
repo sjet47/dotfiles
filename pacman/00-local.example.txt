@@ -48,6 +48,17 @@ lib32-mesa                  # 32 位 OpenGL;AMD 机器也要这个
 # 全程走 ddcutil(在 20-desktop.txt 里),这个包装了也用不上。
 # brightnessctl   # backlight 亮度;brightness.sh 内屏路径调它
 
+# ── 亮度:按机器形态二选一 ────────────────────────────────────────────────
+# config/hypr/scripts/brightness.sh 按焦点显示器名分流:
+#   eDP*/LVDS*/DSI*(内屏) → brightnessctl      其余(外接屏) → ddcutil
+# 脚本里没有 command -v 兜底,选错了按亮度键会**静默失效**。
+#
+# ddcutil 在 20-desktop.txt 入库清单里(两台机器目前都是台式接外屏,那是常态)。
+# 这台机器如果有内屏(笔记本/一体机),取消下面这行的注释:
+# brightnessctl   # 内屏 backlight 亮度
+#
+# 判断有没有内屏:  ls /sys/class/backlight/     # 空 = 没有内屏,不必装
+
 # ── 本机专属外设 ────────────────────────────────────────────────────────
 # 只连在这台机器上的硬件,它们的驱动/控制工具写在这里。手柄、键盘固件、灯控之类。
 # openrgb

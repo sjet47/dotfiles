@@ -52,6 +52,11 @@ zip         # 生成 zip(mimeapps.list 里关联了压缩包)
 unzip       # 解 zip
 unrar       # 解 rar
 cpio        # mkinitcpio 生成 initramfs 需要
+unarchiver  # unar/lsar;能正确识别压缩包里的中日文文件名编码,unzip 遇到老式
+            # GBK/Shift-JIS zip 会乱码。也是 ark 和 okular 的 optdep
+lrzip       # 长距离冗余压缩;压超大文件(整目录备份、日志堆)比 xz 省。ark 的 optdep
+lzop        # 极快的 lzo 压缩。ark 的 optdep;mkinitcpio 也能用它,
+            # 但本机 mkinitcpio.conf 没设 COMPRESSION,走默认 zstd
 
 # ── 系统基础工具 ────────────────────────────────────────────────────────
 cronie                 # 定时任务守护

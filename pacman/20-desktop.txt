@@ -34,6 +34,7 @@ spectacle            # KDE 截图工具;主力是 hypr/scripts/screenshot.sh,这
 gpu-screen-recorder  # 硬件加速录屏;RTX 4080 上走 NVENC,比 wl-screenrec 省 CPU
 wl-screenrec-git     # 录屏(archlinuxcn / AUR);screenrecord.sh 默认用它
 wl-clipboard         # wl-copy / wl-paste;截图脚本和 alias/git 都在用
+xclip                # X11 剪贴板;config/zellij/config.kdl 的 copy_command 配的就是它
 cliphist             # 剪贴板历史
 wtype                # Wayland 下模拟键盘输入;注意它不触发 Hyprland keybind
 zbar                 # zbarimg 二维码解码(screenshot.sh qr 模式)
@@ -68,6 +69,9 @@ playerctl      # MPRIS 播放控制;binds.lua 的播放/暂停/上下曲快捷�
 pipewire         # 音频/视频服务端(原先非显式,依赖链经 kwin,plasma 移除后有孤儿风险)
 pipewire-pulse   # PulseAudio 兼容层
 wireplumber      # pipewire 会话管理(wireplumber.service enabled,音量快捷键的 wpctl 来自它)
+pipewire-alsa    # ALSA 应用直接走 PipeWire(装 /etc/alsa/conf.d/ 的路由配置)。
+                 # 取代了旧的 pulseaudio-alsa —— 那条路径要绕一层 Pulse API;
+                 # 两者装同类配置,只能留一个。没有它 ALSA 老程序会独占声卡
 alsa-utils       # alsamixer/aplay/speaker-test;声音出问题时从最底层往上查
 pavucontrol      # 图形音量面板
 pamixer          # 音量控制(备用)
