@@ -13,9 +13,8 @@ adobe-source-han-serif-cn-fonts  # 思源宋体简中;正文衬线字体
 noto-fonts-cjk                   # 中日韩字形兜底,缺了大量汉字显示成方框
 noto-fonts-extra                 # Noto 的额外字重/变体
 wqy-zenhei                       # 文泉驿正黑;老程序指定该字体时的兜底
-ttf-lxgw-wenkai                  # 霞鹜文楷;中文正文/阅读类应用看着比黑体舒服
-ttf-ms-win11-auto                # [AUR] 微软字体(宋体/微软雅黑/Calibri…);
-                                 # 收到的 Office 文档指定这些字体,缺了排版全乱
+#ttf-ms-win11-auto                # [AUR] 微软字体(宋体/微软雅黑/Calibri…);
+                                  # 收到的 Office 文档指定这些字体,缺了排版全乱
 
 # ── 兜底字形 —— 上面几个都没有的字符,靠这层才不变成豆腐块 ─────────────────────
 otf-unifont  # GNU Unifont;覆盖整个 Unicode BMP 的点阵兜底,最后一道防线
@@ -31,10 +30,6 @@ ttf-jetbrains-mono-nerd       # quickshell 的 OSD/通知/电源菜单图标就�
 ttf-jetbrains-mono            # 上面那个的无图标版
 ttf-cascadia-code             # 等宽编程字体
 ttf-cascadia-code-nerd        # 同上的 Nerd Font 补丁版(带图标字形)
-ttf-iosevka-nerd              # 窄字身等宽,同屏塞更多列;分屏写代码时换用
-ttf-ubuntu-mono-nerd          # 等宽备选
-ttf-monaco                    # 等宽备选(经典 Mac 终端字体)
-ttf-mononoki                  # [AUR] 等宽备选
 adobe-source-code-pro-fonts   # 部分应用按名引用
 
 # ── UI / 排版 ─────────────────────────────────────────────────────────

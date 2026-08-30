@@ -38,7 +38,7 @@ ntfs-3g        # 读写 NTFS 分区(挂 Windows 盘或 U 盘)
 nfs-utils      # 挂载 NFS 共享
 sshfs          # 用 ssh 挂远程目录(alias/utils 里有封装)
 samba          # SMB 共享的服务端与 smbclient;跟 Windows/NAS 互传
-httpdirfs-git  # [AUR] 把 HTTP 目录列表挂成只读文件系统,不下载就能翻远端归档
+httpdirfs      # [AUR] 把 HTTP 目录列表挂成只读文件系统,不下载就能翻远端归档
 cryfs          # 加密目录后再往网盘同步,云端存的是密文
 usbutils       # lsusb 查 USB 设备
 rsync          # 增量同步/备份(alias/utils 里在用)
@@ -52,9 +52,6 @@ zip         # 生成 zip(mimeapps.list 里关联了压缩包)
 unzip       # 解 zip
 unrar       # 解 rar
 cpio        # mkinitcpio 生成 initramfs 需要
-lrzip       # 大文件长距离冗余压缩;备份整目录时比 xz 省
-lzop        # 极快的 lzo 压缩,拿来做临时打包
-unarchiver  # unar/lsar;能正确处理带中文/日文文件名的旧 zip,unzip 会乱码
 
 # ── 系统基础工具 ────────────────────────────────────────────────────────
 cronie                 # 定时任务守护

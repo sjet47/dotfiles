@@ -8,7 +8,6 @@ go            # Go 编译器;工作项目主力语言
 go-tools      # gopls 等 Go 开发工具
 nodejs        # Node 运行时;pi-agent 的扩展跑在上面
 npm           # Node 包管理
-pnpm          # Node 包管理;磁盘占用比 npm 省(atuin config 里记了它的补全)
 bun           # 更快的 JS 运行时/打包器
 deno          # 另一个 JS/TS 运行时;单文件脚本带权限沙箱时用它
 typescript    # tsc 编译器
@@ -38,7 +37,6 @@ python-rich                      # 终端富文本;自己写的脚本拿它排�
 python-watchfiles                # 文件变更监听;开发时热重载脚本
 python-tesserocr                 # [AUR] tesseract 的 Python 绑定(OCR 脚本)
 python-edge-tts                  # [AUR] 微软 TTS;命令行合成语音
-python-sentry_sdk                # [AUR] Sentry 上报;也是 drkonqi(Plasma 崩溃报告)的依赖
 
 # ── 构建 / 编译 ───────────────────────────────────────────────────────
 llvm        # clang 工具链基础设施
@@ -102,4 +100,3 @@ llama.cpp       # 本地跑 LLM 推理;编译时带 CUDA,吃 RTX 4080
 claude-desktop  # [AUR] Claude 桌面端;autostart 里进 scratchpad 工作区
 herdr-bin       # [AUR] 在一个终端里管多个 coding agent
 playwright-cli  # [AUR] 浏览器自动化的录制/选择器调试
-python-markitdown-mcp  # [AUR] 把 PDF/Office/图片转 Markdown 的 MCP server,喂给 agent 读文档

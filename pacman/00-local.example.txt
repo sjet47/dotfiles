@@ -43,6 +43,11 @@ vulkan-intel
 lib32-vulkan-intel
 lib32-mesa                  # 32 位 OpenGL;AMD 机器也要这个
 
+# ── 内屏背光(笔记本装,台式机不要) ──────────────────────────────────────────
+# 判断:`ls /sys/class/backlight/` 有东西才需要。没有内屏的话 scripts/brightness.sh
+# 全程走 ddcutil(在 20-desktop.txt 里),这个包装了也用不上。
+# brightnessctl   # backlight 亮度;brightness.sh 内屏路径调它
+
 # ── 本机专属外设 ────────────────────────────────────────────────────────
 # 只连在这台机器上的硬件,它们的驱动/控制工具写在这里。手柄、键盘固件、灯控之类。
 # openrgb

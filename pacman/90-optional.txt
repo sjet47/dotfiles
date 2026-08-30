@@ -12,6 +12,8 @@
 # dmenu(配置里的 dmenu 全是 vicinae 子命令,跟这个包无关)、mcfly(主力是 atuin)、
 # kplotting5(Required By 为空的残留)。下面这几个还留着,理由写在行尾。
 
+pnpm  # Node 包管理;主力是 npm + bun,atuin config 里那段补全定义不装它也不报错
+
 # ── 上游坏掉、当前装不上的 —— 修好了再挪回 50-apps 的 32 位运行时那批 ──────────────
 # 这两个原本属于 Steam/Proton 的 32 位运行时,multilib 已经不再提供,只剩 AUR,
 # 而 AUR 那两份现在都构建失败(2026-08-30 复核):
@@ -20,7 +22,16 @@ lib32-openal       # [AUR] PKGBUILD 拿 64 位的 /usr/lib/libmysofa.so 去链 3
                    # 报 "file in wrong format";multilib 里没有 lib32-libmysofa
 
 # ── 备选终端 (默认终端是 kitty,见 20-desktop) ──────────────────────────────
+wezterm          # 仓库里有 wezterm.lua 和 alias/wezterm,想切随时能装回来
 cool-retro-term  # CRT 效果终端,纯玩具
+
+# ── 阅读 / 通讯 / 隧道(记着但当前没装) ──────────────────────────────────────
+calibre           # 电子书库管理与格式转换;主力阅读是 foliate,只有推书到阅读器才用得上
+linuxqq-appimage  # [AUR] QQ(Electron 版);PKGBUILD 里的下载地址跟着腾讯版本号走,常腐烂
+cloudflared-bin   # [AUR] Cloudflare Tunnel;内网穿透主力是 frpc,这个是备选
+rpi-imager        # 给树莓派烧系统卡
+usbimager         # [AUR] 极简镜像写盘;rpi-imager 不认在线镜像列表时的替代
+tiny              # 终端 IRC 客户端;现在基本不上 IRC 了
 
 # ── KDE 小应用 / 教育 ────────────────────────────────────────────────────
 kstars    # 桌面天文馆
@@ -73,4 +84,3 @@ geogebra        # 动态几何/代数软件
 z-library-bin   # [AUR] Z-Library 客户端
 electron32-bin  # [AUR] Electron 32 运行时;某个自打包应用需要
 cmatrix         # 终端 matrix 雨屏保
-ttfx            # [AUR] 终端文字特效/屏保(Omarchy 的 terminaltexteffects Rust 移植)

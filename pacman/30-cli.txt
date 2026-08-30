@@ -67,11 +67,11 @@ graphicsmagick      # ImageMagick 的 fork,gm 命令。批量跑比 magick 快�
                     # 而且 API 不像 ImageMagick 那样跨大版本乱改,老脚本能一直跑
 resvg               # SVG 转 PNG
 typst               # 排版;写 PDF 文档用
-typstfmt            # [AUR] typst 源码格式化
+typstfmt-bin        # [AUR] typst 源码格式化(装 -bin 版,源码版编译慢且没必要)
 hugo                # 静态站点生成
 presenterm          # 终端里放 Markdown 幻灯片
 perl-image-exiftool # 读写 EXIF;截图/相机文件批量改元数据、清定位信息
-tesseract-git       # [AUR] OCR 引擎;截图取字、python-tesserocr 的后端
+tesseract           # OCR 引擎;截图取字、python-tesserocr 的后端
 
 # ── 传输 / 下载 ───────────────────────────────────────────────────────
 rclone         # 同步云存储

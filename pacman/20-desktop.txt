@@ -25,7 +25,6 @@ sddm  # 登录/显示管理器(sddm.service enabled;原先只是 sddm-kcm 的依
 waybar       # 顶部状态栏
 quickshell   # 桌面 shell:音量/亮度 OSD + 通知守护(替代 mako),见 config/quickshell/
 vicinae-bin  # [AUR] 应用启动器(AUR,配置里默认用它);通知历史也走它的 dmenu 子命令
-wlogout      # [AUR] 注销/关机菜单;binds.lua 的 SUPER+SHIFT+Q 和 quickshell 电源 OSD 都调它
 
 # ── 截图 / 录屏 / 剪贴板 ─────────────────────────────────────────────────
 grim                 # 截图后端
@@ -35,7 +34,6 @@ spectacle            # KDE 截图工具;主力是 hypr/scripts/screenshot.sh,这
 gpu-screen-recorder  # 硬件加速录屏;RTX 4080 上走 NVENC,比 wl-screenrec 省 CPU
 wl-screenrec-git     # 录屏(archlinuxcn / AUR);screenrecord.sh 默认用它
 wl-clipboard         # wl-copy / wl-paste;截图脚本和 alias/git 都在用
-xclip                # X11 剪贴板;zellij 的 copy_command 配的是它(走 XWayland)
 cliphist             # 剪贴板历史
 wtype                # Wayland 下模拟键盘输入;注意它不触发 Hyprland keybind
 zbar                 # zbarimg 二维码解码(screenshot.sh qr 模式)
@@ -62,15 +60,14 @@ wayvnc    # wlroots 的 VNC 服务端;只绑 127.0.0.1,跨公网走 frp+ssh 隧�
 tigervnc  # VNC 客户端,连别的机器用
 
 # ── 亮度 / 媒体键 ───────────────────────────────────────────────────────
-ddcutil        # 外接显示器 DDC/CI 亮度(scripts/brightness.sh 直接调用)
-brightnessctl  # backlight 亮度;brightness.sh 先试它,失败再退到 ddcutil
+ddcutil        # 外接显示器 DDC/CI 亮度;本机全外接,brightness.sh 只走这条路径
+               # (笔记本要的 brightnessctl 在 00-local.example.txt 里)
 playerctl      # MPRIS 播放控制;binds.lua 的播放/暂停/上下曲快捷键调它
 
 # ── 音频 / 蓝牙前端 ─────────────────────────────────────────────────────
 pipewire         # 音频/视频服务端(原先非显式,依赖链经 kwin,plasma 移除后有孤儿风险)
 pipewire-pulse   # PulseAudio 兼容层
 wireplumber      # pipewire 会话管理(wireplumber.service enabled,音量快捷键的 wpctl 来自它)
-pulseaudio-alsa  # 把 ALSA 应用重定向到 PulseAudio 接口;老程序不装它就独占声卡
 alsa-utils       # alsamixer/aplay/speaker-test;声音出问题时从最底层往上查
 pavucontrol      # 图形音量面板
 pamixer          # 音量控制(备用)
@@ -105,5 +102,4 @@ sound-theme-freedesktop # GTK 提示音(gtk-sound-theme-name=freedesktop)
 
 # ── 终端 / 缩略图 ─────────────────────────────────────────────────────
 kitty              # 配置里默认终端
-wezterm            # 备用终端;仓库里有 wezterm.lua 和 alias/wezterm,偶尔切过去用
 ffmpegthumbnailer  # dolphin 里显示视频缩略图(录屏文件多,没它只有一片空白图标)

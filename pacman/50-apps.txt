@@ -9,11 +9,8 @@ thunderbird    # 邮件客户端;mimeapps.list 里是 mailto 默认
 
 # ── 笔记 / 阅读 / 文献 ──────────────────────────────────────────────────
 obsidian          # 知识库
-obsidian-cli-bin  # [AUR] 命令行开笔记/搜索/新建,脚本里往库里写东西
-typora            # [AUR] 所见即所得的 Markdown 编辑器;写长文比 obsidian 顺
 zotero-bin        # 文献管理
 foliate           # EPUB 阅读器
-calibre           # 电子书库管理与格式转换;给阅读器推书
 anki              # 间隔重复记忆
 
 # ── 办公 / 创作 ───────────────────────────────────────────────────────
@@ -22,7 +19,6 @@ gimp               # 图像编辑
 audacity           # 音频编辑
 obs-studio         # 直播/录制
 fontforge          # 字体编辑;配合 mkvtool 做字幕字体子集
-roomeqwizard       # [AUR] 房间声学测量;调音箱摆位和 easyeffects 的均衡曲线
 
 # ── 影音播放 ──────────────────────────────────────────────────────────
 mpv              # 视频播放;windowrules.lua 里有它的规则
@@ -41,8 +37,6 @@ localsend-bin  # [AUR] 局域网互传文件(AirDrop 替代)
 telegram-desktop-bin  # [AUR] Telegram 桌面端
 discord               # Discord 语音/文字聊天
 feishu-bin            # [AUR] 飞书;工作沟通,告警通知也从这来
-linuxqq-appimage      # [AUR] QQ(Electron 版)
-tiny                  # 终端 IRC 客户端
 
 # ── 密码 / 硬件密钥 ─────────────────────────────────────────────────────
 keepassxc                 # 密码管理(autostart + windowrules)
@@ -55,13 +49,9 @@ pam-u2f                   # FIDO U2F 的 PAM 模块;插着钥匙才能解锁
 v2raya          # 代理客户端的 Web GUI;用独立 xray-core,注意版本校验那个坑
 xray            # v2raya 的实际内核
 v2ray           # 老 v2ray-core;个别只认它的配置还在用
-throne          # sing-box 后端的图形代理管理器
-sing-geoip-db   # [AUR] sing-box 的 GeoIP 规则库
-sing-geosite-db # [AUR] sing-box 的 Geosite 规则库
 hysteria        # 基于 QUIC 的代理;丢包高的网络下比 TCP 系稳
 gost            # 通用隧道/端口转发,临时搭链路
 cgproxy-git     # 基于 cgroup2 的透明代理,按进程分流
-cloudflared-bin # [AUR] Cloudflare Tunnel 客户端;把本地服务暴露出去不用公网 IP
 frpc            # 内网穿透客户端;wayvnc 跨公网就走它
 tailscale       # 组网 VPN;已装未启用
 openvpn3        # [AUR] OpenVPN 3 客户端。**必须用干净 PATH 构建**:
@@ -93,10 +83,7 @@ reqable-bin  # [AUR] HTTP 抓包与调试
 # 虚拟化(virtualbox 全套)挪到 90-optional 了。
 wine                  # 跑 Windows 程序
 gparted               # 图形化分区
-gnome-disk-utility    # 图形化查 SMART / 挂载 / 做镜像;比 gparted 日常
 kdiskmark             # 磁盘顺序/随机读写跑分
-rpi-imager            # 给树莓派烧系统卡
-usbimager             # [AUR] 极简的镜像写盘工具,不认 rpi 那套在线镜像列表时用它
 
 # ── 加密货币 ──────────────────────────────────────────────────────────
 
