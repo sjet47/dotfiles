@@ -475,3 +475,60 @@ grep -rIlw --exclude-dir=.git --exclude-dir=pacman \
 
 **换机是唯一能验证清单的时机。** 第二台机器的 `pkg-sync` 输出不是"那台机器缺东西"的清单，
 而是"第一台机器污染了多少"的账单 —— 拿它来反向修剪入库清单，比在单机上凭空判断准得多。
+
+### 19. 清单管得了"装什么包"，管不了"服务该不该 enable"
+
+`pkg-sync` 的三个对账方向都只看包的存在与否。一个装了但没启用的服务、和一个启用了却
+不该启用的服务，在对账里长得跟正常包一模一样 —— 这是比孤儿层更深的一层盲区。
+
+本机踩到的两类：
+
+**A. 装了没启用 = 等于没装。** 清单注释写着它的用途，于是看清单的人（包括未来的自己）
+以为这个能力是有的：
+
+- `fail2ban` —— 注释写"扫 sshd 日志封暴力破解 IP，本机 sshd 对外开着"，
+  但 `fail2ban.service` 是 disabled，保护为零
+- `sysstat` —— 注释写"要看'半小时前那阵卡顿'只能靠它的历史采样"，
+  但 `sysstat-collect.timer` / `sysstat-summary.timer` 都没启用，根本没有历史
+- `cups` + `cups-pdf` + `print-manager` —— 服务 disabled 且 `/etc/cups/ppd/` 是空的，
+  一台打印机都没配过
+
+**B. 启用了却在打架。** 比 A 更隐蔽，因为它表面上工作正常：
+
+`dhcpcd.service` 和 `NetworkManager.service` 曾长期同为 enabled。NM 的 DHCP 后端是
+`internal`（`NetworkManager --print-config` 里的 `dhcp=` ），根本不经过 dhcpcd，
+于是两个客户端各自向同一台 DHCP 服务器要地址。服务器按 MAC 分配、两次都给同一个 IP，
+所以**表面上一切正常**。真相在路由表里：
+
+```
+default via 10.200.1.1 dev enp1s0 proto dhcp src 10.200.5.50 metric 100    ← NM
+default via 10.200.1.1 dev enp1s0 proto dhcp src 10.200.5.50 metric 1002   ← dhcpcd
+```
+
+`metric 1002` = dhcpcd 的 `1000 + ifindex`。日志里还留着它们互踩的记录：
+
+```
+dhcpcd[690]: enp1s0: pid 683 deleted default route via 10.200.1.1   # pid 683 就是 NM
+```
+
+附带损害：`/etc/dhcpcd.conf` 没有 `denyinterfaces`，dhcpcd 会去给 Docker 的 veth
+发 DHCP 广播（三天里对 11 个不同 veth 动过手），而这些接口 NM 早标成 `unmanaged` 了。
+
+同理 `iwd` 也曾 enabled + active，但 NM 默认走 `wpa_supplicant`，iwd 纯属空转。
+
+**排查方法**，隔一段时间跑一次，把结果跟清单注释对一遍：
+
+```bash
+systemctl list-unit-files --state=enabled --no-legend | awk '{print $1}'
+systemctl --user list-unit-files --state=enabled --no-legend | awk '{print $1}'
+ip route show default          # 同一 dev 出现两条默认路由 = 有两个东西在配网
+```
+
+判断某个包"该不该 enable"时，先查它是不是另一个服务的**可选**后端：
+`pacman -Qi dhcpcd` 的 `Required By: None` / `Optional For: networkmanager`
+就是信号 —— 它只在 NM 配成 `dhcp=dhcpcd` 时才有意义，而默认不是。
+
+停用 dhcpcd 时注意 `dhcpcd.conf` 里的 `persistent`：它让 dhcpcd 退出时**不撤销**
+自己配的地址和路由，所以 `disable --now` 之后那条 metric 1002 仍会留到下次重启，
+要手动 `ip route del`。
+

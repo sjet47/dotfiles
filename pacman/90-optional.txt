@@ -73,7 +73,9 @@ gcx  # [AUR] Grafana Cloud 资源管理 CLI,官方说是为 agent 调用优化�
 nvtop           # GPU 进程与显存占用;btop 和 nvidia-settings 已能覆盖,不是必需
 exercism        # [AUR] 刷 exercism.io 的题目
 lolcat          # 彩虹色输出,玩具
-imgcat          # [AUR] 终端里显示图片
+# imgcat        # [AUR] 终端里显示图片。2026-08-31 删除:上游 2022-05 起停更,
+                # 而默认终端 kitty 自带 `kitten icat`,同样的事不必多装一个 AUR 包。
+                # 真要独立命令,extra 里有 chafa / viu
 jp2a            # JPG 转 ASCII art
 figlet          # 把文字排成大号字符画
 gitlogue        # 把 git 历史放成动画

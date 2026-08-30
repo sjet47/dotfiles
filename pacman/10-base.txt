@@ -26,8 +26,12 @@ debtap               # [AUR] 把 .deb 转成 Arch 包;偶有厂商只发 deb 时
 # ── 网络基础 ──────────────────────────────────────────────────────────
 networkmanager        # 网络连接管理;waybar 网络模块与 nmcli 都依赖它
 nm-connection-editor  # 图形化编辑连接(windowrules.lua 里有它的浮窗规则)
-dhcpcd                # DHCP 客户端
-iwd                   # 无线守护;本机有线为主,留作备用
+dhcpcd                # 救援用的 DHCP 客户端(NM 起不来时手动 dhcpcd <iface> 抢救)。
+                      # **不要 enable dhcpcd.service** —— NM 的 DHCP 后端是 internal,
+                      # 两者会各要一次地址、各装一条默认路由(metric 100 vs 1000+ifindex),
+                      # 还会去给 docker 的 veth 发 DHCP。2026-08-31 已 disable,见 README 坑 19
+iwd                   # 无线守护;本机有线为主,留作备用。同样**不 enable** ——
+                      # NM 默认走 wpa_supplicant,iwd 起着也不会被用到,2026-08-31 已 disable
 openssh               # ssh 客户端与 sshd;wayvnc 走 ssh 隧道也靠它
 inetutils             # 提供 /usr/bin/hostname —— xdg-open、parallel、nvidia-bug-report.sh
                       # 等一批系统脚本直接调它,systemd 的 hostnamectl 顶不了这个位
