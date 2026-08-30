@@ -4,13 +4,20 @@
 #
 #   ./pkg-sync                     双向对账:清单与系统的差异(附带仓库检查)
 #   ./pkg-sync repos               只检查前置仓库是否就绪
-#   ./pkg-sync install             安装 00~40 组(跳过 90-optional)
-#   ./pkg-sync install 30-dev ...  只装指定组
+#   ./pkg-sync install             安装 00~50 组(跳过 90-optional)
+#   ./pkg-sync install 40-dev ...  只装指定组
 #   ./pkg-sync install --skip-repo-check ...   跳过仓库检查(明知选中组不需要时)
 #
 # 清单文件 = 仓库 pacman/ 下的 NN-*.txt,是包清单的唯一事实来源。
 # 本脚本放在 scripts/(已在 PATH 里),所以任意目录下直接敲 pkg-sync 即可。
 # 格式:每行一个包名,# 之后为注释。
+#
+# 两组文件不参与常规流程:
+#   00-local.txt   本机专属:硬件绑定(微码/显卡驱动/固件/引导)+ 本机的历史包袱
+#                  (比如与 Hyprland 并存的整套 Plasma)。不入 git,每台机器自己维护。
+#                  参与对账和安装,只是版本库里没有它 —— 新机器照 00-local.example.txt 抄。
+#   *.example.txt  模板,永远不当清单读。
+#   90-optional    单向对账:装了不报"未记录",没装也不报"缺包"。
 
 set -euo pipefail
 # readlink -f 解析软链,所以即使被 symlink 到别处也能找到仓库里的清单
@@ -24,7 +31,10 @@ REQUIRED_REPOS=(core extra multilib archlinuxcn)
 # 从清单文件提取包名:剥掉注释和空白
 extract() { sed 's/#.*//' "$@" | tr -s '[:space:]' '\n' | grep -v '^$' | sort -u; }
 
-default_groups() { ls [0-9][0-9]-*.txt | grep -v '^90-'; }
+# 所有真清单(排掉 *.example.txt 这类模板)
+all_groups() { ls [0-9][0-9]-*.txt | grep -v '\.example\.txt$'; }
+# install 与"缺包"对账的范围:再去掉 90-optional
+default_groups() { all_groups | grep -v '^90-'; }
 
 repo_hint() {
     case "$1" in
@@ -66,11 +76,20 @@ cmd_repos() {
 }
 
 cmd_check() {
-    local listed sys untracked missing
-    listed=$(extract $(ls [0-9][0-9]-*.txt))
+    local listed required sys untracked missing
+    # 两个方向用不同的清单范围:90-optional 里的包装了算数(不报未记录),
+    # 但没装不算缺 —— 那一组本来就是"可留可不留",否则对账永远有一堆噪音。
+    listed=$(extract $(all_groups))
+    required=$(extract $(default_groups))
     sys=$(pacman -Qqe | sort -u)
     untracked=$(comm -23 <(echo "$sys") <(echo "$listed"))
-    missing=$(comm -13 <(echo "$sys") <(echo "$listed"))
+    missing=$(comm -13 <(echo "$sys") <(echo "$required"))
+
+    if [[ ! -f 00-local.txt ]]; then
+        echo "没有 00-local.txt —— 本机的微码/显卡驱动/固件会全部报成「系统里有、清单里没有」。"
+        echo "  cp 00-local.example.txt 00-local.txt   然后按本机硬件删改"
+        echo
+    fi
 
     if [[ -n $untracked ]]; then
         echo "系统里有、清单里没有（装了新包忘了记）："
@@ -78,7 +97,7 @@ cmd_check() {
         echo
     fi
     if [[ -n $missing ]]; then
-        echo "清单里有、系统没装（清单腐烂，或该包已被弃用）："
+        echo "清单里有、系统没装（清单腐烂，或该包已被弃用；不含 90-optional）："
         echo "$missing" | sed 's/^/  - /'
         echo
     fi

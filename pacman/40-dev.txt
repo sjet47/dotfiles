@@ -1,20 +1,24 @@
-# 30-dev.txt — 开发工具链 —— 按需裁剪,不写代码的机器可以整组跳过
+# 40-dev.txt — 开发工具链 —— 按需裁剪,不写代码的机器可以整组跳过
 #
 # 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
 # ── 语言与运行时 ────────────────────────────────────────────────────────
-go              # Go 编译器;工作项目主力语言
-go-tools        # gopls 等 Go 开发工具
-nodejs          # Node 运行时;pi-agent 的扩展跑在上面
-npm             # Node 包管理
-bun             # 更快的 JS 运行时/打包器
-typescript      # tsc 编译器
-rustup          # Rust 工具链管理(cargo 由它提供)
-ocaml           # OCaml 编译器
-opam            # OCaml 包管理;zshrc 里有它的环境初始化
-mlton           # Standard ML 全程序优化编译器
-ghcup-hs-bin    # Haskell 工具链安装器
+go            # Go 编译器;工作项目主力语言
+go-tools      # gopls 等 Go 开发工具
+nodejs        # Node 运行时;pi-agent 的扩展跑在上面
+npm           # Node 包管理
+pnpm          # Node 包管理;磁盘占用比 npm 省(atuin config 里记了它的补全)
+bun           # 更快的 JS 运行时/打包器
+deno          # 另一个 JS/TS 运行时;单文件脚本带权限沙箱时用它
+typescript    # tsc 编译器
+rustup        # Rust 工具链管理(cargo 由它提供)
+ghcup-hs-bin  # [AUR] Haskell 工具链安装器
+ocaml         # OCaml 编译器
+opam          # OCaml 包管理;zshrc 里有它的环境初始化,没装那段会静默跳过
+
+# ── 版本管理器(职责有重叠,按项目历史留着) ──────────────────────────────────
+mise   # 多语言版本管理与任务运行;新项目统一走它
 
 # ── Python 生态 ─────────────────────────────────────────────────────
 python-pip                       # Python 包安装
@@ -28,24 +32,33 @@ python-weasyprint                # HTML/CSS 转 PDF
 python-redis                     # Redis 的 Python 客户端
 python-grpcio                    # gRPC 的 Python 绑定
 python-googleapis-common-protos  # gRPC 用的通用 proto 定义
+python-ipykernel                 # Jupyter 内核;临时算点东西开 notebook
+python-opencv                    # 图像处理;截图/录屏后处理和小工具用
+python-rich                      # 终端富文本;自己写的脚本拿它排版输出
+python-watchfiles                # 文件变更监听;开发时热重载脚本
+python-tesserocr                 # [AUR] tesseract 的 Python 绑定(OCR 脚本)
+python-edge-tts                  # [AUR] 微软 TTS;命令行合成语音
+python-sentry_sdk                # [AUR] Sentry 上报;也是 drkonqi(Plasma 崩溃报告)的依赖
 
 # ── 构建 / 编译 ───────────────────────────────────────────────────────
 llvm        # clang 工具链基础设施
+clang       # C/C++ 前端;clangd 补全和 bcc 编译 eBPF 都要
 cmake       # 跨平台构建系统
 meson       # 构建系统
 ninja       # 构建后端,配合 cmake/meson
+mold        # 现代链接器;大 C++ 项目链接阶段比 ld 快一个数量级
 bear        # 给 clangd 生成 compile_commands.json
 ctags       # 生成代码索引
 cppunit     # C++ 单元测试框架
 rapidjson   # C++ JSON 库
 pre-commit  # 提交前钩子框架
-mise        # 多语言版本管理与任务运行
 
 # ── 编辑器 / 文档 ──────────────────────────────────────────────────────
 neovim                  # 主力编辑器
 vim                     # 兜底编辑器;配置在 vimrc
 visual-studio-code-bin  # [AUR] VS Code;.desktop 有 Wayland 覆盖
 zeal-git                # 离线 API 文档浏览
+qt6-doc                 # Qt6 离线文档;写 quickshell 的 QML 时查 API
 
 # ── 容器 / Kubernetes ───────────────────────────────────────────────
 docker          # 容器运行时;alias/docker 里有一堆封装
@@ -54,8 +67,17 @@ docker-compose  # 多容器编排
 dive            # 逐层分析镜像体积
 lazydocker      # docker 的 TUI
 kubectl         # k8s 命令行;alias/kubernetes 里有封装
+kubectl-convert-bin # [AUR] kubectl 插件,在 API 版本之间转 manifest
 helm            # k8s 包管理
 cilium-cli      # Cilium 网络插件的运维命令行
+
+# 自建控制面组件 —— 本机拿来手搭裸 k8s、复现线上拓扑,不是靠发行版包跑生产集群
+kubeadm                  # 引导集群
+kubelet                  # 节点代理
+kube-apiserver           # 控制面:API
+kube-controller-manager  # 控制面:控制器
+kube-scheduler           # 控制面:调度器
+kube-proxy               # 节点网络代理
 
 # ── 数据库 / 监控导出 ────────────────────────────────────────────────────
 postgresql                 # 本地 PostgreSQL
@@ -71,18 +93,20 @@ websocat       # WebSocket 版的 netcat
 httpie         # 更友好的 HTTP 命令行客户端
 
 # ── 性能剖析 / 逆向 ─────────────────────────────────────────────────────
-perf                  # 内核级性能剖析
-flamegraph            # [AUR] 把剖析结果画成火焰图
-strace                # 跟踪系统调用
-rr-git                # 可回放的调试器,查偶现 bug 用
-bcc-libbpf-tools      # eBPF 现成工具集(查 I/O、调度延迟等)
-bpftool-bin           # [AUR] 检查/操作 eBPF 程序
-xdp-tools             # XDP 数据面工具
-binaryninja-personal  # [AUR] 逆向分析;已改 .desktop 强制走 Wayland 原生
-nasm                  # 汇编器 + ndisasm 反汇编
-patchelf              # 改二进制的 rpath/interpreter
+perf              # 内核级性能剖析
+flamegraph        # [AUR] 把剖析结果画成火焰图
+strace            # 跟踪系统调用
+rr-git            # 可回放的调试器,查偶现 bug 用
+bcc               # eBPF 的 C 库与 Python 绑定,自己写探针用
+bcc-libbpf-tools  # eBPF 现成工具集(查 I/O、调度延迟等)
+bpf               # bpftool:检查/加载 eBPF 程序(过去清单里写的 bpftool-bin 已从 AUR 下架)
+xdp-tools         # XDP 数据面工具
+nasm              # 汇编器 + ndisasm 反汇编
+patchelf          # 改二进制的 rpath/interpreter
 
 # ── AI / Agent ────────────────────────────────────────────────────
-llama.cpp             # 本地跑 LLM 推理
-claude-desktop        # [AUR] Claude 桌面端;autostart 里进 scratchpad 工作区
-herdr-bin             # [AUR] 在一个终端里管多个 coding agent
+llama.cpp       # 本地跑 LLM 推理;编译时带 CUDA,吃 RTX 4080
+claude-desktop  # [AUR] Claude 桌面端;autostart 里进 scratchpad 工作区
+herdr-bin       # [AUR] 在一个终端里管多个 coding agent
+playwright-cli  # [AUR] 浏览器自动化的录制/选择器调试
+python-markitdown-mcp  # [AUR] 把 PDF/Office/图片转 Markdown 的 MCP server,喂给 agent 读文档

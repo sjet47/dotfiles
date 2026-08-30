@@ -4,39 +4,90 @@
 
 ## 文件构成
 
-| 文件 | 内容 |
-| --- | --- |
-| `00-base.txt` | 内核、固件、显卡驱动、包管理、网络、文件系统、打印 —— 装机第一步 |
-| `10-desktop.txt` | Hyprland、KDE 应用、音频、输入法、字体 —— 装完有可用图形界面 |
-| `20-cli.txt` | 日常 CLI，交互习惯全在这 |
-| `30-dev.txt` | 语言链、容器、数据库、性能剖析、AI agent |
-| `40-apps.txt` | GUI 应用、代理 VPN、抓包、游戏 |
-| `90-optional.txt` | 备选方案 / 一次性尝试 / 玩具，**迁移时整组跳过** |
-| `../scripts/pkg-sync` | 对账 + 安装（在 PATH 里，可直接敲 `pkg-sync`）|
+| 文件 | 内容 | 入 git |
+| --- | --- | --- |
+| `00-local.txt` | **本机专属**：微码、显卡驱动栈、固件、引导、专属外设 + 本机的历史包袱 | ✗ |
+| `00-local.example.txt` | 上面那份的模板，新机器照着抄 | ✓ |
+| `10-base.txt` | 包管理、网络、文件系统、归档、打印 —— 装机第一步 | ✓ |
+| `20-desktop.txt` | Hyprland、KDE 应用、音频、输入法、字体 —— 装完有可用图形界面 | ✓ |
+| `30-cli.txt` | 日常 CLI，交互习惯全在这 | ✓ |
+| `40-dev.txt` | 语言链、容器、数据库、性能剖析、AI agent | ✓ |
+| `50-apps.txt` | GUI 应用、代理 VPN、抓包、游戏、32 位运行时 | ✓ |
+| `90-optional.txt` | 备选方案 / 一次性尝试 / 玩具，**迁移时整组跳过** | ✓ |
+| `../scripts/pkg-sync` | 对账 + 安装（在 PATH 里，可直接敲 `pkg-sync`）| ✓ |
 
 清单只收 `pacman -Qqe`（显式安装）的包，依赖由 pacman 自动拉齐，不入库。
 
+### `00-local.txt` 为什么不入 git
+
+它收两类东西，共同点是**不该跟着仓库复制到别的机器上**：
+
+1. **硬件绑定** —— 微码认 CPU 厂商，显卡驱动认 GPU 厂商，固件和引导认主板。抄错了轻则
+   驱动不加载，重则开不了机。
+2. **本机的历史包袱** —— 入库清单描述的是"这套 dotfiles 想要的系统"，桌面只有
+   **Hyprland 一系**。某台机器上多出来的东西（装机时留下的另一个桌面环境、给一次性项目装的
+   服务端）属于那台机器的情况，写进入库清单会让新机器按仓库装完莫名其妙多出一堆东西。
+   本机的实例：整套 `plasma-meta`（55 个包 / ~274 MiB），和 Hyprland 并存着，只是为了
+   随时能切回去登另一个会话。
+
+所以它被 `.gitignore` 排除，每台机器自己维护一份，版本库里只留 `00-local.example.txt`
+当模板（AMD 那一套写在里面，注释掉了）。
+
+注意第 2 类和 `90-optional.txt` 的区别：`90-optional` 是"**任何机器**都可留可不留"，会入库；
+`00-local` 是"**只有这台机器**才有"，不入库。KDE *应用*（dolphin/okular/gwenview）两者都不属于
+—— 它们不依赖 Plasma 会话，而且 `mimeapps.list`、`vars.lua`、`windowrules.lua` 直接点名了
+它们，所以留在 `20-desktop.txt` 入库。
+
+新机器上第一步：
+
+```bash
+cp pacman/00-local.example.txt pacman/00-local.txt   # 然后按自己的硬件删改
+```
+
+不做这一步的话，`pkg-sync` 会把本机的微码和显卡驱动全报成「系统里有、清单里没有」——
+它检测到缺文件时会直接提示。
+
+### `90-optional.txt` 是单向对账
+
+这一组里的包**装了不报「未记录」，没装也不报「缺包」**。所以它既能停放"装着但随时能删"的
+包（被更好方案取代的旧工具），也能停放"记着但暂时不装"的包（要 license 的、依赖特定硬件的、
+上游构建坏掉的）。其余组是双向对账：写进去就意味着"这台机器应该装它"。
+
 格式是每行一个包名，`#` 之后为注释，`[AUR]` 标记的包必须用 paru 装。行尾注释初版是 pacman
-自带的包描述，**逐步替换成"我为什么需要它"更有价值** —— `10-desktop.txt` 里那批中文注释是范例。
+自带的包描述，**逐步替换成"我为什么需要它"更有价值** —— `20-desktop.txt` 里那批中文注释是范例。
 
 ## 日常用法
 
 ```bash
 pkg-sync              # 双向对账
 pkg-sync repos        # 只检查前置仓库
-pkg-sync install      # 装 00~40 组(跳过 90-optional)
-pkg-sync install 30-dev 40-apps   # 只装指定组
+pkg-sync install      # 装 00~50 组(跳过 90-optional)
+pkg-sync install 40-dev 50-apps   # 只装指定组
 ```
 
 装了新包之后随手跑一次对账，它会报出「系统里有、清单里没有」，把包补进对应分组即可。
-反方向的「清单里有、系统没装」说明清单腐烂了（包被弃用或改名），删掉对应行。
+反方向的「清单里有、系统没装」有三种情况，别一律当腐烂处理：
+
+1. **包其实装着，只是被标成了 dependency** —— `pacman -Qqe` 收不到它。这是最常见的一种，
+   也正是下面坑 1、坑 2 说的定时炸弹。修法是 `sudo pacman -D --asexplicit <pkg>`，不是重装。
+   先分类再动手：
+
+   ```bash
+   pkg-sync | sed -n '/清单里有/,/^$/p' | sed -n 's/^  - //p' |
+     while read -r p; do pacman -Qq "$p" >/dev/null 2>&1 &&
+       echo "已装,改标记: $p" || echo "真的没装: $p"; done
+   ```
+
+2. **真的没装** —— 要么装上，要么想清楚不装、挪进 `90-optional.txt`。
+3. **清单腐烂**（包被弃用、改名、或从仓库下架）—— 删掉对应行，换成继任者。
 
 ## 迁移到新机器
 
 1. 先启用 `multilib` 和 `archlinuxcn` 仓库（见下方第 5 条坑），装好 `paru`
-2. `pkg-sync install 00-base` → 能开机联网
-3. `pkg-sync install 10-desktop` → 有图形界面
-4. 剩下的按需装，`90-optional` 想清楚再单独挑
+2. `cp 00-local.example.txt 00-local.txt`，按新机器的 CPU/GPU 改（`lscpu`、`lspci -k`）
+3. `pkg-sync install 00-local 10-base` → 能开机联网
+4. `pkg-sync install 20-desktop` → 有图形界面
+5. 剩下的按需装，`90-optional` 想清楚再单独挑
 
 ---
 
@@ -258,3 +309,95 @@ sudo paccache -ruk0     # 再清已卸载包的缓存;刚做过大批卸载时�
 
 `/var/cache/pacman/pkg/download-*` 是中断下载留下的暂存目录(root 0700,`du` 会报权限
 拒绝),`paccache` 不管它们,需要手工删。本机攒了 6 个共 292 MiB。
+
+### 15. 官方仓库里有的包，不要为了"快"去用 AUR 的 `-bin`
+
+`-bin` 的意义是**免掉本地编译**。但 `core`/`extra`/`multilib`/`archlinuxcn` 里的包本来就是
+别人编译好的二进制，同样不用本地编译，而且有签名、跟着仓库一起升级、不会像 AUR 包那样因为
+系统库 SONAME 变了就静默失效（坑 11）。所以取舍顺序是：
+
+**官方仓库 → archlinuxcn → AUR 的 `-bin` → AUR 源码包**
+
+只有仓库里根本没有的，才轮得到 `-bin`。本机的 `vicinae-bin` / `herdr-bin` / `tensaku-bin` /
+`ast-grep-bin` / `localsend-bin` / `telegram-desktop-bin` 都属于这一类。
+
+反过来，清单从别的机器抄过来时，`-bin` 这一栏最容易过期：
+
+- `jnv-bin` 已从 AUR 下架，`extra` 里的 `jnv` 就是它的继任者
+- `bpftool-bin` 同样下架，bpftool 现在由 `extra/bpf` 提供
+
+`pkg-sync` 报「清单里有、系统没装」而 `paru -Si <pkg>` 又查不到时，先去仓库里搜同名/近名的包，
+多半是这种"AUR 包被官方收编"的迁移，而不是清单写错了。
+
+### 16. AUR 包会因为上游而不是你而构建失败，要分清
+
+本机有两个 32 位运行时包卡在这上面（已挪进 `90-optional.txt` 并写明原因）：
+
+- `lib32-libcanberra`：源码在 `git.0pointer.net`，该站 TLS 证书域名不匹配，`git clone` 直接失败
+- `lib32-openal`：PKGBUILD 拿 64 位的 `/usr/lib/libmysofa.so` 去链 32 位目标，
+  `ld` 报 `file in wrong format`，而 multilib 里并没有 `lib32-libmysofa`
+
+这两种都不是坑 12 那种"本地 PATH 污染"，重建、清缓存、换干净 PATH 都没用。判断方法：
+报错发生在 **download/prepare 阶段**（拉不到源码）或指向 **PKGBUILD 自己的依赖声明**
+（链错架构的库、缺一个仓库里不存在的 lib32-*），就是上游的问题；报错发生在编译阶段、
+且报的是版本不兼容，才先怀疑本地环境。
+
+另外 `check()` 失败（跑上游测试用例挂了）不影响产物可用，`paru -S --nocheck <pkg>` 可以跳过 ——
+`grpcurl` 现在就得这么装。
+
+### 17. 本地构建的包会因为 pkgrel 更高而永久压住仓库版
+
+`pacman -Syu` 只在**仓库版本更高**时才替换。所以一个本地 `makepkg` 出来的包，只要 `pkgrel`
+比仓库那份大，就会**永远**留在系统里 —— 不报冲突、不报错、`-Syu` 天天跑也纹丝不动。
+
+实例：`isd` 启动即 `ModuleNotFoundError: No module named 'pfzy'`，但 `pacman -Qq python-pfzy`
+明明有，而且它就是 `isd` 声明的依赖。原因是本地那份 `python-pfzy 0.3.4-3` 是 2025-02 手工构建的，
+文件落在 `/usr/lib/python3.13/site-packages/`；系统 Python 早已升到 3.14，`isd` 也是按 3.14 打的包。
+仓库里的 `0.3.4-2` 才是正确的 3.14 构建，但 `-3 > -2`，pacman 认为本地更新，于是一直不换。
+
+**这和坑 11 是同一类"依赖关系满足、运行时却是坏的"，只是换成了 Python 侧**：SONAME 那套对
+Python 不适用，Python 认的是 `site-packages` 的版本号目录，大版本一跳，旧目录里的模块就再也
+`import` 不到了。
+
+判断一个包是不是本地构建的残留，看两个字段：
+
+```bash
+pacman -Qi python-pfzy | grep -E 'Packager|Validated|Build Date'
+# Packager : Unknown Packager    ← 官方包这里是维护者邮箱
+# Validated By : None            ← 官方包这里是 Signature
+```
+
+修法是显式指定仓库来源，把它降回去：
+
+```bash
+sudo pacman -S extra/python-pfzy
+```
+
+全库体检 —— 列出所有"本地版本高于仓库版本"的包（`expac` 批量查，逐个 `expac` 会慢到超时）：
+
+```bash
+export LC_ALL=C   # 不设的话 join 会因排序规则不一致而漏配
+expac -Q '%n %v' | sort -k1,1 > /tmp/lv
+expac -S '%n %v' | sort -u -k1,1 > /tmp/sv
+join /tmp/lv /tmp/sv | while read -r n lv sv; do
+  [[ $(vercmp "$lv" "$sv") -gt 0 ]] &&
+    printf '%-30s 本地 %-16s 仓库 %-16s %s\n' "$n" "$lv" "$sv" \
+      "$(pacman -Qi "$n" | sed -n 's/^Packager *: //p')"
+done
+```
+
+顺带查还有哪些包卡在旧 Python 目录里（Python 大版本升级后值得跑一次）：
+
+```bash
+for d in /usr/lib/python3.1[0-9]/site-packages/*/; do
+  [[ $d == /usr/lib/python$(python3 -c 'import sys;print(f"{sys.version_info.major}.{sys.version_info.minor}")')/* ]] && continue
+  pacman -Qoq "$d" 2>/dev/null
+done | sort -u
+```
+
+> 本机 2026-08-30 复核结果：`python-pfzy` 已修（降回 `extra` 版，isd 正常）。
+> 剩下 `python-pptx 1.0.2-6` 同样是本地构建、pkgrel 高于仓库，但文件在 3.14 里、能 import，
+> 暂时没坏 —— 下次 Python 大版本跳的时候它会以同样的方式静默失效，届时同法处理。
+> `python-textual-autocomplete 4.0.6-1`（本地构建、卡在 3.13、`import` 失败）和
+> `python-backports-zstd`（官方包，落在 3.13 是它的本职）两个都是 `Required By: None` 的孤儿，
+> 按坑 3 逐个 review 后再清。

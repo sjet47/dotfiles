@@ -1,14 +1,57 @@
-# 90-optional.txt — 可留可不留 —— 备选方案 / 一次性尝试 / 纯玩具。迁移时默认整组跳过,想清楚再单独装
+# 90-optional.txt — 可留可不留 —— 备选方案 / 一次性尝试 / 纯玩具
+#
+# 迁移时默认整组跳过,想清楚再单独装。
+# pkg-sync 对这一组只做单向对账:装了不会报"未记录",没装也不会报"缺包" ——
+# 所以这里既能停放"装着但随时能删"的包,也能停放"记着但暂时不装"的包。
 #
 # 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
-# ── 备选终端 (默认终端是 kitty,见 10-desktop) ───────────────────────────────
+# ── 已装但被更好的方案取代 —— 删了不影响日常,是清理时的下一批候选 ────────────────
+# 2026-08-30 已清掉一轮:mako(被 quickshell 取代)、swappy(无配置引用)、
+# dmenu(配置里的 dmenu 全是 vicinae 子命令,跟这个包无关)、mcfly(主力是 atuin)、
+# kplotting5(Required By 为空的残留)。下面这几个还留着,理由写在行尾。
+
+# ── 上游坏掉、当前装不上的 —— 修好了再挪回 50-apps 的 32 位运行时那批 ──────────────
+# 这两个原本属于 Steam/Proton 的 32 位运行时,multilib 已经不再提供,只剩 AUR,
+# 而 AUR 那两份现在都构建失败(2026-08-30 复核):
+lib32-libcanberra  # [AUR] 源码托管在 git.0pointer.net,该站 TLS 证书域名不匹配,拉不下来
+lib32-openal       # [AUR] PKGBUILD 拿 64 位的 /usr/lib/libmysofa.so 去链 32 位目标,
+                   # 报 "file in wrong format";multilib 里没有 lib32-libmysofa
+
+# ── 备选终端 (默认终端是 kitty,见 20-desktop) ──────────────────────────────
 cool-retro-term  # CRT 效果终端,纯玩具
 
+# ── KDE 小应用 / 教育 ────────────────────────────────────────────────────
+kstars    # 桌面天文馆
+marble    # 桌面地球仪
+ktouch    # 打字练习
+
+# ── 加密 / 逆向 / 专用硬件(记着但当前没装) ──────────────────────────────────
+binaryninja-personal  # [AUR] 逆向分析;要买 license,新机器上不自动装
+mongodb-compass-bin   # [AUR] MongoDB 图形客户端;本机没跑 MongoDB
+qflipper              # 给 Flipper Zero 刷固件;有这个硬件再装
+xboxdrv               # [AUR] 用户态手柄驱动;xone + xpadneo 已覆盖,只在它们失灵时顶上
+
+# ── 冷门语言链(记着但当前没装) ─────────────────────────────────────────────
+mlton  # Standard ML 全程序优化编译器
+
+# ── 交叉编译 / 嵌入式(装着,但只为一次性项目) ─────────────────────────────────
+riscv64-linux-gnu-binutils    # RISC-V Linux 目标的汇编/链接工具
+riscv64-unknown-elf-binutils  # RISC-V 裸机目标的汇编/链接工具
+riscv64-unknown-elf-gcc       # RISC-V 裸机交叉编译器
+
+# ── 加密货币(装着,但不是日常工具链的一部分) ───────────────────────────────────
+bitcoin-qt  # 全验证节点 + 钱包 GUI;同步全链要几百 GB
+electrum    # 轻钱包,不用同步全链
+
 # ── 一次性尝试 / 玩具 ────────────────────────────────────────────────────
+nvtop           # GPU 进程与显存占用;btop 和 nvidia-settings 已能覆盖,不是必需
+exercism        # [AUR] 刷 exercism.io 的题目;想起来才用一次
 lolcat          # 彩虹色输出,玩具
 imgcat          # [AUR] 终端里显示图片
+jp2a            # JPG 转 ASCII art
+figlet          # 把文字排成大号字符画
 gitlogue        # 把 git 历史放成动画
 gource          # 版本库演化可视化
 geogebra        # 动态几何/代数软件

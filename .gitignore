@@ -72,3 +72,7 @@ config/systemd/user/*
 
 # KDE/Plasma 自动生成,机器相关,只保留 conf.d 里我们自己的配置
 config/fontconfig/fonts.conf
+
+# pacman 清单:00-local.txt 是本机硬件专属(微码/显卡驱动/固件/引导),
+# 每台机器不一样,只入库模板 00-local.example.txt
+pacman/00-local.txt

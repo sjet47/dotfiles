@@ -1,0 +1,164 @@
+# 50-apps.txt — GUI 应用与专项工具 —— 迁移时按实际需要挑
+#
+# 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── 浏览器 / 邮件 ──────────────────────────────────────────────────────
+google-chrome  # [AUR] 主力浏览器;.desktop 里加了 Wayland 相关 flag
+thunderbird    # 邮件客户端;mimeapps.list 里是 mailto 默认
+
+# ── 笔记 / 阅读 / 文献 ──────────────────────────────────────────────────
+obsidian          # 知识库
+obsidian-cli-bin  # [AUR] 命令行开笔记/搜索/新建,脚本里往库里写东西
+typora            # [AUR] 所见即所得的 Markdown 编辑器;写长文比 obsidian 顺
+zotero-bin        # 文献管理
+foliate           # EPUB 阅读器
+calibre           # 电子书库管理与格式转换;给阅读器推书
+anki              # 间隔重复记忆
+
+# ── 办公 / 创作 ───────────────────────────────────────────────────────
+libreoffice-still  # 办公套件(维护分支,比 fresh 稳)
+gimp               # 图像编辑
+audacity           # 音频编辑
+obs-studio         # 直播/录制
+fontforge          # 字体编辑;配合 mkvtool 做字幕字体子集
+roomeqwizard       # [AUR] 房间声学测量;调音箱摆位和 easyeffects 的均衡曲线
+
+# ── 影音播放 ──────────────────────────────────────────────────────────
+mpv              # 视频播放;windowrules.lua 里有它的规则
+mpv-mpris        # 让 mpv 接入 MPRIS,媒体键和状态栏才能控制它
+vlc-plugins-all  # VLC 全解码器,冷门格式兜底
+vlc              # VLC 顶层包:拥有 vlc.desktop 启动器入口(二进制其实在 vlc-cli)
+mkvtool          # [AUR] mkv 内嵌字体子集化,压缩带字幕的片源体积
+
+# ── 自建服务 ──────────────────────────────────────────────────────────
+jellyfin-server  # 媒体库服务端;局域网里看片
+jellyfin-web     # Jellyfin 的 Web 前端(服务端单独一个包)
+
+# ── 下载 / 局域网传输 ────────────────────────────────────────────────────
+qbittorrent    # BT 下载
+localsend-bin  # [AUR] 局域网互传文件(AirDrop 替代)
+
+# ── 通讯 ────────────────────────────────────────────────────────────
+telegram-desktop-bin  # [AUR] Telegram 桌面端
+discord               # Discord 语音/文字聊天
+feishu-bin            # [AUR] 飞书;工作沟通,告警通知也从这来
+linuxqq-appimage      # [AUR] QQ(Electron 版)
+tiny                  # 终端 IRC 客户端
+
+# ── 密码 / 硬件密钥 ─────────────────────────────────────────────────────
+keepassxc                 # 密码管理(autostart + windowrules)
+yubikey-manager           # 配置 YubiKey
+yubico-authenticator-bin  # [AUR] YubiKey 上的 TOTP 图形客户端
+yubico-pam                # 用 YubiKey 做 sudo/登录的第二因子
+pam-u2f                   # FIDO U2F 的 PAM 模块;插着钥匙才能解锁
+
+# ── 代理 / VPN ──────────────────────────────────────────────────────
+v2raya          # 代理客户端的 Web GUI;用独立 xray-core,注意版本校验那个坑
+xray            # v2raya 的实际内核
+v2ray           # 老 v2ray-core;个别只认它的配置还在用
+throne          # sing-box 后端的图形代理管理器
+sing-geoip-db   # [AUR] sing-box 的 GeoIP 规则库
+sing-geosite-db # [AUR] sing-box 的 Geosite 规则库
+hysteria        # 基于 QUIC 的代理;丢包高的网络下比 TCP 系稳
+gost            # 通用隧道/端口转发,临时搭链路
+cgproxy-git     # 基于 cgroup2 的透明代理,按进程分流
+cloudflared-bin # [AUR] Cloudflare Tunnel 客户端;把本地服务暴露出去不用公网 IP
+frpc            # 内网穿透客户端;wayvnc 跨公网就走它
+tailscale       # 组网 VPN;已装未启用
+openvpn3        # [AUR] OpenVPN 3 客户端。**必须用干净 PATH 构建**:
+                #   PATH="/usr/bin:$PATH" paru -S --rebuild openvpn3
+                #   否则项目里的旧 protoc 会盖住系统版本导致编译失败,见 README 坑 12;
+                #   abseil/protobuf 升级后还需重建,见坑 11
+
+# ── 网络诊断 / 抓包 ─────────────────────────────────────────────────────
+nmap          # 端口扫描/主机发现
+tcpdump       # 命令行抓包
+tcpreplay     # 重放 pcap
+ssldump       # [AUR] 解析 TLS 握手
+mtr           # 路由+丢包连续探测
+traceroute    # 路由跟踪
+trippy        # 更现代的 mtr 替代
+nexttrace     # 带地理可视化的路由追踪;查跨境线路绕行
+bind          # dig/host 等 DNS 查询工具
+gnu-netcat    # [AUR] 网络管道瑞士刀
+geoip         # IP 归属地库;代理规则和 nexttrace 都会读
+sniffnet      # 图形化流量监控
+wireshark-qt  # 图形化抓包分析
+nali-go-bin   # [AUR] 离线查 IP 归属地/CDN 厂商;alias/utils 里在用
+ethtool       # 网卡链路状态/offload/ring buffer 诊断
+
+# ── 数据库 / API 客户端 ─────────────────────────────────────────────────
+reqable-bin  # [AUR] HTTP 抓包与调试
+
+# ── 虚拟化 / 磁盘 / 硬件 ─────────────────────────────────────────────────
+virtualbox            # 虚拟机
+virtualbox-host-dkms  # VirtualBox 的内核模块(DKMS 版,跟着内核滚动重建)
+virtualbox-guest-iso  # Guest Additions 光盘镜像,装完虚拟机第一件事
+virtualbox-ext-vnc    # 让虚拟机的显示走 VNC,不开 GUI 也能连
+wine                  # 跑 Windows 程序
+gparted               # 图形化分区
+gnome-disk-utility    # 图形化查 SMART / 挂载 / 做镜像;比 gparted 日常
+kdiskmark             # 磁盘顺序/随机读写跑分
+rpi-imager            # 给树莓派烧系统卡
+usbimager             # [AUR] 极简的镜像写盘工具,不认 rpi 那套在线镜像列表时用它
+
+# ── 加密货币 ──────────────────────────────────────────────────────────
+
+# ── 游戏 / 手柄 ───────────────────────────────────────────────────────
+steam                 # 游戏平台
+minecraft-launcher    # 官方 MC 启动器
+prismlauncher         # MC 多实例启动器
+protonhax             # [AUR] 在 Proton 容器里执行外部程序
+xone-dkms-git         # Xbox 手柄驱动(有线/无线适配器)
+xone-dongle-firmware  # [AUR] Xbox 无线适配器的固件;缺了 xone 驱动加载不了 dongle
+xpadneo-dkms          # Xbox 蓝牙手柄驱动
+
+# ── Steam/Proton 32 位运行时 ────────────────────────────────────────
+# 整批为跑 32 位游戏装的,单个拆开看没有意义,所以不逐个写注释。
+# 都是显式安装且 Required By 为空 —— 不显式的话会被当孤儿扫掉,游戏就起不来。
+# 不玩游戏的机器整块跳过即可。
+# Wine/Proton 在运行时按名加载这些,不体现为任何包的依赖 —— 孤儿清理会
+# 一次性扫光(音频 openal/libpulse/mpg123、输入 libx*、DX12 翻译 vkd3d)。
+# 已 pacman -D --asexplicit 钉住,勿改回 asdeps。
+# 显卡侧的 32 位库(lib32-nvidia-utils / lib32-vulkan-*)在 00-local.txt,不在这里。
+lib32-acl
+lib32-audit
+lib32-flac
+lib32-gettext
+lib32-glu
+lib32-gst-plugins-base-libs
+lib32-gstreamer
+lib32-lcms2
+lib32-libasyncns
+lib32-libcap
+lib32-libgudev
+lib32-libjpeg-turbo
+lib32-libjpeg6-turbo
+lib32-libltdl
+lib32-libnl
+lib32-libnsl
+lib32-libogg
+lib32-libpcap
+lib32-libpulse
+lib32-libsndfile
+lib32-libtiff
+lib32-libtirpc
+lib32-libudev0-shim
+lib32-libunwind
+lib32-libusb
+lib32-libvorbis
+lib32-libxcursor
+lib32-libxi
+lib32-libxrandr
+lib32-libxrender
+lib32-libxtst
+lib32-libxv
+lib32-mpg123
+lib32-ocl-icd
+lib32-opus
+lib32-orc
+lib32-pam
+lib32-tdb
+lib32-udis86-git
+lib32-vkd3d

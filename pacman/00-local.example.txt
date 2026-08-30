@@ -1,0 +1,62 @@
+# 00-local.example.txt — 00-local.txt 的模板 —— 这份入库,00-local.txt 不入库
+#
+# 新机器上 `cp 00-local.example.txt 00-local.txt`,再按自己的硬件删改。
+# 没有 00-local.txt 的话,pkg-sync 会把本机的微码/显卡驱动全报成"系统里有、清单里没有"。
+#
+# 这份清单收两类东西,共同点是"不该跟着仓库复制到别的机器上":
+#   1. 硬件绑定 —— 微码/显卡驱动/固件/引导/只连在这台机器上的外设
+#   2. 本机的历史包袱 —— 见文件末尾那节
+#
+# 怎么确认自己的硬件:
+#   lscpu | grep 'Model name'          # CPU 厂商 → 选微码
+#   lspci -k | grep -A3 -E 'VGA|3D'    # GPU 型号与在用驱动 → 选显卡驱动栈
+#   ls /boot                           # 看现在是 refind / systemd-boot / grub
+
+# ── 微码 / 固件 ────────────────────────────────────────────────────────
+linux-firmware  # 各类硬件固件;所有机器都要
+alsa-firmware   # 部分声卡的加载器固件
+sof-firmware    # 数字麦克风与音频 DSP 固件
+
+# 二选一,别都装:
+intel-ucode     # Intel CPU
+# amd-ucode     # AMD CPU
+
+# ── 引导 ──────────────────────────────────────────────────────────────
+refind          # 换成实际在用的引导器:refind / systemd-boot(不需要包)/ grub
+
+# ── 显卡:按 GPU 厂商整块选一套 ───────────────────────────────────────────
+
+# NVIDIA(Turing 及更新用 nvidia-open,更老的用 nvidia-dkms)
+nvidia-open
+nvidia-settings
+nvidia-container-toolkit
+lib32-nvidia-utils
+# cuda                      # 只有要跑 GPU 计算/本地推理才装,体积很大
+
+# AMD —— 换到 AMD 机器时启用这块,并把上面 NVIDIA 那块删掉
+# vulkan-radeon             # AMD 显卡的 Vulkan 驱动
+# lib32-vulkan-radeon       # 32 位 Vulkan;Steam 里的 32 位游戏要用
+# xf86-video-amdgpu         # XWayland 下的 amdgpu 驱动
+
+# Intel 核显(有核显就装,独显机器留着当兜底)
+vulkan-intel
+lib32-vulkan-intel
+lib32-mesa                  # 32 位 OpenGL;AMD 机器也要这个
+
+# ── 本机专属外设 ────────────────────────────────────────────────────────
+# 只连在这台机器上的硬件,它们的驱动/控制工具写在这里。手柄、键盘固件、灯控之类。
+# openrgb
+# dualsensectl
+
+# ── 本机的历史包袱(按需填,模板里留空) ─────────────────────────────────────
+# 入库清单描述的是"这套 dotfiles 想要的系统":桌面只有 Hyprland 一系。
+# 某台机器上多出来的东西 —— 装机时留下的另一个桌面环境、给某个一次性项目装的
+# 服务端、公司要求装的客户端 —— 属于这台机器的情况,写这里,别写进入库清单,
+# 否则新机器按仓库装完会莫名其妙多出一堆东西。
+#
+# 本机(Intel+NVIDIA 台式)的例子,换机时不要照抄:
+#   plasma-meta     # 整套 KDE Plasma 会话,与 Hyprland 并存
+#   kwallet-pam
+#   packagekit
+#   packagekit-qt5
+#   dconf-editor

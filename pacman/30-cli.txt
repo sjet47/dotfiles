@@ -1,4 +1,4 @@
-# 20-cli.txt — 日常 CLI —— 交互习惯全靠这组,迁移后第一时间要有
+# 30-cli.txt — 日常 CLI —— 交互习惯全靠这组,迁移后第一时间要有
 #
 # 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
@@ -6,7 +6,7 @@
 # ── shell / 多路复用 / 历史 ─────────────────────────────────────────────
 zsh       # 默认 shell;配置在 zshrc,插件用 submodule 不走 OMZ
 tmux      # 终端复用;配置 tmux.conf,带 resurrect 会话恢复
-zellij    # 另一个终端复用,备选
+zellij    # 另一个终端复用,备选;config/zellij 在库里
 starship  # 跨 shell 提示符
 atuin     # shell 历史(可同步、可搜索)
 
@@ -18,19 +18,23 @@ fd    # find 的现代替代
 # ── 搜索 / 查看 ───────────────────────────────────────────────────────
 ripgrep       # 主力全文搜索
 ugrep         # 带交互 TUI 的 grep,复杂查询时用
-ast-grep-bin  # 按语法树结构搜索/重写代码,跨文件重构用
+ast-grep-bin  # [AUR] 按语法树结构搜索/重写代码,跨文件重构用;取 -bin 免本地编译
 bat           # 带语法高亮的 cat
 fzf           # 模糊选择器;shell 和一堆脚本的交互基座
 hexyl         # 十六进制查看;排查换行符之类的字节问题
+binwalk       # 在固件/镜像里找嵌入的文件系统与压缩块
 
-# ── JSON / YAML / Markdown ────────────────────────────────────────
-jq       # 脚本解析 hyprctl JSON(截图/录屏选区)
-yq       # YAML/XML/TOML 版的 jq
-gron     # 把 JSON 拍平成可 grep 的行
-jnv-bin  # [AUR] 交互式 jq,边写边看结果
-glow     # 终端里渲染 Markdown
+# ── JSON / YAML / Markdown / 二进制 ────────────────────────────────────
+jq    # 脚本解析 hyprctl JSON(截图/录屏选区、CLAUDE.md 里的 layer 取景)
+yq    # YAML/XML/TOML 版的 jq
+gron  # 把 JSON 拍平成可 grep 的行
+jnv   # 交互式 jq,边写边看结果(extra 里就有预编译包,不必用 AUR 的 jnv-bin)
+jc    # 把 ip/df/lsblk 这类老命令的输出转成 JSON,再接 jq
+fq    # jq 的二进制版:直接对 mp4/pcap/elf 做结构化查询
+glow  # 终端里渲染 Markdown
 
 # ── git 工具链 ───────────────────────────────────────────────────────
+git           # 版本控制本体;整个 dotfiles 仓库的基础
 lazygit       # git 的 TUI;配置在 config/lazygit,diff 用 difftastic
 github-cli    # GitHub 的 PR/issue 命令行
 glab          # GitLab 的 MR/CI 命令行(日常主要用这个)
@@ -40,33 +44,38 @@ lucky-commit  # 定制 commit hash 前缀
 tokei         # 代码行数统计
 
 # ── 系统观测 ──────────────────────────────────────────────────────────
-htop                 # 进程查看
-btop                 # 资源监视;windowrules.lua 里有它的浮窗规则
-iotop                # 看磁盘 I/O 占用
-smem                 # [AUR] 按 PSS 统计内存,比 RSS 准
-duf                  # 磁盘占用总览
-dust                 # 目录占用排行
-lnav                 # 日志查看与分析
-hl                   # 结构化日志查看(JSON 日志友好)
-systemd-manager-tui  # [AUR] 终端里管 systemd 单元
-fastfetch            # 系统信息
-cpufetch             # 看 CPU 架构信息
-hwinfo               # 硬件探测;排查驱动问题时用
-impala               # 终端里连 WiFi
+htop       # 进程查看
+btop       # 资源监视;windowrules.lua 里有它的浮窗规则
+iotop      # 看磁盘 I/O 占用
+smem       # [AUR] 按 PSS 统计内存,比 RSS 准
+duf        # 磁盘占用总览
+dust       # 目录占用排行
+lnav       # 日志查看与分析
+hl         # 结构化日志查看(JSON 日志友好)
+isd        # 交互式 systemd TUI;查/改单元状态(替代过去清单里的 systemd-manager-tui)
+libtree    # 树状展示 ELF 的动态库依赖;排查 README 坑 11 那类 SONAME 断链
+fastfetch  # 系统信息
+cpufetch   # 看 CPU 架构信息
+hwinfo     # 硬件探测;排查驱动问题时用
 dmidecode  # 读 BIOS/主板/内存槽位硬件信息
+impala     # 终端里连 WiFi
 
 # ── 文档 / 图形 / 排版 ──────────────────────────────────────────────────
-graphviz        # dot 画图;文档和调试图用
-graphicsmagick  # 批量图片处理
-resvg           # SVG 转 PNG
-typst           # 排版;写 PDF 文档用
-hugo            # 静态站点生成
-presenterm      # 终端里放 Markdown 幻灯片
+graphviz            # dot 画图;文档和调试图用
+imagemagick         # 批量转格式/缩放/拼图;脚本里的图片处理都调 magick
+resvg               # SVG 转 PNG
+typst               # 排版;写 PDF 文档用
+typstfmt            # [AUR] typst 源码格式化
+hugo                # 静态站点生成
+presenterm          # 终端里放 Markdown 幻灯片
+perl-image-exiftool # 读写 EXIF;截图/相机文件批量改元数据、清定位信息
+tesseract-git       # [AUR] OCR 引擎;截图取字、python-tesserocr 的后端
 
 # ── 传输 / 下载 ───────────────────────────────────────────────────────
-rclone  # 同步云存储
-qrcp    # [AUR] 扫码在手机和电脑间传文件
-yt-dlp  # 下载视频;scripts/ytd 是它的封装
+rclone         # 同步云存储
+qrcp           # [AUR] 扫码在手机和电脑间传文件
+yt-dlp         # 下载视频;scripts/ytd 是它的封装
+speedtest-cli  # 命令行测宽带;换网络/查限速时先跑它
 
 # ── 杂项 ────────────────────────────────────────────────────────────
 moreutils        # sponge/ts/parallel 等零碎 unix 工具
@@ -74,10 +83,10 @@ pv               # 管道进度条
 bc               # 命令行计算器;脚本里做浮点运算
 just             # 项目级命令入口(替代 make 跑任务)
 shfmt            # shell 脚本格式化
+yamllint         # YAML lint(ruff 管 Python,shfmt 管 shell,这个补 YAML)
 tldr             # 命令的常用示例,比 man 快
 gum              # 给 shell 脚本做交互组件(选择/输入/确认)
 zoxide           # 按频率跳目录的 cd 替代
 tree-sitter-cli  # neovim 的语法解析器构建/调试
-inotify-tools  # inotifywait/inotifywatch,脚本里监听文件变更
-trash-cli      # trash-put/list/restore/empty,命令行走回收站而不是真删
-yamllint       # YAML lint(ruff 管 Python,shfmt 管 shell,这个补 YAML)
+inotify-tools    # inotifywait/inotifywatch,脚本里监听文件变更
+trash-cli        # trash-put/list/restore/empty,命令行走回收站而不是真删

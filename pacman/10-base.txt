@@ -1,24 +1,15 @@
-# 00-base.txt — 系统底座 —— 装机第一步,缺了开不了机或联不上网
+# 10-base.txt — 系统底座 —— 装机第一步,缺了开不了机或联不上网
+#
+# 只放跟硬件无关、每台机器都一样的东西。微码/显卡驱动/固件/引导在 00-local.txt(不入库)。
 #
 # 行尾注释写的是"这台机器为什么需要它",不是 pacman 的包描述 —— 新增包时照此写。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
 
-# ── 内核 / 固件 / 微码 ──────────────────────────────────────────────────
-base            # Arch 基础包组,系统最小集
-base-devel      # 编译工具链;paru 构建 AUR 包必需
-linux           # 内核
-linux-headers   # 编译内核模块用;xone/xpadneo 等 DKMS 驱动必需
-linux-firmware  # 各类硬件固件
-amd-ucode       # AMD CPU 微码更新(引导时加载)
-alsa-firmware   # 部分声卡的加载器固件
-sof-firmware    # Intel/AMD 数字麦克风与音频 DSP 固件
-
-# ── 引导 / AMD 显卡驱动 ─────────────────────────────────────────────────
-refind               # EFI 引导管理器;要加内核参数(如将来补 resume=)在它的配置里改
-vulkan-radeon        # AMD 显卡的 Vulkan 驱动
-lib32-vulkan-radeon  # 32 位 Vulkan;Steam 里的 32 位游戏要用
-lib32-mesa           # 32 位 OpenGL;同上
-xf86-video-amdgpu    # XWayland 下的 amdgpu 驱动
+# ── 内核 ──────────────────────────────────────────────────────────────
+base           # Arch 基础包组,系统最小集
+base-devel     # 编译工具链;paru 构建 AUR 包必需
+linux          # 内核
+linux-headers  # 编译内核模块用;nvidia-open/xone/xpadneo/virtualbox 等 DKMS 驱动必需
 
 # ── 包管理 ───────────────────────────────────────────────────────────
 archlinuxcn-keyring  # archlinuxcn 仓库的签名密钥;不装则该仓库的包全部验签失败
@@ -26,8 +17,11 @@ paru                 # AUR helper;pkg-sync install 用它装 [AUR] 标记的包
 pacman-contrib       # paccache 清缓存 / checkupdates 安全查更新 / pactree 查依赖树
 expac                # 查询包元数据;pkg-sync 生成清单时用过
 reflector            # 按速度筛选并重排官方 mirrorlist
+rate-mirrors         # 按测速重排 mirrorlist(reflector 的替代,两个都留着对比)
 kernel-modules-hook  # 滚内核后保留旧模块目录,不重启也能加载模块(DKMS 驱动多,必需)
-rate-mirrors         # 按测速重排 mirrorlist
+devtools             # extra-x86_64-build 等纯净 chroot 构建;排查"本地环境污染"那类坑用
+arch-install-scripts # pacstrap/genfstab/arch-chroot;救援盘里重装或修系统靠它
+debtap               # [AUR] 把 .deb 转成 Arch 包;偶有厂商只发 deb 时的最后手段
 
 # ── 网络基础 ──────────────────────────────────────────────────────────
 networkmanager        # 网络连接管理;waybar 网络模块与 nmcli 都依赖它
@@ -43,17 +37,24 @@ wget                  # 命令行下载
 ntfs-3g        # 读写 NTFS 分区(挂 Windows 盘或 U 盘)
 nfs-utils      # 挂载 NFS 共享
 sshfs          # 用 ssh 挂远程目录(alias/utils 里有封装)
+samba          # SMB 共享的服务端与 smbclient;跟 Windows/NAS 互传
+httpdirfs-git  # [AUR] 把 HTTP 目录列表挂成只读文件系统,不下载就能翻远端归档
+cryfs          # 加密目录后再往网盘同步,云端存的是密文
 usbutils       # lsusb 查 USB 设备
 rsync          # 增量同步/备份(alias/utils 里在用)
 smartmontools  # 磁盘 SMART 健康检测(smartctl)
 btrfs-progs    # 根分区是 btrfs;缺了 mkinitcpio 的 fsck hook 会报 No fsck helpers found
+gptfdisk       # gdisk/sgdisk 命令行改 GPT 分区表;装机和修引导时用
 
 # ── 归档解压 ──────────────────────────────────────────────────────────
-7zip   # 7z 解压
-zip    # 生成 zip(mimeapps.list 里关联了压缩包)
-unzip  # 解 zip
-unrar  # 解 rar
-cpio   # mkinitcpio 生成 initramfs 需要
+7zip        # 7z 解压
+zip         # 生成 zip(mimeapps.list 里关联了压缩包)
+unzip       # 解 zip
+unrar       # 解 rar
+cpio        # mkinitcpio 生成 initramfs 需要
+lrzip       # 大文件长距离冗余压缩;备份整目录时比 xz 省
+lzop        # 极快的 lzo 压缩,拿来做临时打包
+unarchiver  # unar/lsar;能正确处理带中文/日文文件名的旧 zip,unzip 会乱码
 
 # ── 系统基础工具 ────────────────────────────────────────────────────────
 cronie                 # 定时任务守护
@@ -64,10 +65,14 @@ less                   # 分页器;man 和 git 的默认 pager
 tree                   # 目录树
 plocate                # 秒级 locate 文件查找
 power-profiles-daemon  # 电源模式切换
+sysstat                # sar/iostat/pidstat;要看"半小时前那阵卡顿"只能靠它的历史采样
+busybox                # 单文件工具箱;coreutils 被自己搞坏时的救命稻草
+fbset                  # 查/设 framebuffer 模式;显卡驱动没起来只剩 tty 时排查用
+fail2ban               # 扫 sshd 日志封暴力破解 IP;本机 sshd 对外开着
 
 # ── 打印 ────────────────────────────────────────────────────────────
-cups      # 打印服务守护
-cups-pdf  # 虚拟"打印成 PDF"打印机
+cups           # 打印服务守护
+cups-pdf       # 虚拟"打印成 PDF"打印机
 print-manager  # 图形化打印机配置(未装 system-config-printer,删了只剩 CUPS 网页版)
 
 # ── 蓝牙 ────────────────────────────────────────────────────────────
