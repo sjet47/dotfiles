@@ -45,6 +45,11 @@
             "connectionToggleable": true
          }
       },
+      "@dagimg-dot/store.vicinae.wifi-commander": {
+         "preferences": {
+            "network-cli-tool": "nmcli"
+         }
+      },
       "@destiner/store.raycast.unix-timestamp": {
          "preferences": {
             "format": "seconds",
