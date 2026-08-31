@@ -162,16 +162,38 @@ Scope {
                         required property var modelData
                         readonly property var n: card.modelData
 
-                        // 截图通知带 -i <图片路径>,mako 里给它开了 max-icon-size=80
-                        readonly property bool bigImage: /Screenshot|截图/.test(card.n.summary ?? "")
-                        readonly property int  iconSize: card.bigImage ? 80 : 32
+                        // macOS 的分槽:appIcon 是"应用自己的图标"放左,image 是"附件"放右。
+                        // 这不是猜的 —— 实测 notify-send -i <路径> 进的是 image
+                        // (值形如 image://icon/<路径>,appIcon 反而是空),
+                        // 而 kitty / 飞书是 appIcon=自己的 logo 路径、image 为空。
+                        readonly property string appIconSrc: {
+                            const i = card.n.appIcon ?? "";
+                            if (i === "") return "";
+                            return (i.startsWith("/") || i.startsWith("file:")) ? i : Quickshell.iconPath(i, true);
+                        }
+                        readonly property string attachSrc: card.n.image ?? ""
+
+                        // 非 default 的 action —— default 不画按钮,它是"点卡片"那一下
+                        readonly property var actionList:
+                            (card.n.actions ?? []).filter(a => a.identifier !== "default")
+                        // 右槽二选一:有按钮就放按钮,否则放附件缩略图
+                        readonly property var shownActions: card.actionList.slice(0, 2)
+
+                        width: parent.width
+                        // 高度固定,不跟内容长 —— 正文超过 2 行由 elide 截断。
+                        // macOS 横幅就是定高的,长短不一的卡片堆在一起很乱。
+                        height: 88
+                        radius: 16
+                        color: "#d9f5f5f7"
+                        border.width: 1
+                        border.color: card.n.urgency === NotificationUrgency.Critical ? "#ff453a"
+                                    : card.n.urgency === NotificationUrgency.Low      ? "#e5e5ea"
+                                    : "#d2d2d7"
 
                         // 初始位置在屏外右侧、全透明,由 enterAnim 拉进来。
-                        // 直接从 x=0 满不透明开始的话,会和还在下移的旧卡片重叠。
                         transform: Translate { id: slide; x: 460 }
                         opacity: 0
 
-                        // 进场:从右滑入 + 淡入,与 Column 的 move 过渡并行
                         ParallelAnimation {
                             id: enterAnim
                             running: true
@@ -180,9 +202,6 @@ Scope {
                             NumberAnimation { target: card; property: "opacity"
                                               to: 1; duration: 260; easing.type: Easing.OutCubic }
                         }
-
-                        // 退场:向右滑出 + 淡出。动画期间 delegate 必须还活着,
-                        // 所以真正从 model 摘掉要等 onFinished,否则一 drop 就销毁,没机会播。
 
                         ParallelAnimation {
                             id: exitAnim
@@ -206,34 +225,11 @@ Scope {
                             }
                         }
 
-                        // act 是动画结束后要做的事(expire / dismiss / invoke)
                         function close(act) {
                             if (exitAnim.running) return;
                             exitAnim.act = act ?? null;
                             exitAnim.start();
                         }
-
-                        readonly property string pic: {
-                            if (card.n.image) return card.n.image;
-                            const i = card.n.appIcon ?? "";
-                            if (i === "") return "";
-                            return (i.startsWith("/") || i.startsWith("file:")) ? i : Quickshell.iconPath(i, true);
-                        }
-
-                        // 非 default 的 action —— default 不画按钮,它是"点卡片"那一下
-                        readonly property var actionList:
-                            (card.n.actions ?? []).filter(a => a.identifier !== "default")
-
-                        width: parent.width
-                        implicitHeight: layout.implicitHeight
-                        radius: 12                                // mako border-radius=12
-                        // mako 的 #f5f5f7d9 是 RRGGBBAA,而 Qt 的八位色是 AARRGGBB ——
-                        // 照抄字符串会被读成 96% 不透明的米黄色,要换序。
-                        color: "#d9f5f5f7"                        // = mako background-color
-                        border.width: 1                           // mako border-size=1
-                        border.color: card.n.urgency === NotificationUrgency.Critical ? "#ff453a"
-                                    : card.n.urgency === NotificationUrgency.Low      ? "#e5e5ea"
-                                    : "#d2d2d7"
 
                         // critical 不自动消失(mako 的 [urgency=critical] default-timeout=0)
                         Timer {
@@ -250,7 +246,6 @@ Scope {
                                     card.close(n => n.dismiss());
                                     return;
                                 }
-                                // 左键触发 default action(截图的"标注"、录屏的"打开"都靠它)
                                 card.close(function (n) {
                                     const def = (n.actions ?? []).find(a => a.identifier === "default");
                                     if (def) def.invoke(); else n.dismiss();
@@ -258,125 +253,106 @@ Scope {
                             }
                         }
 
-                        ColumnLayout {
-                            id: layout
-                            anchors.fill: parent
-                            spacing: 0
-
                         RowLayout {
-                            id: row
-                            Layout.fillWidth: true
-                            Layout.leftMargin: 15    // mako padding 的左右部分
-                            Layout.rightMargin: 15
-                            Layout.topMargin: 10     // mako padding 的上下部分
-                            Layout.bottomMargin: 10
+                            anchors.fill: parent
+                            anchors.margins: 12
                             spacing: 12
 
+                            // ── 左:应用图标 ──
                             Image {
-                                visible: card.pic !== ""
-                                source: card.pic
-                                Layout.preferredWidth: card.iconSize
-                                Layout.preferredHeight: card.iconSize
+                                visible: card.appIconSrc !== ""
+                                source: card.appIconSrc
+                                Layout.preferredWidth: 40
+                                Layout.preferredHeight: 40
                                 Layout.alignment: Qt.AlignVCenter
                                 fillMode: Image.PreserveAspectFit
                                 asynchronous: true
-                                // 截图通知传的是整张 4K PNG,不限制就按原分辨率解进内存
-                                sourceSize.width: card.iconSize * 2
-                                sourceSize.height: card.iconSize * 2
+                                sourceSize.width: 80
+                                sourceSize.height: 80
                             }
 
+                            // ── 中:标题 + 正文 ──
                             ColumnLayout {
                                 Layout.fillWidth: true
+                                Layout.alignment: Qt.AlignVCenter
                                 spacing: 2
 
                                 Text {
                                     Layout.fillWidth: true
                                     text: card.n.summary ?? ""
-                                    color: "#1d1d1f"                    // mako text-color
+                                    color: "#1d1d1f"
                                     font.family: "Noto Sans"
-                                    font.pixelSize: 14                  // mako font=sans-serif 14px
+                                    font.pixelSize: 14
                                     font.bold: true
                                     elide: Text.ElideRight
+                                    maximumLineCount: 1
                                 }
                                 Text {
                                     Layout.fillWidth: true
                                     visible: (card.n.body ?? "") !== ""
-                                    // body 里是真换行符(0a,xxd 实测),而 StyledText 是 HTML 语义会把它
-                                    // 折叠成空格,所以要换成 <br/>。mako 是渲染成换行的,对齐它。
+                                    // body 里是真换行符(0a),StyledText 是 HTML 语义会折叠成空格
                                     text: (card.n.body ?? "").replace(/\n/g, "<br/>")
                                     color: "#1d1d1f"
                                     font.family: "Noto Sans"
                                     font.pixelSize: 14
-                                    textFormat: Text.StyledText          // 通知规范的 Pango 子集,mako 亦然
+                                    textFormat: Text.StyledText
                                     wrapMode: Text.Wrap
-                                    maximumLineCount: 3
+                                    maximumLineCount: 2      // 定高卡片,正文最多两行
                                     elide: Text.ElideRight
                                 }
-
                             }
-                        }
 
-                        // 按钮不做成卡片里浮着的独立方块,而是把胶囊下半部分切出来:
-                        // 一条横线分隔,按钮之间用竖线分,于是它们读起来是胶囊的一部分。
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 1
-                            visible: card.actionList.length > 0
-                            // 用黑色 alpha 而不是固定灰:卡片是半透明的,合成后约 rgb(213,213,215),
-                            // 跟边框色 #d2d2d7(210,210,215)几乎同色 —— 那样画出来根本看不见。
-                            color: "#26000000"
-                        }
+                            // ── 右:按钮竖排(优先) ──
+                            ColumnLayout {
+                                visible: card.shownActions.length > 0
+                                Layout.alignment: Qt.AlignVCenter
+                                spacing: 6
 
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 36   // 40 太重、32 太小,36 是试出来的平衡点
-                            visible: card.actionList.length > 0
-                            spacing: 0
+                                Repeater {
+                                    model: card.shownActions
 
-                            Repeater {
-                                model: card.actionList
+                                    delegate: Rectangle {
+                                        id: btn
+                                        required property var modelData
 
-                                delegate: Item {
-                                    id: btn
-                                    required property var modelData
-                                    required property int index
-
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-
-                                    // 悬停高亮要按位置带上卡片的下角圆角,否则方角会捅出胶囊外。
-                                    // Qt 6.7+ 才有单角圆角(本机 6.11)。
-                                    Rectangle {
-                                        anchors.fill: parent
-                                        color: hover.containsMouse ? "#14000000" : "transparent"
-                                        bottomLeftRadius:  btn.index === 0 ? card.radius : 0
-                                        bottomRightRadius: btn.index === card.actionList.length - 1 ? card.radius : 0
+                                        Layout.preferredWidth: Math.max(64, label.implicitWidth + 20)
+                                        Layout.preferredHeight: 26
+                                        radius: 6
+                                        color: hover.containsMouse ? "#26000000" : "#14000000"
                                         Behavior on color { ColorAnimation { duration: 100 } }
-                                    }
 
-                                    // 竖分隔线:第一个按钮左边不画
-                                    Rectangle {
-                                        visible: btn.index > 0
-                                        width: 1
-                                        height: parent.height
-                                        color: "#26000000"
-                                    }
-
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: btn.modelData.text
-                                        color: "#1d1d1f"
-                                        font.family: "Noto Sans"
-                                        font.pixelSize: 13
-                                    }
-
-                                    MouseArea {
-                                        id: hover
-                                        anchors.fill: parent
-                                        hoverEnabled: true
-                                        onClicked: card.close(() => btn.modelData.invoke())
+                                        Text {
+                                            id: label
+                                            anchors.centerIn: parent
+                                            text: btn.modelData.text
+                                            color: "#1d1d1f"
+                                            font.family: "Noto Sans"
+                                            font.pixelSize: 12
+                                        }
+                                        MouseArea {
+                                            id: hover
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            onClicked: card.close(() => btn.modelData.invoke())
+                                        }
                                     }
                                 }
+                            }
+
+                            // ── 右:附件缩略图(没按钮时才出现) ──
+                            Image {
+                                visible: card.shownActions.length === 0 && card.attachSrc !== ""
+                                source: card.attachSrc
+                                Layout.preferredWidth: 56
+                                Layout.preferredHeight: 56
+                                Layout.alignment: Qt.AlignVCenter
+                                // 必须 Fit 不能 Crop:截图是 16:9 的 4K 图,裁成正方形
+                                // 只会显示中心一小块没有意义的区域,看不出截了什么。
+                                // Fit 之后是一条横带,四角本来就透明,所以也不需要圆角遮罩。
+                                fillMode: Image.PreserveAspectFit
+                                asynchronous: true
+                                sourceSize.width: 112
+                                sourceSize.height: 112
                             }
                         }
                         }
@@ -385,4 +361,3 @@ Scope {
             }
         }
     }
-}
