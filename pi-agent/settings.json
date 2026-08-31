@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.84.3",
+  "lastChangelogVersion": "0.84.4",
   "defaultProvider": "sub2api-openai",
   "defaultModel": "deepseek-v4-flash",
   "defaultThinkingLevel": "high",
