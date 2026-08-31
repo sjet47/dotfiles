@@ -182,9 +182,9 @@ Scope {
 
                         width: parent.width
                         // 高度跟着内容走,正文最多 4 行 —— 这是对着 macOS 实机截图定的:
-                        // 单行正文的横幅很扁,多行的明显长,并不是定高。下限 64 保证
+                        // 单行正文的横幅很扁,多行的明显长,并不是定高。下限 56 保证
                         // 只有标题时也不会瘦成一条。
-                        implicitHeight: Math.max(64, row.implicitHeight + 24)
+                        implicitHeight: Math.max(56, row.implicitHeight + 16)
                         radius: 18
                         color: "#d9f5f5f7"
                         border.width: 1
