@@ -15,6 +15,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -263,16 +264,39 @@ Scope {
                             spacing: 12
 
                             // ── 左:应用图标 ──
-                            Image {
+                            // 圆角遮罩裁剪。注意这对不同图标效果不同:
+                            //   飞书 —— 自带白色圆角方底,本来就是圆的,遮罩基本不改变什么
+                            //   kitty —— 猫头,四周全透明,没有角可裁,遮罩等于没加
+                            // 真正生效的是那些直角不透明方图。
+                            Item {
                                 visible: card.appIconSrc !== ""
-                                source: card.appIconSrc
                                 Layout.preferredWidth: 40
                                 Layout.preferredHeight: 40
                                 Layout.alignment: Qt.AlignVCenter
-                                fillMode: Image.PreserveAspectFit
-                                asynchronous: true
-                                sourceSize.width: 80
-                                sourceSize.height: 80
+
+                                Image {
+                                    id: iconImg
+                                    anchors.fill: parent
+                                    source: card.appIconSrc
+                                    fillMode: Image.PreserveAspectFit
+                                    asynchronous: true
+                                    sourceSize.width: 80
+                                    sourceSize.height: 80
+                                    visible: false          // 由 MultiEffect 画
+                                }
+                                Item {
+                                    id: iconMask
+                                    anchors.fill: parent
+                                    layer.enabled: true
+                                    visible: false
+                                    Rectangle { anchors.fill: parent; radius: 9; color: "black" }
+                                }
+                                MultiEffect {
+                                    anchors.fill: parent
+                                    source: iconImg
+                                    maskEnabled: true
+                                    maskSource: iconMask
+                                }
                             }
 
                             // ── 中:标题 + 正文 ──
