@@ -8,11 +8,21 @@
 | `osd/Osd.qml` | 音量 / 亮度 / 麦克风 OSD | `osd` |
 | `osd/Notifications.qml` | 通知守护（替代 mako） | `notif` |
 | `osd/Power.qml` | 电源菜单（替代 wlogout） | `power` |
+| `osd/Track.qml` | 曲目切换 OSD | `track` |
+| `bar/Bar.qml` | 状态栏（替代 waybar），每块屏一条 | — |
+| `bar/Theme.qml` | 状态栏配色/字号/间距（全部来自 waybar 的 style.css） | — |
+| `bar/BarItem.qml` | 模块外壳：内容 + 鼠标事件 + 悬浮浮层 | — |
+| `bar/SysInfo.qml` | CPU / 内存 / 网络吞吐的采样（读 `/proc`） | — |
+| `bar/Dev.qml` | 只跑状态栏的调试入口，栏放屏幕底部 | — |
 | `screensaver/Screensaver.qml` | matrix 雨屏保（空闲 300s） | `saver` |
 | `screensaver/MatrixRain.qml` | 雨的画面本体，不管什么时候该出现 | — |
 
 `osd/` 放的是转瞬即逝的屏上覆盖层。`screensaver/` 是常驻但平时零成本的组件——不下雨时
-整棵对象树都不存在（`LazyLoader`）。将来做真·常驻组件（比如 waybar 的替代）再另开目录。
+整棵对象树都不存在（`LazyLoader`）。`bar/` 是常驻可见的状态栏，2026-08-27 从 waybar 迁过来。
+
+调状态栏用 `qs -p config/quickshell/bar/Dev.qml` 起独立实例（栏放底部，可以和原 waybar
+并排比对）；别直接热重载进主实例试错——主实例带着通知守护，一个语法错误会把通知、OSD、
+屏保连同状态栏一起卸掉。
 
 放在 `~/.config/quickshell/shell.qml` 就是 quickshell 的 "default" 配置 —— 此时**子目录不会再被
 当成独立配置**，但那只影响"配置发现"，不影响 QML 自己的目录导入：`shell.qml` 里一句
@@ -31,6 +41,7 @@ qs ipc call power toggle             # 电源菜单,绑在 SUPER + ALT + M
 qs ipc call power open / hide
 qs ipc call saver preview            # 立刻下雨,调样式时不用真坐等 300s
 qs ipc call saver dismiss            # 收起
+qs ipc call track preview            # 曲目 OSD,调样式时不用真去切歌
 ```
 
 waybar 的 `custom/notifications` 模块经 `waybar/scripts/notifications.sh` 调用后三个。
@@ -205,6 +216,27 @@ per-column 数据，CPU 每帧只更新一个 `time`。字形来自一张运行�
 配色、位置、超时、免打扰规则当初是逐项照 `config/mako/config` 对齐的。那个文件已经不在，所以
 `osd/Notifications.qml` 里那些 `// mako border-radius=12`、`// mako text-color` 之类的行尾注释
 是这些数值的唯一出处记录 —— 改样式时它们就是基准，别顺手删掉。
+
+## 状态栏（bar/）
+
+2026-08-27 从 waybar 迁过来。外观是 1:1 复刻：`bar/Theme.qml` 里每个数值都标了对应
+`config/waybar/style.css` 的哪条规则，`bar/Bar.qml` 里每个模块都标了对应 `config.jsonc`
+的哪个 key。刻意**不**一样的只有两处（用户 2026-08-27 决定）：托盘可折叠成悬浮面板、
+CPU/内存有悬浮详情面板——waybar 侧这两件事都得另起窗口，而这正是迁移的动机。
+
+数据来源分三类：
+
+- **quickshell 原生服务**：工作区（`Quickshell.Hyprland`）、托盘（`Services.SystemTray`
+  + `DBusMenu`）、音量（`Services.Pipewire`）、电池与键盘电量（`Services.UPower`）、
+  蓝牙（`Quickshell.Bluetooth`）、网络（`Quickshell.Networking`）、时钟（`SystemClock`）
+- **自己读 `/proc`**：CPU / 内存 / 网络吞吐，见 `bar/SysInfo.qml`。这是整条栏里唯一
+  没有现成服务的部分
+- **沿用 waybar 时代的脚本**：`bar/scripts/{stock.sh,claude-usage.sh}`。它们各自管着缓存、
+  鉴权、重试，没有理由用 QML 重写
+
+通知模块从此是**进程内直连**：`shell.qml` 把 `Notifications` 实例传给 `Bar`，免打扰状态
+和历史都是属性绑定。迁移前那条 `waybar → notifications.sh → qs ipc call notif →
+pkill -RTMIN+1 waybar` 的回路连同脚本一起没了。
 
 ---
 
@@ -464,6 +496,242 @@ float slot = floor((c + 0.5) / stride);   // +0.5 挪到格子中心，对任何
 恰好不可见"。往 shader 里塞一行 `fragColor = vec4(0,0.25,0,0.25); return;` 让判定通过的
 列整列涂色，直接数出来，一次就定位了。
 
+
+### 27. Hyprland 的 IPC 请求不能并发发，别手动 refresh
+
+`Hyprland.monitors` 恒为 0、`workspace.id` 恒为 -1、`lastIpcObject` 恒为 undefined ——
+看起来像"这些属性在这个版本不可用"，其实是**并发请求把彼此的响应冲掉了**。
+
+quickshell 在首次访问这些属性时会自己发一轮 `j/status` + `j/monitors` + `j/workspaces`
++ `j/clients`，这一轮是排好序的、正常。如果你另外再手动调一次
+`Hyprland.refreshMonitors()` / `refreshWorkspaces()`，两轮撞在一起，解析出来就是空的
+（日志里照样打印 "parsing monitors response"，**不报错**）。
+
+实测：错开 2 秒分别调没问题；连着调就废。**结论是根本不用调** —— 只读属性，
+quickshell 自己那一轮加上事件流就是全的。
+
+排查手法：`qs -p x.qml --log-rules 'quickshell.hyprland.ipc=true' --log-times`
+能看到请求与解析的时序；同时用 `printf 'j/workspaces' | socat - UNIX-CONNECT:$sock`
+直接问 Hyprland，确认不是它那边返回的问题。
+
+### 28. `font.families` 在这里不存在，图标必须单独一个 Text
+
+CSS 的 `font-family: A, B, C` fallback 链在 Qt 里对应 `font.families`，但 quickshell 的
+QML 引擎里**这个属性根本不存在**（Qt 6.11 实测，连字面量数组都报
+`Cannot assign to non-existent property "families"`）。只能用 `font.family` 指定单个字体。
+
+于是缺字只能靠 fontconfig 回退，而 **Nerd Font 的图标在私有区，私有区的回退不可靠**。
+所以图标和文本要**拆成两个 Text**：图标那段显式 `font.family: Theme.iconFont`。
+
+有意思的是混排字符串（`"󰍛 25%"`）反而能显示——那些是 plane 15 的码位，fontconfig
+认得。真正会掉的是 BMP 私有区，见下一条。
+
+### 29. BMP 私有区（U+E000–F8FF）的字符会在编辑链路里被吞掉
+
+Arch 图标 U+F303、蓝牙 U+F294 这类直接写成字面量，写进文件后会变成**空字符串**
+（表现为状态栏上一块空白，不报任何错）。而 `󰍛`（U+F035B）这种 plane 15 的四字节字符
+不受影响——所以"有的图标好好的、有的没了"很容易看成字体问题。
+
+一律写成 `\uXXXX` 转义，顺带还能 grep：
+
+```qml
+text: "\uf303"                       // nf-linux-archlinux
+text: "\udb80\udcb1"                 // 󰂱 U+F00B1,四字节的要写成代理对
+```
+
+自检：`python3 -c "print([hex(ord(c)) for c in open(f).read() if 0xE000<=ord(c)<=0xF8FF])"`
+
+### 30. waybar 的 `#workspaces button { color: @muted }` 从来没生效过
+
+复刻工作区配色时照着 CSS 直译会得到"非活动工作区是灰的"，但**实际 waybar 渲染出来是
+前景色 #f5f5f7**（截图取色实测 (245,245,247)）。
+
+原因是 GTK 的选择器落在不同控件上：`#workspaces button` 命中按钮本身，而按钮里还有个
+label 子控件，被顶部的 `* { color: @foreground }` 直接命中。两条规则作用对象不同，
+label 自己的那条赢了。同理 `button:hover { color: @foreground }` 也是空转。
+
+`.empty` 的 `opacity: 0.5` 作用在整个按钮上，所以空工作区是**前景色压 0.5**而不是
+muted 压 0.5（实测 (137,141,145)，muted 压 0.5 会是 (90,93,96)）。
+
+教训：从 CSS 迁到 QML 时，**以截图取色为准，不要以 CSS 文本为准**。
+
+### 31. 状态栏要每块屏都建，不能照抄通知那条 filter
+
+`osd/Notifications.qml` 用的是 `Quickshell.screens.filter(s => s.name === activeMonitor)`
+（坑 7：只给活动屏建面板，省掉隐藏屏上整列 delegate 的实例化和图片解码）。**状态栏不能
+这么写** —— 会变成只有焦点屏有栏，切屏时另一块屏的栏凭空消失。
+
+相应地，栏里一切"当前"语义都要按**本面板这块屏**算。`HyprlandWorkspace.active` 的语义是
+"在它自己那块屏上活动"，双屏时两块屏的当前工作区**同时**为 true，直接拿它点高亮会两块
+屏各点亮两个。要再比一次 `w.monitor.name === panel.modelData.name`。
+
+不依赖截图的验证方式（锁屏时也能查）：
+
+```bash
+hyprctl layers -j | jq -r 'to_entries[]|.key as $m|.value.levels|to_entries[]|.value[]?|select(.namespace=="quickshell-bar")|"\($m) \(.w)x\(.h) @\(.x),\(.y)"'
+```
+
+### 32. 浮层要设 `FlipY`，否则"看起来根本没弹出来"
+
+`PopupWindow` 锚在 `Edges.Bottom` 时，如果状态栏在屏幕**底部**（`Dev.qml` 就是这么调的），
+浮层会被放到屏幕外，表现和"悬浮逻辑没生效"一模一样，很容易往错的方向查。
+
+```qml
+anchor.adjustment: PopupAdjustment.FlipY | PopupAdjustment.SlideX
+```
+
+`FlipY` 让合成器自己翻到上方，`SlideX` 管贴近屏幕左右边缘的模块（时钟、通知铃铛）。
+
+另外**别给浮层里的每一项再套一层 PopupWindow**（比如托盘展开面板里逐个图标的 tooltip）：
+浮层套浮层在 Wayland 上定位和层级都不好收拾。托盘面板的做法是在面板底部留一行显示
+当前悬停项的名字，全程只有一个窗口。
+
+### 33. `Text` 默认渲染有彩色边缘，状态栏要用 `NativeRendering`
+
+Qt Quick 默认的 `Text.QtRendering` 在这块屏（scale 1.5）上渲染出来带明显彩色条纹，
+字形也比 GTK 细一圈，和 waybar 并排能一眼看出不是一套东西。
+
+```qml
+renderType: Text.NativeRendering
+font.hintingPreference: Font.PreferVerticalHinting     // = Theme.hinting
+```
+
+`NativeRendering` 治彩边。hinting 那项**必须是 `PreferVerticalHinting`**——它对应 fontconfig
+的 `hintslight`，也就是 GTK 走的那条：
+
+```bash
+fc-match --verbose "Noto Sans" | grep hintstyle    # hintstyle: 1 = FC_HINT_SLIGHT
+```
+
+用 `PreferFullHinting` 会把**数字**的 cap height 从 18px 往下 snap 成 17px，而**字母不受影响**
+（实测：字母段墨量 583 vs 579 完全一致，数字段却矮一像素）。表现就是"数字看着矮一点"，
+很难指认到 hinting 上去。
+
+诊断要点，按顺序：
+
+1. **先量 advance 宽度**。宽度一样就说明字号没问题，差别在光栅化；宽度不一样才是字号。
+   直接去调字号会把已经对上的宽度弄坏。
+2. **数字和字母分开量**。这次就是只有数字对不上，混在一起量永远看不出规律。
+3. **墨量要用覆盖总和，不要用阈值计数**。阈值计数会把"AA 分布不同"读成"字重不同"：
+   同一串文字，阈值法说 waybar 多 10% 墨，覆盖总和法说只差 1.2%（真相是后者）。
+4. 拿 FreeType 独立渲染做第三方基准，判断是哪一边偏了：
+   `ImageFont.truetype(path, em)` 画一串再 `getbbox()`。
+
+另外 `GDK_SCALE=2`（本仓库 env.lua 里设着）会让 GTK 应用按 2x 出图再由合成器缩到 1.5x，
+waybar 的字因此比原生渲染略重一点。这条解释了残留的观感差异，但不是缺陷，也不用去追。
+
+### 34. waybar 的 layer surface 是 31 逻辑像素高，不是 config 里写的 28
+
+`config.jsonc` 的 `"height": 28` 是 GTK 控件高度，`style.css` 又给 `window#waybar` 加了
+1px 边框，实测 `hyprctl layers` 报的是 **31**。照着 28 写会矮一截，独占区也跟着少 3px，
+窗口布局比迁移前高一点点——肉眼很难发现，但一比几何就出来了。
+
+迁移完的对照（waybar 停掉前后各查一次，位置和尺寸应当完全一致）：
+
+```
+DP-1       waybar 2544x31 @8,479   →  quickshell-bar 2544x31 @8,479
+HDMI-A-1   waybar 1472x31 @2568,4  →  quickshell-bar 1424x31 @2568,4
+```
+
+竖屏那块 waybar 的 1472 比逻辑屏宽（1440）还宽 32px，是 waybar 在旋转输出 + 分数缩放下
+的老毛病；quickshell 的 1424 = 1440 - 8 - 8 才是对的。
+
+### 35. 中间模块不能用 `anchors.centerIn`，窄屏会压到右侧模块上
+
+竖屏那块只有 1440 逻辑宽，左右两组占掉的宽度超过一半，硬居中的中间模块（股价）会直接
+压在 cpu/内存上，文字叠文字。
+
+waybar 用的是 GTK CenterBox：**放得下就居中，放不下就退化成顺序排布**（实测它甚至会把
+arch 图标整个挤掉）。复刻前半段就够了——把居中位置夹在左右两组之间：
+
+```qml
+x: Math.max(leftEnd, Math.min((parent.width - width) / 2, rightStart - width))
+maxWidth: Math.max(0, rightStart - leftEnd)      // 真挤不下就自己截断，绝不重叠
+```
+
+**只在窄屏上暴露**，主屏（2560 逻辑宽）怎么看都是好的——多屏配置里这类 bug 很容易漏测。
+
+### 36. 托盘图标要 `QT_QPA_PLATFORMTHEME=gtk3`，否则是洋红方格
+
+托盘图标里凡是走 `image://icon/<name>`（图标主题查找）的，不设这个变量就全部渲染成
+洋红/黑方格占位。**只有恰好装进 `hicolor` 的应用（KeePassXC）能显示**，主题里的
+（fcitx 的 `input-keyboard-symbolic`）一律失败。
+
+原因是 **Qt 不读 `gtk-icon-theme-name`**。本机图标主题是 kora-green，配在
+`~/.config/gtk-{3,4}.0/settings.ini` 里，Qt 看不到，退回默认只认 hicolor。
+
+一行验证，不用截图：
+
+```qml
+Quickshell.iconPath("input-keyboard-symbolic", true)
+// 默认环境          → ""
+// QT_QPA_PLATFORMTHEME=gtk3 → "image://icon/input-keyboard-symbolic"
+```
+
+插件是 `libqgtk3.so`（qt6 自带）。设在 `autostart.lua` 里只给 `qs`，没写进 `env.lua` ——
+全局设会让所有 Qt 应用都跟着 GTK 主题走，那是另一件事。
+
+**注意这个变量热重载拿不到**，必须重启 qs 进程才生效（这是少数几个真要重启的场合之一）。
+
+另外 `Image.status` 在这里**不可信**：图标没找到时它照样是 `Ready`，只是内容是占位图。
+判断要看 `Quickshell.iconPath()` 的返回值，或者直接截图看像素。
+
+
+### 37. `Rectangle.border` 画在填充之外，会把 1px 边框合成到**壁纸**上
+
+用户报的现象是"字体高度没居中，而且整条 bar 更矮"。根因跟字体无关：
+
+```
+qs      y5:73 | y6:86 y7:86 | y8..50:38 | y51:87 y52:86 | y53:74
+waybar  y64:73 | y65:52 y66:45 | y67..108:38 | y109:46 y110:53 | y111:76
+```
+
+栏体上下各多了一条亮度 86 的亮线。Qt 的 `Rectangle.border` 是**画在填充之外**的——那一圈
+1px 里没有背景色，`#12ffffff`（白 7%）直接压在壁纸上：`72 × 0.93 + 255 × 0.07 = 85`，
+和实测的 86 对得上。GTK 的 border 默认 `background-clip: border-box`，背景铺到边框底下，
+所以 waybar 那条是不显眼的 45~53。
+
+后果不直观：深色栏体被两条亮线从 46px 削成 43px，**整条栏看着变矮**，里面的文字也从
+上15/下7 变成上13/下5、**像是没居中**。两个症状都指向"字体不对"，但改字体一个都修不好。
+
+改法是分两层画，让边框 composite 的对象是栏体而不是壁纸：
+
+```qml
+Rectangle { anchors.fill: parent; radius: r; color: bg }                       // 背景铺满
+Rectangle { anchors.fill: parent; radius: r; color: "transparent"              // 边框叠上去
+            border.color: b; border.width: 1 }
+```
+
+验证手法：**沿一列打亮度剖面**，别靠肉眼看边框。一条 47 个数的序列，边框、背景、壁纸
+三段一目了然，还能直接算出 composite 的对象是谁。
+
+### 38. imports 之前的注释里不能出现花括号
+
+在 `shell.qml` 顶部注释里写了一句"要重新启用就放开 `Bar ' + '{' + ' notifications: notifications ' + '}' + '`"，
+整个配置就加载不了了，报的是：
+
+```
+Failed to load configuration
+  caused by @shell.qml[50:5]: Power is not a type
+```
+
+**报错完全指向错误的方向** —— `osd/` 一个字都没动，四个类型单独 `qs -p` 加载全都正常，
+但只要走完整的 `shell.qml` 就全部 "not a type"，而且报哪一个取决于谁排在最前面
+（删掉 `id:` 之后错误就从 Notifications 跳到 Power）。
+
+根因是 quickshell 扫描配置时**不剥注释**：imports 之前的注释里只要出现左花括号，它就认为
+根对象已经开始，后面的 `import "osd"` / `import "screensaver"` 全都收集不到，于是目录导入
+带来的类型一个都不存在。日志里唯一的线索是这一行：
+
+```
+Got intercept for "…/osd/qmldir" contains ""      # 生成出来的 qmldir 是空的
+```
+
+**同样的花括号写在对象体内部的注释里没事**，位置决定。定位手法：逐行删注释二分。
+一开始我以为是注释里的 `import "bar"` 字样，替换掉之后照样失败 —— 真正的触发字符是花括号。
+
+（顺带一个 shell 坑：用 `python3 -c "…"` 做替换时，zsh 会把双引号里的反引号当命令替换吃掉，
+导致"我明明替换了却没生效"，白白排除掉一个正确的怀疑对象。这类替换要用 heredoc。）
 ---
 
 改配置的工作流（热重载、不要重启进程、怎么验证）见仓库根目录 `CLAUDE.md`。

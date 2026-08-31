@@ -122,4 +122,7 @@ hl.animation({ leaf = "zoomFactor",    enabled = true, speed = 7,    bezier = "q
 
 -- 图层规则(anonymous/named layer rules)
 hl.layer_rule({ name = "vicinae", match = { namespace = "vicinae" }, blur = true, ignore_alpha = 0,   no_anim = true })
+-- 状态栏的背景是 rgba(28,28,30,.78),模糊全靠这条规则;namespace 对不上就直接透出桌面。
+hl.layer_rule({ name = "bar",     match = { namespace = "quickshell-bar" }, blur = true, ignore_alpha = 0.4 })
+-- 迁移期回滚用:waybar 已从自启动摘掉,确认 quickshell 状态栏没问题后连同 config/waybar/ 一起删。
 hl.layer_rule({ name = "waybar",  match = { namespace = "waybar" },  blur = true, ignore_alpha = 0.4 })

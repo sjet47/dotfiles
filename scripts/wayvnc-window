@@ -5,7 +5,7 @@
 #   wayvnc-window                  转发当前活动窗口
 #   wayvnc-window chrome           转发 class/title 匹配 'chrome' 的第一个窗口
 #   wayvnc-window --size 1080x2340 指定虚拟屏尺寸(默认 1280x800)
-#   wayvnc-window --keep-bar       别把窗口全屏,留出 waybar
+#   wayvnc-window --keep-bar       别把窗口全屏,留出状态栏
 #   wayvnc-window --stop           收工:窗口移回原处,虚拟屏拆掉
 #   wayvnc-window --status         看当前转的是哪个窗口
 #
@@ -175,13 +175,13 @@ start)
     target_ws=$(hyprctl monitors -j | jq -r --arg o "$out" '.[] | select(.name == $o) | .activeWorkspace.id')
     move_window "$addr" "$target_ws"
 
-    # 铺满是为了吃掉 gaps/边框,顺带盖住跟到虚拟屏上来的 waybar —— 这块屏本来就只为这一个
-    # 窗口存在,没必要留边(实测不铺满只能拿到 1266x754,还被 waybar 顶下去 39px)。
+    # 铺满是为了吃掉 gaps/边框,顺带盖住跟到虚拟屏上来的状态栏 —— 这块屏本来就只为这一个
+    # 窗口存在,没必要留边(实测不铺满只能拿到 1266x754,还被状态栏顶下去 39px)。
     #
     # 用 fullscreen_state 而不是 fullscreen:internal=2 是合成器侧全屏,client=0 是不告诉
     # 客户端它全屏了,于是浏览器之类不会切进自己的 F11 视图,页面布局跟平时一样。
     # (顺带一提 fullscreen 的 mode 语义容易记反:mode=0 才是真全屏,mode=1 是 maximize,
-    # 后者保留 layer-shell 的 waybar 区和 gaps。)想留着 waybar 看时间就 --keep-bar。
+    # 后者保留 layer-shell 的状态栏独占区和 gaps。)想留着状态栏看时间就 --keep-bar。
     if [ "$FULLSCREEN" = 1 ]; then
         hyprctl dispatch \
             "hl.dsp.window.fullscreen_state({ internal = 2, client = 0, window = hl.get_window('address:$addr') })" \

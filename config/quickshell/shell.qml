@@ -8,9 +8,19 @@
 //   osd/Osd.qml            音量 / 亮度 / 麦克风    IPC target: osd
 //   osd/Notifications.qml  通知守护(替代 mako)     IPC target: notif
 //   osd/Power.qml          电源菜单(替代 wlogout)  IPC target: power
+//   osd/Track.qml          曲目切换 OSD            IPC target: track
 //
 // 另有常驻但平时不占资源的:
 //   screensaver/           空闲 300s 的 matrix 雨屏保      IPC target: saver
+//
+// bar/ 里有一条完整的状态栏(替代 waybar),但**当前没有接进来** —— 2026-08-27 迁移做完后
+// 用户决定先继续用 waybar,状态栏留着自己有空再微调。要重新启用,把下面被注释掉的目录导入
+// 和 ShellRoot 里对应的那行实例化一起放开。单独调它不用动这里:
+//   qs -p config/quickshell/bar/Dev.qml
+//
+// **这段注释里一个花括号都不能出现** —— 见 README 坑 38:imports 之前的注释里只要出现
+// 左花括号,quickshell 就认为根对象已经开始,后面的目录导入全部收集不到,表现是 osd/ 里
+// 每个类型都报 "X is not a type"。
 //
 // 子目录不会被 quickshell 当成独立配置(default 配置存在时它不扫子目录),
 // 这里是靠 QML 的目录导入把里面的组件拿进来。
@@ -20,6 +30,7 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+// import "bar"          // 状态栏当前未启用,见文件头
 import "osd"
 import "screensaver"
 
@@ -39,8 +50,14 @@ ShellRoot {
     }
 
     Osd { activeMonitor: root.activeMonitor }
-    Notifications { activeMonitor: root.activeMonitor }
+    Notifications { id: notifications; activeMonitor: root.activeMonitor }
     Power { activeMonitor: root.activeMonitor }
+    Track { activeMonitor: root.activeMonitor }
+
+    // 状态栏当前未启用(用户 2026-08-27 决定先继续用 waybar)。放开这行即可接回来:
+    //   Bar { notifications: notifications }
+    // 接回来之后免打扰状态和历史是属性绑定,waybar 那条
+    // "脚本 → qs ipc → pkill -RTMIN+1 waybar" 的回路就可以再删一次。
 
     // 不吃 activeMonitor:屏保要盖住每一块屏,不是只跟着焦点走。
     //

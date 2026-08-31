@@ -46,7 +46,7 @@ hl.window_rule({
   move  = "20 monitor_h-120",
 })
 
--- waybar 点击 CPU 启动的 btop(独立 class,不影响普通 kitty)
+-- 状态栏点击 CPU 启动的 btop(独立 class,不影响普通 kitty)
 hl.window_rule({
   name   = "float-btop",
   match  = { class = "btop-float" },
