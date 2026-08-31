@@ -217,10 +217,24 @@ AUR 包。pacman 原生的 `-Qqe` / `-Qqen` / `-Qqem` 加 stdin 安装已经够�
 ### 11. AUR 包会因系统库 SONAME 升级静默失效，而且重装无效
 
 AUR 包是**在你机器上编译**的，链接的是当时的系统库。之后 pacman 升级了那个库、SONAME 变了，
-旧二进制就加载不了 —— 但 pacman 不会告诉你，因为包依赖关系（`protobuf>=2.4.0` 这种）依然满足。
+旧二进制就加载不了 —— 但 pacman 不会告诉你。
 
-实例：`openvpn3` 构建于 7 月，链接 `libabsl_*.so.2605`；abseil-cpp 升到 `20260817.0-1` 之后
-只提供 `.2608`，后端进程直接起不来。
+**pacman 为什么拦不住**：库本身是 provides 了 SONAME 的，官方仓库的包也按 SONAME 依赖它 ——
+
+```bash
+pacman -Qi protobuf | grep Provides
+# Provides : libprotoc.so=36.0.0-64  libprotobuf.so=36.0.0-64  libprotobuf-lite.so=36.0.0-64
+```
+
+ABI 一变，依赖它的官方包会直接报依赖冲突，整个事务被拦下来。而 AUR 的 PKGBUILD 普遍把依赖
+写成 `protobuf>=2.4.0` 这种几乎没有约束力的开区间 —— protobuf 36 完美满足它，pacman 心安
+理得放行升级，运行时才在加载动态库时炸掉。**问题不在链接太严格**（二进制里的
+`NEEDED: libprotobuf.so.35.1.0` 精确到 ABI 版本，是正确且必须的，否则会加载成功然后随机
+内存损坏），**而在包元数据太松、没如实反映二进制的真实要求**。
+
+同一个 `openvpn3` 已经栽过两次：2026-07 是 abseil-cpp 从 `.2605` 升到 `.2608`；
+2026-08-31 是 protobuf 从 `.35.1.0` 升到 `.36.0.0`，打断的是
+`openvpn3-service-client` 和 `openvpn3-service-netcfg`。
 
 **症状极具误导性** —— 主程序 `/usr/bin/openvpn3` 是好的，配置能正常加载，只有真正建隧道时
 后端才崩，报错是 `New tunnel did not respond`，看着完全像网络问题。真正的原因得去 journal 里找：
@@ -236,14 +250,33 @@ journalctl -b | grep -i openvpn3 | grep 'error while loading shared libraries'
 paru -S --rebuild openvpn3    # 换成实际包名
 ```
 
-判断是否中招，看 `Build Date` 和缺库：
+**体检靠 `checkrebuild`，而且它是自动的**。`rebuild-detector`（extra 仓库，记在
+`10-base.txt`）自带一个 pacman hook，装上即生效：`Operation=Upgrade` 的 `PostTransaction`
+阶段扫全系统，所以**每次 `-Syu` 完都会自己报**，不用记得手动跑。想主动扫一次：
+
+```bash
+checkrebuild    # 输出 "foreign<TAB>包名",逐个 paru -S --rebuild 即可
+```
+
+确认某个具体的包中没中招：
 
 ```bash
 pacman -Qi openvpn3 | grep 'Build Date'
 ldd /usr/lib/openvpn3-linux/openvpn3-service-client | grep 'not found'
 ```
 
-体检全部 AUR 包（换机后、大版本升级后值得跑一次）：
+> **已知误报**（`checkrebuild` 会报，但重建无用，忽略即可）：
+>
+> - `localsend :: libdartjni.so 缺 libjvm.so` —— Dart 的 Java 互操作桥，LocalSend 在
+>   Linux 上不使用，没装 JDK 就会报。
+> - `lib32-libcanberra :: libcanberra-gtk3*.so 缺 libgtk-3.so.0 / libgdk-3.so.0` ——
+>   缺的是 `lib32-gtk3`，本机没装也不需要（没有 32 位 GTK3 应用）。核心的
+>   `/usr/lib32/libcanberra.so.0` 是好的，重建也不会变好。
+>
+> 两者的共同点：断的是**可选依赖**那条腿，不是 SONAME 变更。分辨方法是看缺的那个库在系统上
+> 到底存不存在 —— 真中招是"库还在，只是版本号变了"，误报是"库压根没装"。
+
+没装 `rebuild-detector` 时的兜底（换机后、大版本升级后手动跑一次）：
 
 ```bash
 for p in $(pacman -Qqem); do
@@ -257,9 +290,6 @@ for p in $(pacman -Qqem); do
   done
 done
 ```
-
-> 已知无害的残留：`localsend :: libdartjni.so 缺 libjvm.so` —— Dart 的 Java 互操作桥，
-> LocalSend 在 Linux 上不使用，没装 JDK 就会报，可忽略。
 
 ### 12. PATH 里的项目工具链会污染 AUR 构建
 

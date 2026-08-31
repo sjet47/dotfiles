@@ -15,6 +15,8 @@ linux-headers  # 编译内核模块用;nvidia-open/xone/xpadneo/virtualbox 等 D
 archlinuxcn-keyring  # archlinuxcn 仓库的签名密钥;不装则该仓库的包全部验签失败
 paru                 # AUR helper;pkg-sync install 用它装 [AUR] 标记的包
 pacman-contrib       # paccache 清缓存 / checkupdates 安全查更新 / pactree 查依赖树
+rebuild-detector     # 自带 pacman hook,每次事务后列出因系统库 SONAME 变更而断链的
+                     # AUR 包 —— 即坑 11 那类"静默失效",省掉那里的手写体检循环
 expac                # 查询包元数据;pkg-sync 生成清单时用过
 reflector            # 按速度筛选并重排官方 mirrorlist
 rate-mirrors         # 按测速重排 mirrorlist(reflector 的替代,两个都留着对比)
