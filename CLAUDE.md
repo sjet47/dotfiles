@@ -27,6 +27,17 @@ Arch Linux + Hyprland 的个人配置仓库。
 
 几点注意：
 
+- **不要用 `sed -i` 改这些文件。** 它是新建临时文件再改名覆盖，inode 一换 quickshell 的
+  文件监视就失效，**之后无论怎么改都不再重载，而且不报任何错** —— 你会对着旧代码反复
+  测试却毫无察觉（这里踩过，白测了好几轮）。用原地重写（Python `write_text`、编辑器保存）。
+  已经用 `sed -i` 改过的话，只能重启 `qs` 才能恢复监视。实测：
+
+  | 写法 | inode | 是否重载 |
+  | --- | --- | --- |
+  | Python 原地重写 | 不变 | ✓ |
+  | `sed -i` | **变** | ✗ |
+  | `sed -i` 之后再用 Python | — | ✗ 仍然不重载 |
+
 - 热重载**不重启进程**（PID 不变），`org.freedesktop.Notifications` 的 D-Bus 注册也保住，中途不会漏收通知。
 - 但 QML 侧的运行时状态**全部重置**：正在显示的通知、免打扰开关、历史记录都会清空。要跨重载保留通知，得把 `NotificationServer.keepOnReload` 改成 `true`。
 - 语法错误**不会杀掉进程，但会让整个 shell 卸载** —— 面板和 IPC 全没了（`qs ipc` 报

@@ -25,7 +25,20 @@ import Quickshell.Services.Notifications
 Scope {
     id: notif
 
+    // 焦点屏 —— 这里只当兜底用,通知本身不跟焦点走
     required property string activeMonitor
+
+    // 通知固定在主屏。OSD / 电源菜单跟着焦点是对的(反馈应该出现在你正看的屏上),
+    // 但通知跟着焦点跳会很烦 —— 切个屏正在读的通知就跑了。
+    // 主屏不在(拔了、改名)时回退到焦点屏,否则通知会静默消失。
+    property string pinnedMonitor: "DP-1"
+
+    readonly property string targetMonitor: {
+        if (notif.pinnedMonitor !== ""
+            && Quickshell.screens.some(s => s.name === notif.pinnedMonitor))
+            return notif.pinnedMonitor;
+        return notif.activeMonitor;
+    }
 
     property bool  dnd: false
     property var   popups: []      // 正在显示的 Notification 对象
@@ -112,7 +125,7 @@ Scope {
     // 只给当前活动屏建面板。若对所有屏建再靠 visible 控制,隐藏的那块也会照样
     // 实例化整列 delegate 并解码一遍图片(插桩实测每条 delegate 创建两次)。
     Variants {
-        model: Quickshell.screens.filter(s => s.name === notif.activeMonitor)
+        model: Quickshell.screens.filter(s => s.name === notif.targetMonitor)
 
         PanelWindow {
             id: panel
