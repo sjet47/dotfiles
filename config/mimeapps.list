@@ -1,6 +1,6 @@
 [Added Associations]
 application/pdf=okular.desktop;
-text/markdown=typora.desktop;
+text/markdown=code.desktop;
 x-scheme-handler/claude-cli=claude-code-url-handler.desktop
 x-scheme-handler/mailto=userapp-Thunderbird-GFJR22.desktop;
 x-scheme-handler/mid=userapp-Thunderbird-GFJR22.desktop;
@@ -15,7 +15,7 @@ x-scheme-handler/net.thunderbird=userapp-Thunderbird-OJJ2T3.desktop;
 application/pdf=okular.desktop;
 message/rfc822=userapp-Thunderbird-GFJR22.desktop
 text/html=google-chrome.desktop
-text/markdown=typora.desktop;
+text/markdown=code.desktop;
 x-scheme-handler/claude-cli=claude-code-url-handler.desktop
 x-scheme-handler/http=google-chrome.desktop
 x-scheme-handler/https=google-chrome.desktop
