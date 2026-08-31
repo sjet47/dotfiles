@@ -180,10 +180,11 @@ Scope {
                         readonly property var shownActions: card.actionList.slice(0, 2)
 
                         width: parent.width
-                        // 高度固定,不跟内容长 —— 正文超过 2 行由 elide 截断。
-                        // macOS 横幅就是定高的,长短不一的卡片堆在一起很乱。
-                        height: 88
-                        radius: 16
+                        // 高度跟着内容走,正文最多 4 行 —— 这是对着 macOS 实机截图定的:
+                        // 单行正文的横幅很扁,多行的明显长,并不是定高。下限 64 保证
+                        // 只有标题时也不会瘦成一条。
+                        implicitHeight: Math.max(64, row.implicitHeight + 24)
+                        radius: 18
                         color: "#d9f5f5f7"
                         border.width: 1
                         border.color: card.n.urgency === NotificationUrgency.Critical ? "#ff453a"
@@ -254,8 +255,11 @@ Scope {
                         }
 
                         RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: 12
+                            id: row
+                            // 不能 anchors.fill:卡片高度由它算,填充会让两者互相依赖成环
+                            anchors { left: parent.left; right: parent.right
+                                      verticalCenter: parent.verticalCenter
+                                      leftMargin: 12; rightMargin: 12 }
                             spacing: 12
 
                             // ── 左:应用图标 ──
@@ -297,7 +301,7 @@ Scope {
                                     font.pixelSize: 14
                                     textFormat: Text.StyledText
                                     wrapMode: Text.Wrap
-                                    maximumLineCount: 2      // 定高卡片,正文最多两行
+                                    maximumLineCount: 4      // macOS 实机截图是第 4 行处省略号截断
                                     elide: Text.ElideRight
                                 }
                             }
