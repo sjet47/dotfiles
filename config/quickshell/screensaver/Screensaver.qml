@@ -37,8 +37,20 @@ Scope {
     property bool forced: false      // IPC 手动拉起
     property bool dismissed: false   // 面板自己收到输入,不等 idle 事件绕回来
 
+    // 全屏时不下雨。理论上看视频/玩游戏的应用**应该**申请 idle-inhibit
+    // (IdleMonitor 的 respectInhibitors 会尊重它),但游戏和不少播放器根本不申请 ——
+    // 用户实测全屏玩游戏照样弹,所以补这一道。
+    //
+    // 用 Wayland 协议层的 toplevel 状态,**不要用 Hyprland 的 workspace.hasfullscreen** ——
+    // 那个字段在 Hyprland 0.56.2 上压根不反映全屏:实测把窗口切到全屏后
+    // `activewindow.fullscreen` 已经是 2,`activeworkspace.hasfullscreen` 却还是 false。
+    // ToplevelManager 走的是 wlr-foreign-toplevel-management,实测 false→true→false 准确。
+    readonly property bool fullscreen: ToplevelManager.activeToplevel?.fullscreen ?? false
+
+    // forced(IPC preview)刻意排在最前:调样式时不该被全屏或 idle 状态挡住
     readonly property bool running:
-        saver.forced || (idleStart.isIdle && !idleStop.isIdle && !saver.dismissed)
+        saver.forced || (idleStart.isIdle && !idleStop.isIdle && !saver.dismissed
+                         && !saver.fullscreen)
 
     function dismiss(): void {
         saver.forced = false;
@@ -72,7 +84,8 @@ Scope {
         function state(): string {
             return JSON.stringify({ running: saver.running, forced: saver.forced,
                 dismissed: saver.dismissed, startIdle: idleStart.isIdle,
-                stopIdle: idleStop.isIdle, loaded: loader.item !== null });
+                stopIdle: idleStop.isIdle, fullscreen: saver.fullscreen,
+                loaded: loader.item !== null });
         }
     }
 

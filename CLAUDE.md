@@ -25,6 +25,17 @@ Arch Linux + Hyprland 的个人配置仓库。
 
 不要 `kill` 之后再 `qs &` 重来 —— 那样容易在旧实例还没退干净时起第二个，抢不到 `org.freedesktop.Notifications` 的那个只会白占内存。
 
+**但热重载够不到子目录模块。** `shell.qml` 里 `import "screensaver"` 这种目录模块，改了里面的
+`.qml` **不会**生效：日志照常打 `Configuration Loaded`，而组件用的还是进程内缓存的旧编译结果。
+验证过——往 `screensaver/MatrixRain.qml` 里塞明显的语法错误，重载一声不吭。`touch shell.qml`、
+清 `~/.cache/quickshell/qmlcache/` 都救不回来，**只能重启进程**：
+
+```bash
+qs kill && uwsm-app -- qs
+```
+
+所以改 `osd/` 之外的**子目录**组件时，别再对着旧代码反复调 —— 那是白测。改完先重启，再验证。
+
 几点注意：
 
 - **不要用 `sed -i` 改这些文件。** 它是新建临时文件再改名覆盖，inode 一换 quickshell 的

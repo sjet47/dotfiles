@@ -180,6 +180,14 @@ per-column 数据，CPU 每帧只更新一个 `time`。字形来自一张运行�
   弹一次也不会把布局搅乱（普通窗口会，见长期记忆 `hyprland-dwindle-silent-focus`）。
 - **通知会浮在雨上面**（已实测）。同为 overlay 层时合成器按 surface 创建先后叠，而通知的
   surface 是收到通知那一刻才建的，永远比常驻的屏保晚。调 `shell.qml` 里的声明顺序没用。
+- **全屏时不下雨**。理论上看视频/玩游戏的应用应该申请 idle-inhibit（`respectInhibitors` 会
+  尊重它），但游戏和不少播放器根本不申请，所以补了一道全屏检测：
+
+  ```qml
+  readonly property bool fullscreen: ToplevelManager.activeToplevel?.fullscreen ?? false
+  ```
+
+  **必须用 Wayland 协议层的 toplevel 状态**，见坑 27。
 - 排查"屏保怎么不出现"用 `qs ipc call saver state`：idle / forced / dismissed 三个状态位
   肉眼看不出来，它能直接区分"压根没触发"和"刚被一次输入收起了"。**自动化截图尤其要注意**——
   屏保会被任何输入收起，脚本跑到一半人动一下鼠标，拍到的就是桌面。
@@ -509,6 +517,33 @@ float slot = floor((c + 0.5) / stride);   // +0.5 挪到格子中心，对任何
 顺带一个排查手法：这类"分组/判定"的 bug，光看渲染结果分不清"判定错了"还是"判定对了但
 恰好不可见"。往 shader 里塞一行 `fragColor = vec4(0,0.25,0,0.25); return;` 让判定通过的
 列整列涂色，直接数出来，一次就定位了。
+
+### 27. Hyprland 的 `hasfullscreen` 字段不能用来判断全屏
+
+`hyprctl activeworkspace -j` 里的 `hasfullscreen` 在 Hyprland 0.56.2 上**压根不反映全屏**：
+把窗口切到全屏后 `activewindow.fullscreen` 已经是 `2`，`activeworkspace.hasfullscreen` 却还是
+`false`。quickshell 的 `HyprlandWorkspace.hasFullscreen` 直接来自这个字段，同样不可用。
+
+用 Wayland 协议层的（wlr-foreign-toplevel-management），实测 false→true→false 准确：
+
+```qml
+import Quickshell.Wayland
+readonly property bool fullscreen: ToplevelManager.activeToplevel?.fullscreen ?? false
+```
+
+顺带两个测试时会撞上的坑：
+
+- **这台机器的 Hyprland 走 Lua 配置，`hyprctl dispatch` 要用 lua 表达式**，而且 dispatcher
+  是分层的。`hyprctl dispatch fullscreen 0` 不是"没效果"，是**报 lua 语法错误后静默失败**——
+  一开始就是这么测的，得出一堆假结论。正确写法：
+
+  ```bash
+  hyprctl dispatch 'hl.dsp.window.fullscreen(0)'   # 切换真全屏
+  ```
+
+  错误信息 `hl.dispatch: expected a dispatcher (e.g. hl.dsp.window.close())` 会提示层级。
+- 拿不准某个状态字段可不可信时，**先用外部命令验证这个字段本身**（这里是先确认 `hyprctl` 自己
+  报的 `hasfullscreen` 就是错的），再去怀疑上层的 QML 绑定。否则会一直在错的层里找原因。
 
 ---
 
