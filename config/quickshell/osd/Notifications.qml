@@ -45,6 +45,9 @@ Scope {
     property var   log: []         // 历史(纯数据,通知对象销毁后仍在)
     readonly property int maxLog: 50
 
+    // 同一时刻只允许一张卡片打开菜单。菜单画在卡片外面,要靠它来放开输入遮罩。
+    property var openMenuCard: null
+
     NotificationServer {
         id: server
 
@@ -154,7 +157,17 @@ Scope {
             // 现在固定成整屏高,卡片在里面自由动;多出来的透明区域靠 mask 把输入放行,
             // 否则这块看不见的覆盖层会吃掉下面窗口的点击。
             implicitHeight: panel.screen.height - 40
-            mask: Region { item: stack }
+            // 菜单是画在卡片外面的,落在 stack 区域之外就点不到 —— 所以菜单打开时
+            // 干脆取消遮罩、整块面板收输入,顺带得到"点击别处关闭菜单"。
+            mask: notif.openMenuCard ? null : stackRegion
+            Region { id: stackRegion; item: stack }
+
+            // 菜单打开时,点空白处关掉它
+            MouseArea {
+                anchors.fill: parent
+                enabled: notif.openMenuCard !== null
+                onClicked: notif.openMenuCard = null
+            }
             color: "transparent"
 
             Column {
@@ -190,14 +203,31 @@ Scope {
                         // 非 default 的 action —— default 不画按钮,它是"点卡片"那一下
                         readonly property var actionList:
                             (card.n.actions ?? []).filter(a => a.identifier !== "default")
-                        // 右槽二选一:有按钮就放按钮,否则放附件缩略图
-                        readonly property var shownActions: card.actionList.slice(0, 2)
+                        // action 收在右下角 Options 的弹出菜单里,不占卡片布局 ——
+                        // 所以缩略图不再和按钮抢右槽,两者可以同时出现。
+                        // 用 HoverHandler 而不是 MouseArea.containsMouse:
+                        // 子 MouseArea 会从父的手里抢走 hover,而且两者的状态更新有先后 ——
+                        // 光标离开 Options 那一帧 opt 已变 false、card 还没变 true,
+                        // 并集在那一帧为假,按钮就闪一下。实测日志里是
+                        //   HOVER opt=false card=false   ← 缝隙
+                        //   HOVER card=true
+                        // HoverHandler 报告的是"指针在本 item 或任意子项之上",没有这个缝隙。
+                        readonly property bool hovered: cardHover.hovered
+
+                        HoverHandler { id: cardHover }
+                        readonly property bool menuOpen: notif.openMenuCard === card
+
+                        // 菜单画在卡片**外面**(下方),而卡片之间是 Column 的兄弟节点 ——
+                        // menu 内部那个 z: 100 只在本卡片内排序,压不住后面的卡片,
+                        // 于是菜单会被下一条通知盖住。要抬就得抬整张卡片。
+                        // 同时只有一张卡片能开菜单(notif.openMenuCard),不会互相打架。
+                        z: card.menuOpen ? 1 : 0
 
                         width: parent.width
                         // 高度跟着内容走,正文最多 4 行 —— 这是对着 macOS 实机截图定的:
                         // 单行正文的横幅很扁,多行的明显长,并不是定高。下限 56 保证
                         // 只有标题时也不会瘦成一条。
-                        implicitHeight: Math.max(56, row.implicitHeight + 16)
+                        implicitHeight: Math.max(56, layout.implicitHeight)
                         radius: 18
                         color: "#d9f5f5f7"
                         border.width: 1
@@ -248,12 +278,16 @@ Scope {
 
                         // critical 不自动消失(mako 的 [urgency=critical] default-timeout=0)
                         Timer {
+                            // 悬停或菜单打开时停表 —— macOS 悬停也会保住通知,
+                            // 否则展开到一半通知就没了。离开后 running 由假变真会重启计时。
                             running: card.n.urgency !== NotificationUrgency.Critical
+                                     && !card.hovered && !card.menuOpen
                             interval: card.n.expireTimeout > 0 ? card.n.expireTimeout : 5000
                             onTriggered: card.close(n => n.expire())
                         }
 
                         MouseArea {
+                            id: cardMouse
                             anchors.fill: parent
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: function (mouse) {
@@ -268,12 +302,29 @@ Scope {
                             }
                         }
 
+                        ColumnLayout {
+                            id: layout
+                            anchors.fill: parent
+                            spacing: 0
+
                         RowLayout {
                             id: row
-                            // 不能 anchors.fill:卡片高度由它算,填充会让两者互相依赖成环
-                            anchors { left: parent.left; right: parent.right
-                                      verticalCenter: parent.verticalCenter
-                                      leftMargin: 12; rightMargin: 12 }
+                            Layout.fillWidth: true
+
+                            // 内容整层淡出,给 Options 让位。挂在 row 上而不是正文上 ——
+                            // 右槽的附件缩略图和左边的图标同样会压在按钮底下,
+                            // 只遮正文的话有图时按钮照样没法读。
+                            layer.enabled: optBtn.visible
+                            layer.effect: MultiEffect {
+                                maskEnabled: true
+                                maskSource: fadeMask
+                                maskThresholdMin: 0.5
+                                maskSpreadAtMin: 1.0
+                            }
+                            Layout.leftMargin: 12
+                            Layout.rightMargin: 12
+                            Layout.topMargin: 8
+                            Layout.bottomMargin: 8
                             spacing: 12
 
                             // ── 左:应用图标 ──
@@ -301,14 +352,25 @@ Scope {
                                     id: iconMask
                                     anchors.fill: parent
                                     layer.enabled: true
+                                    layer.smooth: true
+                                    layer.samples: 4          // 遮罩自身要 MSAA,否则圆角是硬阶梯
                                     visible: false
-                                    Rectangle { anchors.fill: parent; radius: 9; color: "black" }
+                                    Rectangle {
+                                        anchors.fill: parent
+                                        radius: 9
+                                        color: "black"
+                                        antialiasing: true
+                                    }
                                 }
                                 MultiEffect {
                                     anchors.fill: parent
                                     source: iconImg
                                     maskEnabled: true
                                     maskSource: iconMask
+                                    // 默认是按 alpha 硬切,边缘只有一个像素的过渡 → 锯齿。
+                                    // 抬高阈值再给足 spread,让它吃满遮罩自带的抗锯齿渐变。
+                                    maskThresholdMin: 0.5
+                                    maskSpreadAtMin: 1.0
                                 }
                             }
 
@@ -329,6 +391,7 @@ Scope {
                                     maximumLineCount: 1
                                 }
                                 Text {
+                                    id: bodyText
                                     Layout.fillWidth: true
                                     visible: (card.n.body ?? "") !== ""
                                     // body 里是真换行符(0a),StyledText 是 HTML 语义会折叠成空格
@@ -343,46 +406,9 @@ Scope {
                                 }
                             }
 
-                            // ── 右:按钮竖排(优先) ──
-                            ColumnLayout {
-                                visible: card.shownActions.length > 0
-                                Layout.alignment: Qt.AlignVCenter
-                                spacing: 6
-
-                                Repeater {
-                                    model: card.shownActions
-
-                                    delegate: Rectangle {
-                                        id: btn
-                                        required property var modelData
-
-                                        Layout.preferredWidth: Math.max(64, label.implicitWidth + 20)
-                                        Layout.preferredHeight: 26
-                                        radius: 6
-                                        color: hover.containsMouse ? "#26000000" : "#14000000"
-                                        Behavior on color { ColorAnimation { duration: 100 } }
-
-                                        Text {
-                                            id: label
-                                            anchors.centerIn: parent
-                                            text: btn.modelData.text
-                                            color: "#1d1d1f"
-                                            font.family: "Noto Sans"
-                                            font.pixelSize: 12
-                                        }
-                                        MouseArea {
-                                            id: hover
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                            onClicked: card.close(() => btn.modelData.invoke())
-                                        }
-                                    }
-                                }
-                            }
-
                             // ── 右:附件缩略图(没按钮时才出现) ──
                             Image {
-                                visible: card.shownActions.length === 0 && card.attachSrc !== ""
+                                visible: card.attachSrc !== ""
                                 source: card.attachSrc
                                 Layout.preferredWidth: 56
                                 Layout.preferredHeight: 56
@@ -394,6 +420,138 @@ Scope {
                                 asynchronous: true
                                 sourceSize.width: 112
                                 sourceSize.height: 112
+                            }
+                        }
+
+                        }
+
+                        // ── 悬停才出现的覆盖层(不占布局,浮在正文上) ──
+
+                        // Options 的擦除遮罩源(白=保留,透明=擦掉)。
+                        //
+                        // 要的是"以按钮为中心向外 alpha 0→1",用两道线性渐变叠出来:
+                        //   横向 —— 左白右透   纵向 —— 上白下透
+                        // 普通叠加是 over 合成,alpha 取的是**并集**(a2+a1(1-a2)),
+                        // 所以只有"既靠右又靠下"的那个角两道都透明 —— 正好是个软边角洞。
+                        // 省掉 QtQuick.Shapes 的 RadialGradient,效果上没差。
+                        //
+                        // 止点按按钮的实际位置算(row 的右/下边缘和按钮是对齐的:
+                        // row 的左右 margin 12 = 按钮 rightMargin,上下 8 = bottomMargin),
+                        // 不用比例硬编 —— 卡片高度随正文行数变,写死比例在单行卡片上会整片擦掉。
+                        readonly property real fadeX0: Math.max(0, (row.width - optBtn.width - 60) / Math.max(1, row.width))
+                        readonly property real fadeX1: Math.min(1, Math.max(card.fadeX0 + 0.01, (row.width - optBtn.width - 4) / Math.max(1, row.width)))
+                        readonly property real fadeY0: Math.max(0, (row.height - optBtn.height - 26) / Math.max(1, row.height))
+                        readonly property real fadeY1: Math.min(1, Math.max(card.fadeY0 + 0.01, (row.height - optBtn.height - 2) / Math.max(1, row.height)))
+
+                        Item {
+                            id: fadeMask
+                            visible: false
+                            layer.enabled: true
+                            width: row.width
+                            height: row.height
+
+                            Rectangle {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    orientation: Gradient.Horizontal
+                                    GradientStop { position: card.fadeX0; color: "white" }
+                                    GradientStop { position: card.fadeX1; color: "transparent" }
+                                }
+                            }
+                            Rectangle {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: card.fadeY0; color: "white" }
+                                    GradientStop { position: card.fadeY1; color: "transparent" }
+                                }
+                            }
+                        }
+
+                        // 右下角 Options —— 浮在正文上,不撑开卡片
+                        Rectangle {
+                            id: optBtn
+                            visible: card.actionList.length > 0 && (card.hovered || card.menuOpen)
+                            anchors { right: parent.right; bottom: parent.bottom
+                                      rightMargin: 12; bottomMargin: 8 }
+                            width: optLabel.implicitWidth + 22
+                            height: 24
+                            radius: 6
+                            // 背后的内容已经被遮罩擦干净了,按钮不需要靠不透明度去挣可读性,
+                            // 所以只用 10% 的正文色轻轻压暗(实测卡片 213 / 按钮 194)。
+                            color: optMouse.containsMouse || card.menuOpen ? "#2e1d1d1f" : "#1a1d1d1f"
+                            Behavior on color { ColorAnimation { duration: 100 } }
+
+                            Text {
+                                id: optLabel
+                                anchors.centerIn: parent
+                                text: "Options \u2304"
+                                color: "#1d1d1f"
+                                font.family: "Noto Sans"
+                                font.pixelSize: 12
+                            }
+                            MouseArea {
+                                id: optMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: notif.openMenuCard = card.menuOpen ? null : card
+                            }
+                        }
+
+                        // ── 弹出菜单:画在卡片下方、右对齐 ──
+                        Rectangle {
+                            id: menu
+                            visible: card.menuOpen
+                            z: 100          // 压住下面的卡片
+                            anchors { right: parent.right; top: parent.bottom
+                                      rightMargin: 8; topMargin: 6 }
+                            width: Math.max(150, menuCol.implicitWidth + 24)
+                            height: menuCol.implicitHeight + 8
+                            radius: 8
+                            // 跟卡片同一种材质:同底色、**同透明度**。
+                            // 原来是 #f2f5f5f7(95% 不透明)+ 黑色描边 —— 比胶囊又亮又实,
+                            // 看着是另一块面板贴上来的。菜单画在卡片外面、直接压桌面,
+                            // 所以用卡片的 #d9f5f5f7 合成出来就和胶囊一模一样。
+                            color: "#d9f5f5f7"
+                            border { width: 1; color: "#d2d2d7" }
+
+                            ColumnLayout {
+                                id: menuCol
+                                anchors { left: parent.left; right: parent.right
+                                          verticalCenter: parent.verticalCenter }
+                                spacing: 0
+
+                                Repeater {
+                                    model: card.actionList
+
+                                    delegate: Rectangle {
+                                        id: mi
+                                        required property var modelData
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 28
+                                        Layout.leftMargin: 4
+                                        Layout.rightMargin: 4
+                                        radius: 5
+                                        color: miMouse.containsMouse ? "#0a84ff" : "transparent"
+
+                                        Text {
+                                            anchors { left: parent.left; leftMargin: 10
+                                                      verticalCenter: parent.verticalCenter }
+                                            text: mi.modelData.text
+                                            color: miMouse.containsMouse ? "#ffffff" : "#1d1d1f"
+                                            font.family: "Noto Sans"
+                                            font.pixelSize: 13
+                                        }
+                                        MouseArea {
+                                            id: miMouse
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            onClicked: {
+                                                notif.openMenuCard = null;
+                                                card.close(() => mi.modelData.invoke());
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         }
