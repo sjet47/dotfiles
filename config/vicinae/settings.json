@@ -10,10 +10,21 @@
 
 {
    "$schema": "https://vicinae.com/schemas/config.json",
+   "close_on_focus_loss": true,
    "activate_on_single_click": true,
+   "wrap_navigation": true,
+   "encrypt_sensitive_data": false,
+   "escape_key_behavior": "",
    "favicon_service": "google",
+   "keybinding": "vim",
    "input_server": {
+      "enabled": true
+   },
+   "tray": {
       "enabled": false
+   },
+   "global_shortcuts": {
+      "toggle": ""
    },
    "font": {
       "normal": {
@@ -28,6 +39,12 @@
    },
    "telemetry": {
       "system_info": false
+   },
+   "launcher_window": {
+      "compact_mode": {
+         "enabled": true
+      },
+      "floating_status_bar": true
    },
    "fallbacks": [
       "shortcuts:6cadf337-9f7c-4325-ad8a-bab7b4a71eeb"
@@ -45,9 +62,49 @@
             "connectionToggleable": true
          }
       },
+      "@alan7a/store.vicinae.case-converter": {
+         "preferences": {
+            "CamelCase": true,
+            "CapitalCase": true,
+            "ConstantCase": true,
+            "DotCase": true,
+            "HeaderCase": true,
+            "KebabCase": true,
+            "KebabUpperCase": true,
+            "LowerCase": true,
+            "LowerFirst": true,
+            "NoCase": true,
+            "PascalCase": true,
+            "PascalSnakeCase": true,
+            "PathCase": true,
+            "RandomCase": true,
+            "SentenceCase": true,
+            "SnakeCase": true,
+            "SwapCase": true,
+            "TitleCase": true,
+            "UpperCase": true,
+            "UpperFirst": true,
+            "action": "paste",
+            "exceptions": "Linux",
+            "hideHUD": false,
+            "popToRoot": true,
+            "prefixCharacters": "",
+            "preserveCase": true,
+            "preservePunctuation": false,
+            "source": "selected",
+            "suffixCharacters": ""
+         }
+      },
       "@dagimg-dot/store.vicinae.wifi-commander": {
          "preferences": {
             "network-cli-tool": "nmcli"
+         }
+      },
+      "@destiner/store.raycast.json-format": {
+         "preferences": {
+            "autopaste": true,
+            "indent": "2",
+            "maxInitialLines": "10000"
          }
       },
       "@destiner/store.raycast.unix-timestamp": {
@@ -63,7 +120,8 @@
                "alias": "uts"
             },
             "timestamp-to-date": {
-               "alias": "pts"
+               "alias": "pts",
+               "enabled": false
             }
          }
       },
@@ -74,10 +132,23 @@
             "weekStart": "0"
          }
       },
+      "@jmaeso/store.raycast.uuid-generator": {
+         "preferences": {
+            "defaultAction": "copy",
+            "upperCaseLetters": false
+         }
+      },
       "@knoopx/store.vicinae.otp": {
          "entrypoints": {
             "list-codes": {
                "alias": "totp"
+            }
+         }
+      },
+      "@maggie/store.raycast.todo-list": {
+         "entrypoints": {
+            "index": {
+               "alias": "todo"
             }
          }
       },
@@ -120,6 +191,38 @@
             }
          }
       },
+      "@tonngw/store.raycast.sql-format": {
+         "preferences": {
+            "autoPaste": true,
+            "keywordCase": "upper",
+            "language": "clickhouse",
+            "tabWidth": "2"
+         }
+      },
+      "@yangxy/store.raycast.date-format-converter": {
+         "preferences": {
+            "formatWithMillis": false,
+            "formatWithTimezone": false,
+            "isoDate": true,
+            "isoDateTime": true,
+            "isoFormat": false,
+            "localizedFullDateTime": false,
+            "localizedLongDateTime": false,
+            "localizedSecondsTime": false,
+            "localizedShortDate": false,
+            "localizedShortDateTime": false,
+            "localizedTime": false,
+            "naturalLanguageDateFormat": "YYYY-MM-DD",
+            "unixMillis": true,
+            "unixTimestamp": true,
+            "utcIsoFormat": true
+         },
+         "entrypoints": {
+            "insert-natural-language-date": {
+               "enabled": false
+            }
+         }
+      },
       "applications": {
          "entrypoints": {
             "code": {
@@ -127,10 +230,16 @@
             }
          }
       },
+      "calculator": {
+         "preferences": {
+            "backend": "numen"
+         }
+      },
       "clipboard": {
          "entrypoints": {
             "history": {
-               "alias": "ch"
+               "enabled": true,
+               "shortcut": "super+V"
             }
          }
       },
@@ -233,6 +342,17 @@
             },
             "sct-ffb46c6a37af": {
                "alias": "oa-act"
+            }
+         }
+      },
+      "system": {
+         "entrypoints": {
+            "browse-apps": {
+               "enabled": true,
+               "preferences": {
+                  "showHidden": false,
+                  "sortAlphabetically": true
+               }
             }
          }
       }
