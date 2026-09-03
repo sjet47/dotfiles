@@ -79,12 +79,8 @@ hl.bind(mod .. " + grave",         hl.dsp.workspace.toggle_special("scratchpad")
 hl.bind(mod .. " + SHIFT + grave", hl.dsp.window.move({ workspace = "special:scratchpad" }))
 
 -- 第二个特殊工作区(aux):独立于 scratchpad(同一显示器同时只显示一个 special workspace)
-hl.bind(mod .. " + ALT + grave",         hl.dsp.workspace.toggle_special("aux"))
-hl.bind(mod .. " + ALT + SHIFT + grave", hl.dsp.window.move({ workspace = "special:aux" }))
-
--- 在已有工作区间循环
-hl.bind(mod .. " + TAB",         hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mod .. " + SHIFT + TAB", hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mod .. " + TAB",         hl.dsp.workspace.toggle_special("aux"))
+hl.bind(mod .. " + SHIFT + TAB", hl.dsp.window.move({ workspace = "special:aux" }))
 
 -- 鼠标拖拽移动/缩放窗口
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
