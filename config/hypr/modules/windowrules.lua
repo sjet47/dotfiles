@@ -79,6 +79,13 @@ hl.window_rule({
   float = true,
 })
 
+-- Steam:主窗口与好友列表/设置等子窗口 class 都是 steam(XWayland)
+hl.window_rule({
+  name  = "float-steam",
+  match = { class = "^steam$" },
+  float = true,
+})
+
 -- 飞书:图片预览(XWayland,class 为空,title 固定"图片")
 hl.window_rule({
   name  = "float-feishu-image-preview",
