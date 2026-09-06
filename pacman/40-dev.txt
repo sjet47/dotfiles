@@ -90,7 +90,7 @@ perf              # 内核级性能剖析
 flamegraph        # [AUR] 把剖析结果画成火焰图
 strace            # 跟踪系统调用
 rr-git            # 可回放的调试器,查偶现 bug 用
-bcc               # eBPF 的 C 库与 Python 绑定,自己写探针用
+bcc               # eBPF 的 C 库,自己写探针用(Python 绑定是另一个包,见 90-optional)
 bcc-libbpf-tools  # eBPF 现成工具集(查 I/O、调度延迟等)
 bpf               # bpftool:检查/加载 eBPF 程序(过去清单里写的 bpftool-bin 已从 AUR 下架)
 xdp-tools         # XDP 数据面工具

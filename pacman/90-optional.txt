@@ -40,6 +40,8 @@ ktouch    # 打字练习
 binaryninja-personal  # [AUR] 逆向分析;要买 license
 mongodb-compass-bin   # [AUR] MongoDB 图形客户端;跑 MongoDB 的机器才用得上
 qflipper              # 给 Flipper Zero 刷固件;有这个硬件再装
+libcec                # HDMI-CEC:用电视遥控器控制本机,或让本机唤醒/切换电视输入;
+                      # 需要显卡/采集卡真的把 CEC 引脚接出来,大多数 PC 没有
 xboxdrv               # [AUR] 用户态手柄驱动;xone + xpadneo 已覆盖,只在它们失灵时顶上
 
 # ── 冷门语言链 ──────────────────────────────────────────────────────────
@@ -83,3 +85,18 @@ gource          # 版本库演化可视化
 geogebra        # 动态几何/代数软件
 z-library-bin   # [AUR] Z-Library 客户端
 cmatrix         # 终端 matrix 雨屏保
+
+# ── 网络诊断 / 兼容层 ────────────────────────────────────────────────────
+ldns            # 带 drill:DNSSEC 诊断比 dig 强 —— `drill -T` 从根逐级 trace 只打关键
+                # 委派行,`drill -S` 直接给"验没验通"的结论,不用自己比对 DS/DNSKEY。
+                # 日常查 A/MX 用 bind 的 dig 就够,这个是查 DNSSEC 才拿出来的
+libcurl-gnutls  # Debian 系二进制惯用的 curl 变体(Arch 的 libcurl 是 OpenSSL 版);
+                # 10-base 的 debtap 转出来的包常缺它,转 .deb 时才需要
+
+# ── 开发库 / 头文件 —— 主力包的伴生件,缺了主力包照样能用 ──────────────────────
+python-bcc          # bcc 的 Python 绑定(40-dev 的 bcc 只装 C 库);写 Python eBPF 探针才要
+tree-sitter-bash    # bash 的 tree-sitter 语法库;配 30-cli 的 tree-sitter-cli,
+tree-sitter-python  # python 的 tree-sitter 语法库;neovim 自己会在 runtimepath 下编,
+                    # 这两个是给"直接链 libtree-sitter-*.so"的程序用的
+vulkan-headers      # Vulkan 的 C 头文件;只在自己编 Vulkan 程序时要,跑游戏不需要
+pybind11            # C++ 写 Python 扩展的 header-only 库;编原生 Python 模块时要
