@@ -36,6 +36,7 @@ glow  # 终端里渲染 Markdown
 
 # ── git 工具链 ───────────────────────────────────────────────────────
 git           # 版本控制本体;整个 dotfiles 仓库的基础
+git-lfs       # 大文件走指针存储;gitconfig 里 lfs filter 是 required=true,缺了它 clone 含 LFS 的仓库会直接失败
 lazygit       # git 的 TUI;配置在 config/lazygit,diff 用 difftastic
 github-cli    # GitHub 的 PR/issue 命令行
 glab          # GitLab 的 MR/CI 命令行(日常主要用这个)
