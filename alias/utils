@@ -30,6 +30,10 @@ function md5verify() { md5sum "$1" | grep -f "$1".md5; }
 function pts() { date -d @"$1"; } # parse UNIX timestamp to human-readable format
 function nowts() { echo $[$(date +%s) + "${1:-0}"]; } # get current UNIX timestamp + offset
 
+# Lock screen
+alias lock='loginctl lock-session'
+alias unlock='pkill -USR1 hyprlock'
+
 # Helpers
 function arc() {
     7z a "$1".7z "${@:2}"
