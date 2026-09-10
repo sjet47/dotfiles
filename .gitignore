@@ -37,6 +37,7 @@ config/herdr/sessions/tmp
 !config/krunnerrc
 !config/feishu-flags.conf
 !config/code-flags.conf
+!config/chatgpt-flags.conf
 !config/mimeapps.list
 !pi-agent/hermes-memory-config.json
 !pi-agent/mcp.json
