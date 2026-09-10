@@ -34,7 +34,7 @@
    },
    "theme": {
       "dark": {
-         "name": "zenwritten-dark"
+         "name": "vicinae-dark"
       }
    },
    "telemetry": {
@@ -60,6 +60,14 @@
       "@Gelei/store.vicinae.bluetooth": {
          "preferences": {
             "connectionToggleable": true
+         }
+      },
+      "@Rafo94/store.raycast.easy-ocr": {
+         "preferences": {
+            "autodetect_lang": false,
+            "newLine": "replaceSpace",
+            "tesseract_lang": "eng",
+            "tesseract_path": "/usr/bin/tesseract"
          }
       },
       "@alan7a/store.vicinae.case-converter": {
@@ -218,6 +226,9 @@
             "utcIsoFormat": true
          },
          "entrypoints": {
+            "index": {
+               "alias": "pts"
+            },
             "insert-natural-language-date": {
                "enabled": false
             }
@@ -239,7 +250,10 @@
          "entrypoints": {
             "history": {
                "enabled": true,
-               "shortcut": "super+V"
+               "shortcut": "super+V",
+               "preferences": {
+                  "defaultAction": "copy"
+               }
             }
          }
       },
