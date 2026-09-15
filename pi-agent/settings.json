@@ -8,14 +8,18 @@
     "npm:pi-web-access",
     "npm:pi-tps",
     "npm:@tintinweb/pi-subagents",
-    "npm:@tifan/pi-recap",
     "npm:@tintinweb/pi-tasks",
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
     "https://github.com/sjet47/pi-setup",
-    "npm:pi-readseek",
-    "https://github.com/sjet47/pi-intercom"
+    "https://github.com/sjet47/pi-intercom",
+    "npm:pi-mcp-adapter",
+    "npm:pi-compact-ui"
+  ],
+  "npmCommand": [
+    "npm",
+    "--allow-remote=all"
   ],
   "enabledModels": [
     "sub2api-openai/gpt-5.6-sol",
@@ -59,19 +63,10 @@
   "images": {
     "autoResize": false
   },
-  "readseek": {
-    "overrideTools": [
-      "read",
-      "edit",
-      "write"
-    ],
-    "syntaxValidation": "off",
-    "display": {
-      "edit": "compact"
-    }
-  },
-  "showCacheMissNotices": true,
+  "showCacheMissNotices": false,
   "tuiMode": "fullscreen",
-  "fullscreenScrollbar": "auto",
-  "fullscreenExitOutput": "resume-hint"
+  "fullscreenScrollbar": "always",
+  "fullscreenExitOutput": "resume-hint",
+  "outputPad": 1,
+  "defaultProjectTrust": "always"
 }
