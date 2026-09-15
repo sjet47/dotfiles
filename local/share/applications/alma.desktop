@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Alma
+Exec=/opt/Alma/alma --ozone-platform=wayland --enable-wayland-ime %U
+Terminal=false
+Type=Application
+Icon=alma
+Icon=/home/sjet/.local/share/icons/alma.png
+# Wayland 原生下 class 是小写 alma(XWayland 回退时才是 Alma)
+StartupWMClass=alma
+Comment=AI Provider Management Desktop App
+Categories=Utility;

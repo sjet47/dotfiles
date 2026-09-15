@@ -21,6 +21,7 @@ Thunderbird 的 `userapp-*`——整目录链接会把这些一起拖进仓库�
 | `craft-agents.desktop` | Wayland(AppImage) |
 | `lodyDesktop.desktop` | Wayland + IME |
 | `stably-orca.desktop` | Wayland + IME |
+| `alma.desktop` | Wayland + IME(顺带把 `StartupWMClass` 改成 Wayland 下的小写 `alma`) |
 
 不收的：没加自定义 flag 的手动条目(typora)、应用自己写入的 URL handler
 (`cc-switch-handler`、`claude-code-url-handler`,重装会自动重建)、
