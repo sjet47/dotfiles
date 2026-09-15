@@ -195,8 +195,18 @@ Scope {
                         // 而 kitty / 飞书是 appIcon=自己的 logo 路径、image 为空。
                         readonly property string appIconSrc: {
                             const i = card.n.appIcon ?? "";
-                            if (i === "") return "";
-                            return (i.startsWith("/") || i.startsWith("file:")) ? i : Quickshell.iconPath(i, true);
+                            if (i !== "")
+                                return (i.startsWith("/") || i.startsWith("file:")) ? i : Quickshell.iconPath(i, true);
+                            // 回退:Electron 系(Alma/VSCode/Discord...)根本不填 app_icon,
+                            // 它们只会把图塞进 image 槽 —— 于是左边永远是空的。
+                            // 那就按 desktop-entry / appName 自己去图标主题里查一个。
+                            const de = card.n.desktopEntry ?? "";
+                            if (de !== "") {
+                                const p = Quickshell.iconPath(de, true);
+                                if (p !== "") return p;
+                            }
+                            const an = (card.n.appName ?? "").toLowerCase().replace(/\s+/g, "-");
+                            return an === "" ? "" : Quickshell.iconPath(an, true);
                         }
                         readonly property string attachSrc: card.n.image ?? ""
 
