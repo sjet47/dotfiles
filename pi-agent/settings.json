@@ -28,7 +28,8 @@
     "sub2api-openai/GLM-5.3-Flash",
     "sub2api-openai/grok-4.6",
     "sub2api-openai/gpt-6-astra",
-    "sub2api-openai/deepseek-flash"
+    "sub2api-openai/deepseek-flash",
+    "sub2api-openai/gpt-5.6-luna"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
