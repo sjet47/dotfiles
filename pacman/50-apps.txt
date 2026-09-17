@@ -126,7 +126,6 @@ lib32-libltdl
 lib32-libnl
 lib32-libnsl
 lib32-libogg
-lib32-libpcap
 lib32-libpulse
 lib32-libsndfile
 lib32-libtiff

@@ -99,6 +99,5 @@ patchelf          # 改二进制的 rpath/interpreter
 
 # ── AI / Agent ────────────────────────────────────────────────────
 llama.cpp       # 本地跑 LLM 推理;编译时带 CUDA,吃 RTX 4080
-claude-desktop  # [AUR] Claude 桌面端;autostart 里进 scratchpad 工作区
 herdr-bin       # [AUR] 在一个终端里管多个 coding agent
 playwright-cli  # [AUR] 浏览器自动化的录制/选择器调试

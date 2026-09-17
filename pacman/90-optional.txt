@@ -68,6 +68,12 @@ virtualbox-host-dkms  # 内核模块(DKMS 版)
 virtualbox-guest-iso  # Guest Additions 光盘镜像,装完虚拟机第一件事
 virtualbox-ext-vnc    # 让虚拟机的显示走 VNC,不开 GUI 也能连
 
+# ── AI 桌面客户端 —— 都是 Electron 大包,按需装 ──────────────────────────────
+# Wayland/IME 启动参数都在仓库里:local/share/applications/ 和 config/chatgpt-flags.conf
+claude-desktop    # [AUR] Claude 桌面端(Chat / Cowork / Claude Code)
+chatgpt-desktop   # [AUR] ChatGPT 桌面端,官方二进制重打包
+alma-desktop-bin  # [AUR] 多模型聚合客户端,OpenAI/Anthropic/Gemini/自定义 provider 切着用
+
 # ── 云 / 运维 CLI ───────────────────────────────────────────────────────
 gcx  # [AUR] Grafana Cloud 资源管理 CLI,官方说是为 agent 调用优化的
 
