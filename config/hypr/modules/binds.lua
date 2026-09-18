@@ -18,7 +18,6 @@ hl.bind(mod .. " + Q",      hl.dsp.window.close())
 hl.bind(mod .. " + RETURN", hl.dsp.exec_cmd("uwsm-app -- " .. vars.terminal))
 hl.bind(mod .. " + E",      hl.dsp.exec_cmd(vars.fileManager))
 hl.bind(mod .. " + T",      hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mod .. " + space",  hl.dsp.exec_cmd(vars.menu))
 hl.bind(mod .. " + P",      hl.dsp.window.pseudo())        -- dwindle
 hl.bind(mod .. " + S",      hl.dsp.layout("togglesplit"))  -- dwindle
 

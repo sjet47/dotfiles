@@ -24,7 +24,7 @@
       "enabled": false
    },
    "global_shortcuts": {
-      "toggle": ""
+      "toggle": "super+SPACE"
    },
    "font": {
       "normal": {
