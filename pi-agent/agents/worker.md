@@ -1,6 +1,6 @@
 ---
 description: Implementation and testing specialist
-model: sub2api-openai/deepseek-flash
+model: sub2api-deepseek/deepseek-flash
 thinking: high
 prompt_mode: replace
 ---

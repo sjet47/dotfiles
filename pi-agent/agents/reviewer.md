@@ -1,7 +1,7 @@
 ---
 description: Code auditor and acceptance reviewer
 model: sub2api-openai/gpt-6-astra
-thinking: medium
+thinking: high
 prompt_mode: replace
 ---
 
