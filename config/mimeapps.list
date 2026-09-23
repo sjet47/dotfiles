@@ -68,3 +68,4 @@ audio/mp4=vlc.desktop
 audio/x-m4a=vlc.desktop
 audio/aac=vlc.desktop
 x-scheme-handler/codex=chatgpt.desktop
+x-scheme-handler/alma=alma.desktop
