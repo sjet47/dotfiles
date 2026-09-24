@@ -13,19 +13,16 @@
     "https://github.com/sjet47/pi-setup",
     "https://github.com/sjet47/pi-intercom"
   ],
-  "npmCommand": [
-    "npm",
-    "--allow-remote=all"
-  ],
   "enabledModels": [
-    "sub2api-openai/GLM-5.3-Flash",
     "sub2api-openai/gpt-6-astra",
     "sub2api-deepseek/deepseek-flash",
     "sub2api-kimi/kimi-k3",
     "sub2api-grok/grok-4.7",
     "sub2api-openai/gpt-6-luna",
     "sub2api-openai/gpt-6-sol",
-    "sub2api-grok/grok-4.7-build-fast"
+    "sub2api-grok/grok-4.7-build-fast",
+    "magpie-anthropic/claude/claude-opus-5-5",
+    "magpie-anthropic/claude/claude-fabel-5-1"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
