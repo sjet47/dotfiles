@@ -22,6 +22,7 @@ Thunderbird 的 `userapp-*`——整目录链接会把这些一起拖进仓库�
 | `lodyDesktop.desktop` | Wayland + IME |
 | `stably-orca.desktop` | Wayland + IME |
 | `alma.desktop` | Wayland + IME(顺带把 `StartupWMClass` 改成 Wayland 下的小写 `alma`) |
+| `magpie.desktop` | Tauri:`GDK_BACKEND=wayland`(`StartupWMClass` 同样改成小写 `magpie`) |
 
 不收的：没加自定义 flag 的手动条目(typora)、应用自己写入的 URL handler
 (`cc-switch-handler`、`claude-code-url-handler`,重装会自动重建)、
@@ -30,7 +31,7 @@ Thunderbird 的 `userapp-*`——整目录链接会把这些一起拖进仓库�
 
 ## 背景
 
-Electron/Qt 应用回退 XWayland 会因为 `xwayland.force_zero_scaling=true` +
+Electron/Qt/Tauri 应用回退 XWayland 会因为 `xwayland.force_zero_scaling=true` +
 显示器 scale 1.5 而糊掉/变小。环境变量 hint(`ELECTRON_OZONE_PLATFORM_HINT`)
 不可靠，必须用命令行 flag。有 wrapper 会读 `*-flags.conf` 的应用(VSCode、飞书)
 走 `config/code-flags.conf` / `config/feishu-flags.conf`；没有 wrapper 的
