@@ -73,6 +73,7 @@ virtualbox-ext-vnc    # 让虚拟机的显示走 VNC,不开 GUI 也能连
 claude-desktop    # [AUR] Claude 桌面端(Chat / Cowork / Claude Code)
 chatgpt-desktop   # [AUR] ChatGPT 桌面端,官方二进制重打包
 alma-desktop-bin  # [AUR] 多模型聚合客户端,OpenAI/Anthropic/Gemini/自定义 provider 切着用
+magpie-bin        # [AUR] 本地模型路由网关
 
 # ── 云 / 运维 CLI ───────────────────────────────────────────────────────
 gcx  # [AUR] Grafana Cloud 资源管理 CLI,官方说是为 agent 调用优化的
@@ -91,6 +92,7 @@ gource          # 版本库演化可视化
 geogebra        # 动态几何/代数软件
 z-library-bin   # [AUR] Z-Library 客户端
 cmatrix         # 终端 matrix 雨屏保
+dcraw           # 佳能 .CR3 格式转换工具
 
 # ── 网络诊断 / 兼容层 ────────────────────────────────────────────────────
 ldns            # 带 drill:DNSSEC 诊断比 dig 强 —— `drill -T` 从根逐级 trace 只打关键

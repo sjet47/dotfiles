@@ -114,8 +114,6 @@ lib32-audit
 lib32-flac
 lib32-gettext
 lib32-glu
-lib32-gst-plugins-base-libs
-lib32-gstreamer
 lib32-lcms2
 lib32-libasyncns
 lib32-libcap
