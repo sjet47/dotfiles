@@ -1,5 +1,13 @@
 {
-  "imports": [
-    "claude-code"
-  ]
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--autoConnect",
+        "--no-usage-statistics"
+      ]
+    }
+  }
 }

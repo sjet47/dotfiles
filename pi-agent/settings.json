@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.87.1",
+  "lastChangelogVersion": "0.99.1",
   "defaultProvider": "sub2api-deepseek",
   "defaultModel": "deepseek-flash",
   "defaultThinkingLevel": "high",
@@ -7,13 +7,11 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-web-access",
     "npm:@tintinweb/pi-subagents",
-    "npm:@tintinweb/pi-tasks",
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
     "https://github.com/sjet47/pi-setup",
-    "https://github.com/sjet47/pi-intercom",
-    "npm:pi-mcp-adapter"
+    "https://github.com/sjet47/pi-intercom"
   ],
   "npmCommand": [
     "npm",
