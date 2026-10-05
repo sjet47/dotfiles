@@ -1,32 +1,38 @@
 {
-  "lastChangelogVersion": "0.99.1",
-  "defaultProvider": "sub2api-deepseek",
-  "defaultModel": "deepseek-flash",
+  "defaultModel": "group/deepseek-flash",
+  "defaultProvider": "magpie-openai",
+  "lastChangelogVersion": "1.0.3",
   "defaultThinkingLevel": "high",
-  "defaultTools": ["+codemode", "-ls", "-grep", "-find"],
+  "defaultTools": [
+    "+codemode",
+    "-ls",
+    "-grep",
+    "-find"
+  ],
   "packages": [
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-web-access",
-    {
-      "source": "npm:pi-subagents",
-      "skills": ["!skills/council-mode"]
-    },
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
     "https://github.com/sjet47/pi-setup",
-    "https://github.com/sjet47/pi-intercom"
+    "https://github.com/sjet47/pi-intercom",
+    {
+      "source": "npm:pi-subagents",
+      "skills": [
+        "!skills/council-mode"
+      ]
+    }
   ],
   "enabledModels": [
-    "sub2api-openai/gpt-6-astra",
-    "sub2api-deepseek/deepseek-flash",
-    "sub2api-kimi/kimi-k3",
-    "sub2api-grok/grok-4.7",
-    "sub2api-openai/gpt-6-luna",
-    "sub2api-openai/gpt-6-sol",
-    "sub2api-grok/grok-4.7-build-fast",
     "magpie-anthropic/claude/claude-opus-5-5",
-    "magpie-anthropic/claude/claude-fabel-5-1"
+    "magpie-anthropic/claude/claude-fabel-5-1",
+    "magpie-openai/grok/grok-4.7",
+    "magpie-openai/group/gpt-6-luna",
+    "magpie-openai/group/gpt-6.1-sol",
+    "magpie-openai/group/gpt-6-astra",
+    "magpie-openai/group/deepseek-flash",
+    "magpie-openai/grok/grok-4.7-build-fast"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,

@@ -1,7 +1,7 @@
 ---
 name: worker
 description: Implementation and testing specialist
-model: sub2api-deepseek/deepseek-flash
+model: magpie-openai/group/deepseek-flash
 thinking: high
 systemPromptMode: replace
 inheritProjectContext: true

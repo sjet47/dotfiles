@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Code auditor and acceptance reviewer
-model: sub2api-openai/gpt-6-astra
+model: magpie-openai/group/gpt-6-astra
 thinking: high
 systemPromptMode: replace
 inheritProjectContext: true
