@@ -106,6 +106,7 @@ hl.window_rule({ name = "float-nm-connection-editor", match = { class = "nm-conn
 hl.window_rule({ name = "float-localsend",           match = { class = "org.localsend.localsend_app" },                float = true })
 hl.window_rule({ name = "float-dolphin",             match = { class = "org.kde.dolphin" },          float = true })
 hl.window_rule({ name = "float-telegram",            match = { class = "org.telegram.desktop" },     float = true })
+hl.window_rule({ name = "float-magpie",              match = { class = "magpie" },                   float = true })
 
 -- Fcitx5 候选框:XWayland 顶层窗口,去圆角并 pin 防止被 special workspace 盖住
 hl.window_rule({
