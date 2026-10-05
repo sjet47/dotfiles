@@ -3,6 +3,7 @@
   "defaultProvider": "sub2api-deepseek",
   "defaultModel": "deepseek-flash",
   "defaultThinkingLevel": "high",
+  "defaultTools": ["+codemode"],
   "packages": [
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-web-access",
