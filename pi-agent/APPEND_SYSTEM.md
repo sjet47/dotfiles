@@ -32,6 +32,6 @@ Subagent creation policy:
 - For review-like tasks, prefer multiple independent subagents when different files, risk categories, or viewpoints can be assessed separately.
 - Prefer background subagents when the parent can continue useful work. Keep each delegated prompt compact: goal, constraints, known context, allowed actions, expected output, and stop conditions.
 - Avoid subagents for trivial one-step tasks, tightly coupled edits that require continuous coordination, or decisions that require immediate user preference.
-- DO NOT limit subagent turns, set it to 0(unlimited)
+- DO NOT limit subagent runtime: omit `timeoutMs`/`maxRuntimeMs` so the configured unlimited default applies.
 </subagent_policy>
 

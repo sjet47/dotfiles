@@ -1,0 +1,22 @@
+{
+  "toolActivation": "eager",
+  "disabledFeatures": [
+    "agent-management",
+    "watchdog",
+    "missions",
+    "lane-management",
+    "spawn-budget-grants",
+    "lane-metadata",
+    "gates",
+    "usage-budgets",
+    "tool-budgets",
+    "control-overrides",
+    "extension-bindings",
+    "external-machines"
+  ],
+  "scheduledRuns": { "enabled": false },
+  "missions": { "enabled": false },
+  "fleetView": false,
+  "maxActiveAsyncRunsPerSession": 4,
+  "timeoutMs": 2147483647
+}

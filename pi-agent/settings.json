@@ -7,7 +7,10 @@
   "packages": [
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-web-access",
-    "npm:@tintinweb/pi-subagents",
+    {
+      "source": "npm:pi-subagents",
+      "skills": ["!skills/council-mode"]
+    },
     "npm:@aliou/pi-processes",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-schedule-prompt",
@@ -69,5 +72,8 @@
   "markdown": {
     "mermaid": "streaming"
   },
-  "fullscreenCopyOnSelect": true
+  "fullscreenCopyOnSelect": true,
+  "subagents": {
+    "disableBuiltins": true
+  }
 }
