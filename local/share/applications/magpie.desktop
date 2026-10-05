@@ -2,10 +2,12 @@
 Type=Application
 Name=magpie
 Comment=Every agent's model. One place.
+# 官网二进制放在 ~/.local/bin,由其自带更新功能维护
 # Tauri(webkit2gtk)默认回退 XWayland,强制 GDK 走 Wayland
-Exec=env GDK_BACKEND=wayland /usr/bin/magpie app
+Exec=env GDK_BACKEND=wayland /home/sjet/.local/bin/magpie %u
 Icon=magpie
 # Wayland 原生下 class 是小写 magpie(XWayland 回退时才是 Magpie)
 StartupWMClass=magpie
 Categories=Development;Utility;
+MimeType=x-scheme-handler/magpie;
 Terminal=false
