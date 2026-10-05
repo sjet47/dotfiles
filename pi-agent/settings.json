@@ -4,10 +4,7 @@
   "lastChangelogVersion": "1.0.3",
   "defaultThinkingLevel": "high",
   "defaultTools": [
-    "+codemode",
-    "-ls",
-    "-grep",
-    "-find"
+    "+codemode"
   ],
   "packages": [
     "npm:@juicesharp/rpiv-ask-user-question",
