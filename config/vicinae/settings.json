@@ -354,6 +354,9 @@
             "sct-8cf581d43bf9": {
                "alias": "oa-app"
             },
+            "sct-d790c0e249a9": {
+               "alias": "glab-nginx"
+            },
             "sct-ffb46c6a37af": {
                "alias": "oa-act"
             }

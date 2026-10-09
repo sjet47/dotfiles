@@ -8,6 +8,8 @@ nvim/plugin
 config/*
 pi-agent/*
 config/herdr/sessions/tmp
+config/herdr/session-snapshots
+config/herdr/herdr.sock.agent
 
 # Directories
 !config/alacritty/
