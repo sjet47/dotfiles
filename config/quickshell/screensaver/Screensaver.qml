@@ -6,12 +6,12 @@
 //   qs ipc call saver dismiss   收起
 //
 // 开着不管时的时间轴(停画这条与 hypr/hypridle.conf 是**两份配置**,改一边记得改另一边):
-//    880s  停画并收起      (这里,见下)
+//    900s  停画并收起      (这里,见下)
 //    900s  dpms off        (hypridle)
 //   1800s  lock-session    (hypridle → hyprlock)
 //
-// 为什么 880 就停:hypridle 900s 直接把屏幕关了,继续往黑屏上渲染纯属白烧 GPU。
-// 提前 20s 让 LazyLoader.active 转 false,整棵对象树连同那几千个 Text 一起回收 ——
+// 为什么跟关屏对齐在 900:hypridle 900s 直接把屏幕关了,继续往黑屏上渲染纯属白烧 GPU。
+// 关屏同时让 LazyLoader.active 转 false,整棵对象树连同那几千个 Text 一起回收 ——
 // 屏保不显示时在进程里应当是零成本的,不能常驻(单实例本来就 ~370MB,见 ../README.md 坑 17)。
 // 停画时顺手把 forced 清掉,否则唤醒屏幕的那次输入会让屏保重新冒出来。
 //
@@ -32,7 +32,7 @@ import Quickshell.Wayland
 Scope {
     id: saver
 
-    property int stopTimeout: 880
+    property int stopTimeout: 900
 
     property bool forced: false      // 手动拉起(IPC preview)
 

@@ -64,11 +64,11 @@ Lock 保持 `loginctl lock-session`：走标准会话锁语义，由 hypridle �
 
 | 时刻 | 事件 | 配置在哪 |
 | --- | --- | --- |
-| 880s | 停画并收起，整棵对象树卸掉 | `Screensaver.stopTimeout` |
+| 900s | 停画并收起，整棵对象树卸掉 | `Screensaver.stopTimeout` |
 | 900s | `dpms off` | hypridle |
 | 1800s | `loginctl lock-session` → hyprlock | hypridle |
 
-880 这个数不是随便取的：hypridle 900s 直接关屏，再往黑屏上渲染纯属白烧 GPU，提前 20s 收工。收工时顺带清掉 `forced`，否则唤醒屏幕的那次输入会让雨重新冒出来。
+停画和关屏对齐在 900s：hypridle 900s 直接关屏，再往黑屏上渲染纯属白烧 GPU，跟着一起收工。收工时顺带清掉 `forced`，否则唤醒屏幕的那次输入会让雨重新冒出来。
 
 ### 雨怎么画的
 
