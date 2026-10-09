@@ -10,7 +10,7 @@
 //   osd/Power.qml          电源菜单(替代 wlogout)  IPC target: power
 //
 // 另有常驻但平时不占资源的:
-//   screensaver/           空闲 300s 的 matrix 雨屏保      IPC target: saver
+//   screensaver/           手动开启的 matrix 雨屏保      IPC target: saver
 //
 // 子目录不会被 quickshell 当成独立配置(default 配置存在时它不扫子目录),
 // 这里是靠 QML 的目录导入把里面的组件拿进来。

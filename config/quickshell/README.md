@@ -8,7 +8,7 @@
 | `osd/Osd.qml` | 音量 / 亮度 / 麦克风 OSD | `osd` |
 | `osd/Notifications.qml` | 通知守护（替代 mako） | `notif` |
 | `osd/Power.qml` | 电源菜单（替代 wlogout） | `power` |
-| `screensaver/Screensaver.qml` | matrix 雨屏保（空闲 300s） | `saver` |
+| `screensaver/Screensaver.qml` | matrix 雨屏保（仅手动开启） | `saver` |
 | `screensaver/MatrixRain.qml` | 雨的画面本体，不管什么时候该出现 | — |
 
 `osd/` 放的是转瞬即逝的屏上覆盖层。`screensaver/` 是常驻但平时零成本的组件——不下雨时
@@ -29,7 +29,7 @@ qs ipc call notif invoke             # 触发最新一条的 default action(对�
 qs ipc call notif dismissAll         # 清空(对应 makoctl dismiss --all)
 qs ipc call power toggle             # 电源菜单,绑在 SUPER + ALT + M
 qs ipc call power open / hide
-qs ipc call saver preview            # 立刻下雨,调样式时不用真坐等 300s
+qs ipc call saver preview            # 下雨,绑在 SUPER + ALT + S
 qs ipc call saver dismiss            # 收起
 ```
 
@@ -57,18 +57,18 @@ Lock 保持 `loginctl lock-session`：走标准会话锁语义，由 hypridle �
 
 ## 屏保
 
-空闲 300s 铺满每块屏的 matrix 雨。**纯装饰**：不做认证、不替代锁屏，任意输入即退。
+铺满每块屏的 matrix 雨，**只能手动开启**（`SUPER + ALT + S`），不随空闲自动触发。**纯装饰**：
+不做认证、不替代锁屏，任意输入即退。
 
-时间轴横跨两份配置，`hypr/hypridle.conf` 改了这边也要跟着改：
+开着不管时的时间轴横跨两份配置，`hypr/hypridle.conf` 改了这边也要跟着改：
 
 | 时刻 | 事件 | 配置在哪 |
 | --- | --- | --- |
-| 300s | 下雨 | `Screensaver.idleTimeout` |
-| 880s | 停画，整棵对象树卸掉 | `Screensaver.stopTimeout` |
+| 880s | 停画并收起，整棵对象树卸掉 | `Screensaver.stopTimeout` |
 | 900s | `dpms off` | hypridle |
 | 1800s | `loginctl lock-session` → hyprlock | hypridle |
 
-880 这个数不是随便取的：hypridle 900s 直接关屏，再往黑屏上渲染纯属白烧 GPU，提前 20s 收工。
+880 这个数不是随便取的：hypridle 900s 直接关屏，再往黑屏上渲染纯属白烧 GPU，提前 20s 收工。收工时顺带清掉 `forced`，否则唤醒屏幕的那次输入会让雨重新冒出来。
 
 ### 雨怎么画的
 
@@ -171,25 +171,15 @@ per-column 数据，CPU 每帧只更新一个 `time`。字形来自一张运行�
 
 ### 其他
 
-- **空闲检测用 `IdleMonitor`（ext-idle-notify-v1），和 hypridle 同一个协议**，不用自己数时间。
-  它的 `respectInhibitors` 属性直接白送"看视频不弹屏保"——应用申请的 idle-inhibit 会被尊重。
+- **停画计时用 `IdleMonitor`（ext-idle-notify-v1），和 hypridle 同一个协议**，不用自己数时间。
 - **层级选 `Overlay` 是为了盖住 waybar**。waybar 是 Top 层的 layer surface，kitty + cmatrix
   那种普通 toplevel 窗口压根盖不住它。要反过来让 waybar 露在雨上面，把 `WlrLayershell.layer`
   改成 `WlrLayer.Bottom`。
-- 另一个 kitty + cmatrix 给不了的好处：**layer surface 不参与 dwindle 平铺**，屏保每隔几分钟
-  弹一次也不会把布局搅乱（普通窗口会，见长期记忆 `hyprland-dwindle-silent-focus`）。
+- 另一个 kitty + cmatrix 给不了的好处：**layer surface 不参与 dwindle 平铺**，屏保弹出来
+  也不会把布局搅乱（普通窗口会，见长期记忆 `hyprland-dwindle-silent-focus`）。
 - **通知会浮在雨上面**（已实测）。同为 overlay 层时合成器按 surface 创建先后叠，而通知的
   surface 是收到通知那一刻才建的，永远比常驻的屏保晚。调 `shell.qml` 里的声明顺序没用。
-- **全屏时不下雨**。理论上看视频/玩游戏的应用应该申请 idle-inhibit（`respectInhibitors` 会
-  尊重它），但游戏和不少播放器根本不申请，所以补了一道全屏检测：
-
-  ```qml
-  readonly property bool fullscreen: ToplevelManager.activeToplevel?.fullscreen ?? false
-  ```
-
-  **必须用 Wayland 协议层的 toplevel 状态**，见坑 27。
-- 排查"屏保怎么不出现"用 `qs ipc call saver state`：idle / forced / dismissed 三个状态位
-  肉眼看不出来，它能直接区分"压根没触发"和"刚被一次输入收起了"。**自动化截图尤其要注意**——
+- 排查屏保状态用 `qs ipc call saver state`：forced / stopIdle / loaded 肉眼看不出来。**自动化截图尤其要注意**——
   屏保会被任何输入收起，脚本跑到一半人动一下鼠标，拍到的就是桌面。
 
 ## 通知卡片的布局
