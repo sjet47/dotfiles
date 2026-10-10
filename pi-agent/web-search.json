@@ -2,7 +2,8 @@
   "workflow": "auto-summary",
   "openaiSearchProviders": ["magpie-openai"],
   "openaiUseProviderBaseUrl": true,
-  "openaiSearchModel": "codex/gpt-6-luna",
+  "openaiSearchModel": "grok/grok-4.7",
+  "summaryModel": "magpie-openai/group/deepseek-flash",
   "searchRouting": {
     "providers": ["openai", "exa", "parallel-mcp", "duckduckgo"],
     "useCurrentModel": false,
