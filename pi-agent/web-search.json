@@ -4,10 +4,14 @@
   "openaiUseProviderBaseUrl": true,
   "openaiSearchModel": "grok/grok-4.7",
   "summaryModel": "magpie-openai/group/deepseek-flash",
+  "webSearch": {
+    "allowedProviders": ["openai", "exa"]
+  },
   "searchRouting": {
-    "providers": ["openai", "exa", "parallel-mcp", "duckduckgo"],
+    "providers": ["openai", "exa"],
     "useCurrentModel": false,
     "fallbackOn": ["unsupported", "transient", "quota", "network", "invalid-response"]
   },
+  "exaApiKey": "",
   "xcrawlApiKey": "$XCRAWL_KEY"
 }
