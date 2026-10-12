@@ -17,7 +17,7 @@ pi-cmd() {
   cmd=$(
     pi -p --no-session --no-tools --no-extensions --no-skills \
       --no-prompt-templates --no-context-files --no-themes --offline \
-      --thinking off --model 'deepseek/deepseek-v4-flash' \
+      --thinking off --model 'magpie-openai/group/deepseek-flash' \
       --system-prompt 'Convert the user request into one immediately runnable zsh command for Arch Linux. Output ONLY the command: no markdown fences, no explanation. Use PWD and recent history as context. If the request is already a command, fix or complete it. If you cannot produce a command, output nothing.' \
       "$prompt"$'\n\n'"$context"
   ) || {
