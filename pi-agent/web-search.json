@@ -12,6 +12,6 @@
     "useCurrentModel": false,
     "fallbackOn": ["unsupported", "transient", "quota", "network", "invalid-response"]
   },
-  "exaApiKey": "",
+  "exaApiKey": "$EXA_API_KEY",
   "xcrawlApiKey": "$XCRAWL_KEY"
 }
