@@ -13,6 +13,9 @@ hl.bind(mod .. " + ALT + L", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mod .. " + ALT + S", hl.dsp.exec_cmd("qs ipc call saver preview"))
 -- 电源菜单:wlogout → quickshell(config/quickshell/osd/Power.qml)
 hl.bind(mod .. " + ALT + M", hl.dsp.exec_cmd("qs ipc call power toggle"))
+-- 电源键短按也走电源菜单。HHKB 的 Fn + 左上角发的就是 KEY_POWER;logind 那边用
+-- /etc/systemd/logind.conf.d/10-power-key.conf 设成 HandlePowerKey=ignore,否则会直接关机。
+hl.bind("XF86PowerOff", hl.dsp.exec_cmd("qs ipc call power toggle"))
 
 hl.bind(mod .. " + Q",      hl.dsp.window.close())
 hl.bind(mod .. " + RETURN", hl.dsp.exec_cmd("uwsm-app -- " .. vars.terminal))
