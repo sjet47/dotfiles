@@ -130,6 +130,7 @@ if [[ ! $__ZSH_LOAD_ONCE ]]; then
     ocaml
     pi-cmd
     cd-stack
+    herdr
   )
 
   for setup in "${__plugin_setups[@]}"; do

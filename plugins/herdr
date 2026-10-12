@@ -1,0 +1,13 @@
+alias h='herdr'
+
+function _load_herdr_machine() {
+  h machine list --json | jq -r ".[] | select(.label == \"${1:?label needed}\") | .id"
+}
+
+function hme() {
+  herdr machine enable $(_load_herdr_machine $1)
+}
+
+function hmd() {
+  herdr machine disable $(_load_herdr_machine $1)
+}
