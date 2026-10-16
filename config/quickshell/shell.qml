@@ -17,6 +17,7 @@
 //
 pragma ComponentBehavior: Bound
 
+import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
@@ -38,8 +39,30 @@ ShellRoot {
         stdout: StdioCollector { onStreamFinished: root.seedMonitor = this.text.trim() }
     }
 
+    // 机器本地覆盖配置(local/ 已被 gitignore;不存在时跳过),模板见 local/Local.example.qml。
+    // 用 Loader 而不是 import "local":import 缺文件会让整个 shell 加载失败,
+    // Loader 只打一条 warning,item 为 null,下面用 ?. 兜底取默认值。
+    Loader {
+        id: localLoader
+        source: Qt.resolvedUrl("local/Local.qml")
+    }
+    readonly property var local: localLoader.item
+
+    // quickshell 的热重载只监视 import 链上的文件,Loader 加载的 Local.qml 不在其中
+    // (实测只改它不重载)。这里自己盯着它,变了就整个 shell 重载,效果等同改其他 QML。
+    // 文件不存在时 FileView 静默失败不再监视:新建 Local.qml 之后碰一下任意 QML 即可。
+    FileView {
+        path: Quickshell.shellPath("local/Local.qml")
+        watchChanges: true
+        printErrors: false
+        onFileChanged: Quickshell.reload(false)
+    }
+
     Osd { activeMonitor: root.activeMonitor }
-    Notifications { activeMonitor: root.activeMonitor }
+    Notifications {
+        activeMonitor: root.activeMonitor
+        pinnedMonitor: root.local?.notifMonitor ?? ""
+    }
     Power { activeMonitor: root.activeMonitor }
 
     // 不吃 activeMonitor:屏保要盖住每一块屏,不是只跟着焦点走。

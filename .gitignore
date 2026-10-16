@@ -57,6 +57,10 @@ config/herdr/.plugins.lock
 # hypr local-only 配置:除模板外都不入库
 config/hypr/local/*
 !config/hypr/local/example.lua
+
+# quickshell 同理:入口用 Loader 加载 local/Local.qml,缺失时跳过
+config/quickshell/local/*
+!config/quickshell/local/Local.example.qml
 config/hypr/scripts/wallpaper.sh
 
 # 迁移到 hyprland.lua 后,Hyprland 在缺失时会自动生成 hyprland.conf stub,不入库

@@ -28,10 +28,11 @@ Scope {
     // 焦点屏 —— 这里只当兜底用,通知本身不跟焦点走
     required property string activeMonitor
 
-    // 通知固定钉在一块屏上(pinnedMonitor)。OSD / 电源菜单跟着焦点是对的(反馈应该出现在你正看的屏上),
+    // 通知可以固定钉在一块屏上。OSD / 电源菜单跟着焦点是对的(反馈应该出现在你正看的屏上),
     // 但通知跟着焦点跳会很烦 —— 切个屏正在读的通知就跑了。
+    // 接口名是机器相关的,由 shell.qml 从 local/Local.qml(不入库)传进来;空串 = 跟焦点屏走。
     // 钉住的屏不在(拔了、改名)时回退到焦点屏,否则通知会静默消失。
-    property string pinnedMonitor: "DP-2"
+    property string pinnedMonitor: ""
 
     readonly property string targetMonitor: {
         if (notif.pinnedMonitor !== ""

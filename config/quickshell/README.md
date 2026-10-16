@@ -10,6 +10,7 @@
 | `osd/Power.qml` | 电源菜单（替代 wlogout） | `power` |
 | `screensaver/Screensaver.qml` | matrix 雨屏保（仅手动开启） | `saver` |
 | `screensaver/MatrixRain.qml` | 雨的画面本体，不管什么时候该出现 | — |
+| `local/Local.qml` | 本机配置（不入库，模板 `local/Local.example.qml`）：通知钉在哪块屏 | — |
 
 `osd/` 放的是转瞬即逝的屏上覆盖层。`screensaver/` 是常驻但平时零成本的组件——不下雨时
 整棵对象树都不存在（`LazyLoader`）。将来做真·常驻组件（比如 waybar 的替代）再另开目录。
@@ -17,6 +18,14 @@
 放在 `~/.config/quickshell/shell.qml` 就是 quickshell 的 "default" 配置 —— 此时**子目录不会再被
 当成独立配置**，但那只影响"配置发现"，不影响 QML 自己的目录导入：`shell.qml` 里一句
 `import "osd"` 就能把里面的组件按文件名当类型用，`required property` 照常传。
+
+## 本机配置
+
+机器相关的值(目前只有通知钉在哪块屏)不写死在 QML 里,放 `local/Local.qml`,和 hypr 的
+`local/init.lua` 一个思路:除模板 `local/Local.example.qml` 外整个目录 gitignore。入口用
+`Loader` 按路径加载而不是 `import "local"` —— import 缺文件会让整个 shell 起不来,Loader
+只报一条 warning、`item` 为 null,各项回落到默认值。热重载只盯 import 链,Loader 加载的文件
+不在其中,所以 shell.qml 里另有一个 `FileView` 盯着它,改了就 `Quickshell.reload`。
 
 ## 对外接口
 
