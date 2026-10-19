@@ -1,5 +1,5 @@
 {
-  "workflow": "auto-summary",
+  "workflow": "none",
   "openaiSearchProviders": ["magpie-openai"],
   "openaiUseProviderBaseUrl": true,
   "openaiSearchModel": "grok/grok-4.7",
