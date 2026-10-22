@@ -15,7 +15,6 @@ Thunderbird 的 `userapp-*`——整目录链接会把这些一起拖进仓库�
 
 | 文件 | 改了什么 |
 |---|---|
-| `com.anthropic.Claude.desktop` | Wayland + IME + `--password-store=gnome-libsecret`(keyring) |
 | `obsidian.desktop` | Wayland + IME |
 | `binaryninja.desktop` | `QT_QPA_PLATFORM=wayland` + `env -u QT_SCALE_FACTOR`(详见文件内注释) |
 | `craft-agents.desktop` | Wayland(AppImage) |
