@@ -23,6 +23,7 @@ alias lg="lazygit"
 alias gcpb="git branch --show-current | wl-copy -n"
 alias gcph="git rev-parse HEAD | wl-copy -n"
 
+function __main_worktree() { dirname "$(git rev-parse --path-format=absolute --git-common-dir)"; }
 function ghcl() { git clone --recurse-submodules "https://github.com/$1.git"; }
 function ghcls() { git clone --recurse-submodules "git@github.com:$1.git"; }
 function git_repo_url() { cd $1 && git remote -v | grep origin | head -n 1 | awk '{print $2}'; }
@@ -33,12 +34,12 @@ function gadsm() {
     git submodule add $repo_url $repo_path
 }
 function gpw() {
+    # Assume $PWD in work-tree dir
     local worktree="${1:-${PWD##*/}}"
     local main_branch=${2:-master}
-    # Assume $PWD in work-tree dir
     git switch -C tmp
     (
-        cd .. || return
+        cd $(__main_worktree) || return
         git switch $main_branch
         git pull origin $main_branch
         git branch -f $worktree
@@ -47,9 +48,9 @@ function gpw() {
 }
 function grw() {
     local main_branch=${1:-master}
-    # Assume $PWD in work-tree dir
     (
-        cd .. || return
+        cd $(__main_worktree) || return
+        git switch $main_branch
         git pull origin $main_branch
     )
     git rebase $main_branch
