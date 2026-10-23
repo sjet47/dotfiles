@@ -123,3 +123,5 @@ hl.animation({ leaf = "zoomFactor",    enabled = true, speed = 7,    bezier = "q
 -- 图层规则(anonymous/named layer rules)
 hl.layer_rule({ name = "vicinae", match = { namespace = "vicinae" }, blur = true, ignore_alpha = 0,   no_anim = true })
 hl.layer_rule({ name = "waybar",  match = { namespace = "waybar" },  blur = true, ignore_alpha = 0.4 })
+-- slurp 选框:退出后 grim 立即截图,带淡出动画会把选框黑边截进去
+hl.layer_rule({ name = "slurp",   match = { namespace = "^selection$" }, no_anim = true })
