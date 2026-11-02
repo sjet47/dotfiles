@@ -32,14 +32,15 @@ JQ_MONITOR_GEO='
 '
 
 get_rectangles() {
-  local monitor workspace
-  monitor=$(hyprctl monitors -j | jq -c '.[] | select(.focused == true)')
+  local monitors workspaces
+  monitors=$(hyprctl monitors -j)
+  # slurp 覆盖所有屏幕,所以每块屏都给出显示器框 + 其可见工作区的窗口框,才能跨屏选。
   # 按工作区 name 匹配而不是 id:Hyprland 0.57 起具名/特殊工作区的 id 为 null,
   # 拿 id 做 tonumber 会让 jq 报错,一个框都给不出来。
   # 特殊工作区展开时盖在普通工作区之上,只列它的窗口。
-  workspace=$(jq -r 'if .specialWorkspace.name != "" then .specialWorkspace.name else .activeWorkspace.name end' <<<"$monitor")
-  jq -r "${JQ_MONITOR_GEO} format_geo" <<<"$monitor"
-  hyprctl clients -j | jq -r --arg ws "$workspace" '.[] | select(.workspace.name == $ws) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
+  workspaces=$(jq -c '[.[] | if .specialWorkspace.name != "" then .specialWorkspace.name else .activeWorkspace.name end]' <<<"$monitors")
+  jq -r "${JQ_MONITOR_GEO} .[] | format_geo" <<<"$monitors"
+  hyprctl clients -j | jq -r --argjson ws "$workspaces" '.[] | select(.workspace.name as $n | any($ws[]; . == $n)) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
 }
 
 PID=""
