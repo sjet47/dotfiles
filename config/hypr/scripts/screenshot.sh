@@ -32,10 +32,14 @@ JQ_MONITOR_GEO='
 '
 
 get_rectangles() {
-  local active_workspace
-  active_workspace=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.id')
-  hyprctl monitors -j | jq -r --arg ws "$active_workspace" "${JQ_MONITOR_GEO} .[] | select(.activeWorkspace.id == (\$ws | tonumber)) | format_geo"
-  hyprctl clients -j | jq -r --arg ws "$active_workspace" '.[] | select(.workspace.id == ($ws | tonumber)) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
+  local monitor workspace
+  monitor=$(hyprctl monitors -j | jq -c '.[] | select(.focused == true)')
+  # 按工作区 name 匹配而不是 id:Hyprland 0.57 起具名/特殊工作区的 id 为 null,
+  # 拿 id 做 tonumber 会让 jq 报错,一个框都给不出来。
+  # 特殊工作区展开时盖在普通工作区之上,只列它的窗口。
+  workspace=$(jq -r 'if .specialWorkspace.name != "" then .specialWorkspace.name else .activeWorkspace.name end' <<<"$monitor")
+  jq -r "${JQ_MONITOR_GEO} format_geo" <<<"$monitor"
+  hyprctl clients -j | jq -r --arg ws "$workspace" '.[] | select(.workspace.name == $ws) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
 }
 
 PID=""
