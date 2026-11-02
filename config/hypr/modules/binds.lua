@@ -28,7 +28,8 @@ hl.bind(mod .. " + S",      hl.dsp.layout("togglesplit"))  -- dwindle
 hl.bind("PRINT",             hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"))
 hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh region"))
 hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh window"))
-hl.bind(mod .. " + SHIFT + F", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh fullscreen"))
+hl.bind(mod .. " + SHIFT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh fullscreen"))
+hl.bind(mod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 
 -- 录屏:region(默认拉框) / window / fullscreen,再次按下停止并保存到 ~/Videos
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenrecord.sh"))
