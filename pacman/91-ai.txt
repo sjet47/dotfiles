@@ -5,7 +5,7 @@
 #
 # 单独成组是因为这一类的生命周期跟别的包不一样:版本号多是 alpha/rc,上游几周一换代,
 # 互相替代也快 —— 放在一起,换代时一眼能看出谁可以删。
-# 写代码时天天要用的 agent 工具链(llama.cpp / herdr / playwright-cli)不在这里,在 40-dev。
+# 写代码时天天要用的 herdr 不在这里,在 40-dev。
 #
 # 行尾注释只写"这个包是干嘛的、什么情况下才需要它",不写本机装没装(理由同 90-optional)。
 # [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
@@ -16,6 +16,10 @@ dsh-desktop-linux-bin  # [AUR] DeepSeek Harness 桌面端的 Linux 移植(第三
                        # .desktop 覆盖在 local/share/applications/deepseek-harness.desktop,
                        # 界面冻结的排查记录见 debug/dsh-freeze-2026-11-02/
 grok-bot-bin           # [AUR] Grok Bot 桌面 agent
+
+# ── 本地推理 / agent 辅助工具 ──────────────────────────────────────────
+llama.cpp       # 本地跑 LLM 推理(archlinuxcn);推理后端在 extra 的 ggml 里,有独显才跑得动大模型
+playwright-cli  # [AUR] 浏览器自动化的录制/选择器调试
 
 # ── AI 桌面客户端 —— 都是 Electron 大包 ───────────────────────────────────
 # Wayland/IME 启动参数都在仓库里:local/share/applications/ 和 config/chatgpt-flags.conf
