@@ -41,6 +41,26 @@ function link_desktop_entries() {
     echo
 }
 
+# 用户级图标补丁。上游若只装 scalable SVG,静态构建的 Qt 程序(Vicinae)拿不到图标:
+# 它没有 SVG icon engine,`QIcon::fromTheme()` 对纯 SVG 的图标名返回 null。
+# 这里按 hicolor 尺寸目录补 PNG,并逐文件软链进 ~/.local/share/icons
+# (同名文件可能来自别的主题/包,不能整目录 symlink)。
+function link_icons() {
+    local src_root="$HOME/dotfiles/local/share/icons"
+    local dst_root="$HOME/.local/share/icons"
+
+    info "link icons"
+    for src in "$src_root"/hicolor/*/apps/*; do
+        local rel="${src#$src_root/}"
+        local dst="$dst_root/$rel"
+        info "make symbol link $src -> $dst" 3
+        mkdir -p "$(dirname "$dst")"
+        ln -sfn "$src" "$dst"
+    done
+    ok "link icons"
+    echo
+}
+
 function mkdir_home() {
     info "make directory $HOME/$1" 3
     mkdir -p -v "$HOME/$1"
@@ -80,6 +100,7 @@ function main() {
     make_slinks
     mkdirs
     link_desktop_entries
+    link_icons
 
     # local profile
     touch "$HOME/.profile"
