@@ -12,9 +12,10 @@
 | `20-desktop.txt` | Hyprland、KDE 应用、音频、输入法 —— 装完有可用图形界面 | ✓ |
 | `25-fonts.txt` | CJK / 兜底字形 / emoji / 等宽 / UI 字体 | ✓ |
 | `30-cli.txt` | 日常 CLI，交互习惯全在这 | ✓ |
-| `40-dev.txt` | 语言链、容器、数据库、性能剖析、AI agent | ✓ |
+| `40-dev.txt` | 语言链、容器、数据库、性能剖析、日常 AI 工具链 | ✓ |
 | `50-apps.txt` | GUI 应用、代理 VPN、抓包、游戏、32 位运行时 | ✓ |
 | `90-optional.txt` | 备选方案 / 一次性尝试 / 玩具，**迁移时整组跳过** | ✓ |
+| `91-ai.txt` | AI agent harness / 桌面客户端 / 模型网关，可选组，**迁移时整组跳过** | ✓ |
 | `../scripts/pkg-sync` | 对账 + 安装（在 PATH 里，可直接敲 `pkg-sync`）| ✓ |
 
 清单只收 `pacman -Qqe`（显式安装）的包，依赖由 pacman 自动拉齐，不入库。
@@ -48,9 +49,10 @@ cp pacman/00-local.example.txt pacman/00-local.txt   # 然后按自己的硬件�
 不做这一步的话，`pkg-sync` 会把本机的微码和显卡驱动全报成「系统里有、清单里没有」——
 它检测到缺文件时会直接提示。
 
-### `90-optional.txt` 是单向对账
+### `9x` 可选组是单向对账
 
-这一组里的包**装了不报「未记录」，没装也不报「缺包」**。所以它既能停放"装着但随时能删"的
+`90-optional.txt`、`91-ai.txt` 等 `9x-*` 文件都是可选组，脚本按文件名前缀 `9[0-9]-` 识别。
+这些组里的包**装了不报「未记录」，没装也不报「缺包」**。所以它既能停放"装着但随时能删"的
 包（被更好方案取代的旧工具），也能停放"记着但暂时不装"的包（要 license 的、依赖特定硬件的、
 上游构建坏掉的）。其余组是双向对账：写进去就意味着"这台机器应该装它"。
 
@@ -63,7 +65,8 @@ cp pacman/00-local.example.txt pacman/00-local.txt   # 然后按自己的硬件�
 pkg-sync              # 三向对账
 pkg-sync repos        # 只检查前置仓库
 pkg-sync orphans      # 列出全部孤儿包(按体积排序)
-pkg-sync install      # 装 00~50 组(跳过 90-optional)
+pkg-sync install      # 装 00~50 组(跳过 9x 可选组)
+pkg-sync install 91-ai            # 可选组要点名装
 pkg-sync install 40-dev 50-apps   # 只装指定组
 ```
 
@@ -111,7 +114,7 @@ pkg-sync install 40-dev 50-apps   # 只装指定组
 2. `cp 00-local.example.txt 00-local.txt`，按新机器的 CPU/GPU 改（`lscpu`、`lspci -k`）
 3. `pkg-sync install 00-local 10-base` → 能开机联网
 4. `pkg-sync install 20-desktop 25-fonts` → 有图形界面且不满屏方框
-5. 剩下的按需装，`90-optional` 想清楚再单独挑
+5. 剩下的按需装，`9x` 可选组（`90-optional`、`91-ai`）想清楚再单独挑
 
 ---
 

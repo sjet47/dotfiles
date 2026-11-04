@@ -5,7 +5,7 @@
 #   ./pkg-sync                     三向对账:清单与系统的差异 + 孤儿层(附带仓库检查)
 #   ./pkg-sync repos               只检查前置仓库是否就绪
 #   ./pkg-sync orphans             列出全部孤儿包(按体积排序)
-#   ./pkg-sync install             安装 00~50 组(跳过 90-optional)
+#   ./pkg-sync install             安装 00~50 组(跳过 9x 可选组)
 #   ./pkg-sync install 40-dev ...  只装指定组
 #   ./pkg-sync install --skip-repo-check ...   跳过仓库检查(明知选中组不需要时)
 #
@@ -18,7 +18,8 @@
 #                  (比如与 Hyprland 并存的整套 Plasma)。不入 git,每台机器自己维护。
 #                  参与对账和安装,只是版本库里没有它 —— 新机器照 00-local.example.txt 抄。
 #   *.example.txt  模板,永远不当清单读。
-#   90-optional    单向对账:装了不报"未记录",没装也不报"缺包"。
+#   9x-*           可选组(90-optional / 91-ai ...),单向对账:装了不报"未记录",
+#                  没装也不报"缺包"。install 不带参数时整批跳过,要装得点名。
 #
 # 对账有三个方向,第三个是后加的:清单只记显式包(pacman -Qqe),
 # 所以任何以"依赖"身份装进来的东西 —— 不管是 AUR 的 makedepends 残留,
@@ -42,8 +43,8 @@ extract() { sed 's/#.*//' "$@" | tr -s '[:space:]' '\n' | grep -v '^$' | sort -u
 
 # 所有真清单(排掉 *.example.txt 这类模板)
 all_groups() { ls [0-9][0-9]-*.txt | grep -v '\.example\.txt$'; }
-# install 与"缺包"对账的范围:再去掉 90-optional
-default_groups() { all_groups | grep -v '^90-'; }
+# install 与"缺包"对账的范围:再去掉 9x 可选组
+default_groups() { all_groups | grep -v '^9[0-9]-'; }
 
 repo_hint() {
     case "$1" in
@@ -135,7 +136,7 @@ WARN
 
 cmd_check() {
     local listed required sys untracked missing
-    # 两个方向用不同的清单范围:90-optional 里的包装了算数(不报未记录),
+    # 两个方向用不同的清单范围:9x 可选组里的包装了算数(不报未记录),
     # 但没装不算缺 —— 那一组本来就是"可留可不留",否则对账永远有一堆噪音。
     listed=$(extract $(all_groups))
     required=$(extract $(default_groups))
@@ -155,7 +156,7 @@ cmd_check() {
         echo
     fi
     if [[ -n $missing ]]; then
-        echo "清单里有、系统没装（清单腐烂，或该包已被弃用；不含 90-optional）："
+        echo "清单里有、系统没装（清单腐烂，或该包已被弃用；不含 9x 可选组）："
         echo "$missing" | sed 's/^/  - /'
         echo
     fi

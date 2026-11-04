@@ -1,0 +1,28 @@
+# 91-ai.txt — AI agent / harness / 桌面客户端 —— 迭代快、体积大,按需装
+#
+# 和 90-optional 同属 9x 可选组:pkg-sync 单向对账(装了不报"未记录",没装也不报"缺包"),
+# install 不带参数时整组跳过,要装得点名:pkg-sync install 91-ai
+#
+# 单独成组是因为这一类的生命周期跟别的包不一样:版本号多是 alpha/rc,上游几周一换代,
+# 互相替代也快 —— 放在一起,换代时一眼能看出谁可以删。
+# 写代码时天天要用的 agent 工具链(llama.cpp / herdr / playwright-cli)不在这里,在 40-dev。
+#
+# 行尾注释只写"这个包是干嘛的、什么情况下才需要它",不写本机装没装(理由同 90-optional)。
+# [AUR] 标记的包必须用 paru/yay 安装,纯 pacman 装不了。
+
+# ── Agent harness ───────────────────────────────────────────────────
+deepseek-harness-bin   # [AUR] DeepSeek Harness 的 CLI 与 agent 运行时(官方预编译)
+dsh-desktop-linux-bin  # [AUR] DeepSeek Harness 桌面端的 Linux 移植(第三方打包官方构建);
+                       # .desktop 覆盖在 local/share/applications/deepseek-harness.desktop,
+                       # 界面冻结的排查记录见 debug/dsh-freeze-2026-11-02/
+grok-bot-bin           # [AUR] Grok Bot 桌面 agent
+
+# ── AI 桌面客户端 —— 都是 Electron 大包 ───────────────────────────────────
+# Wayland/IME 启动参数都在仓库里:local/share/applications/ 和 config/chatgpt-flags.conf
+claude-desktop    # [AUR] Claude 桌面端(Chat / Cowork / Claude Code)
+chatgpt-desktop   # [AUR] ChatGPT 桌面端,官方二进制重打包
+alma-desktop-bin  # [AUR] 多模型聚合客户端,OpenAI/Anthropic/Gemini/自定义 provider 切着用
+
+# ── 模型网关 ─────────────────────────────────────────────────────────
+webkit2gtk-4.1    # magpie(本地模型路由网关)的运行库。magpie 本体不走包管理:
+                  # 官网二进制放 ~/.local/bin/magpie 自更新,AUR magpie-bin 跟版太慢
