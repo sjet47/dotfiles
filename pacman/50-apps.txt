@@ -49,8 +49,9 @@ pam-u2f                   # FIDO U2F 的 PAM 模块;插着钥匙才能解锁
 oath-toolkit              # oathtool 生成/校验 TOTP;命令行验一次性码,不用开图形客户端
 
 # ── 代理 / VPN ──────────────────────────────────────────────────────
-v2raya          # 代理客户端的 Web GUI;用独立 xray-core,注意版本校验那个坑
-xray            # v2raya 的实际内核
+v2raya-bin      # [AUR] 代理客户端的 Web GUI;2026-11-03 由 archlinuxcn 的 v2raya 换来:
+                # 自带同版本 v2raya_core,天然过 2.4+ 的 core 版本严格校验,不再需要 xray shim
+xray            # 独立 xray-core;不再是 v2raya 的内核,手写配置/对照测试时直接跑
 v2ray           # 老 v2ray-core;个别只认它的配置还在用
 hysteria        # 基于 QUIC 的代理;丢包高的网络下比 TCP 系稳
 sing-box        # 通用代理内核;部分订阅只给 sing-box 格式的配置

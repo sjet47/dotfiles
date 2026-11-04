@@ -83,6 +83,7 @@ prometheus-redis-exporter  # Redis 指标采集
 protoc-gen-go  # [AUR] protobuf 的 Go 代码生成插件
 grpcurl        # [AUR] gRPC 版的 curl,调试服务用
 websocat       # WebSocket 版的 netcat
+mkcert         # 本地自建 CA 签开发证书;测 TLS 服务(含 xray 自签证书场景)时用
 httpie         # 更友好的 HTTP 命令行客户端
 
 # ── 性能剖析 / 逆向 ─────────────────────────────────────────────────────
