@@ -1,0 +1,4 @@
+# 换成挂了 zhwiki 的词典;用户词库名不变,仍是 rime_ice。
+patch:
+  translator/dictionary: rime_ice_ext
+  translator/user_dict: rime_ice

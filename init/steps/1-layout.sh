@@ -61,6 +61,23 @@ function link_icons() {
     echo
 }
 
+# Rime 用户配置。~/.local/share/fcitx5/rime 里混着 userdb 和 build 产物,
+# 不能整目录 symlink,只能逐文件链接。雾凇词库本身来自 pacman 包。
+function link_rime_config() {
+    local src_dir="$HOME/dotfiles/local/share/fcitx5/rime"
+    local dst_dir="$HOME/.local/share/fcitx5/rime"
+
+    info "link rime config"
+    mkdir -p "$dst_dir"
+    for src in "$src_dir"/*.yaml; do
+        local dst="$dst_dir/$(basename "$src")"
+        info "make symbol link $src -> $dst" 3
+        ln -sfn "$src" "$dst"
+    done
+    ok "link rime config"
+    echo
+}
+
 function mkdir_home() {
     info "make directory $HOME/$1" 3
     mkdir -p -v "$HOME/$1"
@@ -101,6 +118,7 @@ function main() {
     mkdirs
     link_desktop_entries
     link_icons
+    link_rime_config
 
     # local profile
     touch "$HOME/.profile"

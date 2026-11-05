@@ -1,0 +1,17 @@
+# 雾凇词库 + zhwiki。
+# import_tables 不递归,导入 rime_ice 拿不到它引用的 cn_dicts,所以这里要逐项列出,
+# 上游 /usr/share/rime-data/rime_ice.dict.yaml 的列表变了要同步。
+# zhwikisource/zhwiktionary 没挂:实测会把古文生僻词顶进常用候选(shurufa -> 暑溽/树乳)。
+---
+name: rime_ice_ext
+version: "1"
+sort: by_weight
+import_tables:
+  - cn_dicts/8105
+  - cn_dicts/base
+  - cn_dicts/ext
+  - cn_dicts/tencent
+  - cn_dicts/others
+  - zhwiki
+  - web-slang
+...

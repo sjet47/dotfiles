@@ -1,0 +1,4 @@
+# 雾凇拼音由 pacman 包 rime-ice-pinyin-git 提供,这里只启用它的预设。
+patch:
+  __include: rime_ice_suggestion:/
+  menu/page_size: 7
