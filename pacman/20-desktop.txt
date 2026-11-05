@@ -99,6 +99,9 @@ fcitx5-gtk             # GTK 应用集成
 fcitx5-qt              # Qt 应用集成
 fcitx5-material-color  # fcitx5 候选框主题
 fcitx5-pinyin-zhwiki   # 中文维基词条做的拼音词库;打专有名词全靠它
+fcitx5-rime            # Rime 引擎,默认输入法
+rime-ice-pinyin-git    # 雾凇拼音全拼;词库和预设都在 /usr/share/rime-data
+rime-pinyin-zhwiki     # 中文维基词库的 Rime 版,由 rime_ice_ext 词典挂载
 
 # ── 光标 / 音效主题 ──────────────────────────────────────────────────────
 adwaita-cursors         # 光标主题(gtk settings.ini + XCURSOR_THEME 都指向 Adwaita)
