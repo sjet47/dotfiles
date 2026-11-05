@@ -1,4 +1,8 @@
 # 换成挂了 zhwiki 的词典;用户词库名不变,仍是 rime_ice。
+# quickphrase:`;` 前缀输入 LaTeX 符号和 emoji,见 lua/quickphrase.lua。
 patch:
   translator/dictionary: rime_ice_ext
   translator/user_dict: rime_ice
+  recognizer/patterns/quickphrase: "^;[\\\\:_A-Za-z]*$"
+  engine/translators/+:
+    - lua_translator@*quickphrase

@@ -68,9 +68,9 @@ function link_rime_config() {
     local dst_dir="$HOME/.local/share/fcitx5/rime"
 
     info "link rime config"
-    mkdir -p "$dst_dir"
-    for src in "$src_dir"/*.yaml; do
-        local dst="$dst_dir/$(basename "$src")"
+    mkdir -p "$dst_dir/lua"
+    for src in "$src_dir"/*.yaml "$src_dir"/lua/*.lua; do
+        local dst="$dst_dir/${src#$src_dir/}"
         info "make symbol link $src -> $dst" 3
         ln -sfn "$src" "$dst"
     done
