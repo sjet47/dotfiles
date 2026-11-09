@@ -2,6 +2,10 @@
 
 Arch Linux + Hyprland 的个人配置仓库。
 
+## Git 直接提交到 main
+
+如非特殊说明，直接提交到 `main`，不用开分支。
+
 ## 视觉改动要截图自验证
 
 改完 waybar 样式、Hyprland 外观（gaps/border/blur/动画）、wlogout 布局这类**视觉相关配置后，截图确认实际效果**，不要只凭代码判断对错：
