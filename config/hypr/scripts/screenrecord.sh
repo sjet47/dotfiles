@@ -26,7 +26,9 @@ make_gif_and_copy() {
   local filter="fps=$GIF_FPS,scale='min($GIF_MAX_WIDTH,iw)':-2:flags=lanczos,split[a][b];"
   filter+="[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle"
   if ffmpeg -nostdin -v error -y -i "$mp4" -filter_complex "$filter" "$gif"; then
-    wl-copy --type image/gif <"$gif"
+    # Chromium 系只读 image/png 和 text/uri-list,按文件粘贴才能保住动图
+    python3 -c 'import pathlib, sys; sys.stdout.write(pathlib.Path(sys.argv[1]).as_uri() + "\r\n")' "$gif" |
+      wl-copy --type text/uri-list
     notify-send "GIF 已复制到剪贴板" "$gif" -t 5000
   else
     rm -f "${gif:?}"
