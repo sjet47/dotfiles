@@ -33,6 +33,7 @@ tensaku-bin          # [AUR] 截图标注(AUR,satty fork,支持滚动长截图);
 spectacle            # KDE 截图工具;主力是 hypr/scripts/screenshot.sh,这个作备用
 gpu-screen-recorder  # 硬件加速录屏;RTX 4080 上走 NVENC,比 wl-screenrec 省 CPU
 wl-screenrec-git     # 录屏(archlinuxcn / AUR);screenrecord.sh 默认用它
+ffmpeg               # screenrecord.sh 把小录屏转成 GIF
 wl-clipboard         # wl-copy / wl-paste;截图脚本和 alias/git 都在用
 xclip                # X11 剪贴板;config/zellij/config.kdl 的 copy_command 配的就是它
 cliphist             # 剪贴板历史
