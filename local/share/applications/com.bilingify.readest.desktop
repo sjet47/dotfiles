@@ -1,0 +1,13 @@
+[Desktop Entry]
+# Readest 的 Tauri CEF 运行时写死 ozone-platform=x11,只能走 XWayland;
+# force_zero_scaling 下界面按 1x 渲染偏小,这里手动指定缩放。
+# 上游: https://github.com/readest/readest/issues/6432
+Categories=Office;
+Comment=Your online library
+Exec=readest --force-device-scale-factor=1.5
+StartupWMClass=readest
+Icon=readest
+Name=Readest
+Terminal=false
+Type=Application
+MimeType=application/epub+zip;application/x-mobipocket-ebook;application/vnd.amazon.ebook;application/vnd.amazon.mobi8-ebook;application/x-fictionbook+xml;application/vnd.comicbook+zip;application/pdf;text/plain;text/markdown;x-scheme-handler/readest;x-scheme-handler/readest-onedrive;x-scheme-handler/com.googleusercontent.apps.209390247301-ctpmep68ppfa56r1b8tr35e4qi4p60kq
