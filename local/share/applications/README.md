@@ -22,7 +22,7 @@ Thunderbird 的 `userapp-*`——整目录链接会把这些一起拖进仓库�
 | `stably-orca.desktop` | Wayland + IME |
 | `alma.desktop` | Wayland + IME(顺带把 `StartupWMClass` 改成 Wayland 下的小写 `alma`) |
 | `magpie.desktop` | Tauri:`GDK_BACKEND=wayland`(`StartupWMClass` 同样改成小写 `magpie`) |
-| `com.bilingify.readest.desktop` | Tauri CEF 写死 X11,切不了 Wayland,只能 `--force-device-scale-factor=1.5` 修 XWayland 下界面偏小 |
+| `com.bilingify.readest.desktop` | Tauri CEF 写死 X11,切不了 Wayland;`env GDK_SCALE=2` 修 XWayland 下界面偏小(Chromium 参数在发布版被忽略，详见文件内注释) |
 
 不收的：没加自定义 flag 的手动条目(typora)、应用自己写入的 URL handler
 (`cc-switch-handler`、`claude-code-url-handler`,重装会自动重建)、

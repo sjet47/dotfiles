@@ -1,10 +1,13 @@
 [Desktop Entry]
 # Readest 的 Tauri CEF 运行时写死 ozone-platform=x11,只能走 XWayland;
-# force_zero_scaling 下界面按 1x 渲染偏小,这里手动指定缩放。
+# force_zero_scaling 下 CEF 按 GTK 的 GDK_SCALE 定缩放,但 vicinae/uwsm-app 经
+# systemd-run 启动时环境里没有 GDK_SCALE,界面按 1x 渲染偏小,所以在这里显式带上。
+# --force-device-scale-factor 之类的 Chromium 参数无效:发布版设了
+# command_line_args_disabled,argv 整个被忽略。
 # 上游: https://github.com/readest/readest/issues/6432
 Categories=Office;
 Comment=Your online library
-Exec=readest --force-device-scale-factor=1.5
+Exec=env GDK_SCALE=2 readest
 StartupWMClass=readest
 Icon=readest
 Name=Readest
