@@ -6,7 +6,3 @@ patch:
   recognizer/patterns/quickphrase: "^;[\\\\:_A-Za-z]*$"
   engine/translators/+:
     - lua_translator@*quickphrase
-  # 置顶候选:不受用户词频影响。Shift+Del 只是软删,再选一次就带着原词频复活,
-  # 想固定首选要靠这里。格式 编码<Tab>字词1 字词2,见 lua/pin_cand_filter.lua 说明书。
-  pin_cand_filter/+:
-    - "l\t了"
