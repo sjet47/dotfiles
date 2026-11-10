@@ -153,5 +153,7 @@ onboarding = false
     resume_agents_on_restore = true
 
 [experimental]
-    pane_history = true
+    # 关闭：每次自动保存都会在主循环里同步导出所有 pane 的完整 scrollback（无上限），
+    # 大输出 pane 会让 herdr 周期性卡顿。重启恢复改靠 agent 原生 resume。
+    pane_history = false
     kitty_graphics = true
