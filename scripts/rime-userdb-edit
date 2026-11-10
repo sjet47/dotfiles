@@ -15,6 +15,7 @@
 # 环境变量(主要给测试用):
 #   RIME_USER_DIR        Rime 用户目录,默认 ~/.local/share/fcitx5/rime
 #   RIME_BACKUP_DIR      旧库备份目录,默认 ~/.local/share/fcitx5/rime-userdb-backup
+#   RIME_BACKUP_KEEP     保留最近几份备份,默认 10,多出的从最旧的开始删
 #   RIME_USERDB_EDITOR   编辑器命令,默认 vim
 #   RIME_NO_FCITX=1      不停/不起 fcitx5(只在副本目录上测试时用)
 
@@ -24,6 +25,7 @@ dict=${1:-rime_ice}
 user_dir=${RIME_USER_DIR:-$HOME/.local/share/fcitx5/rime}
 backup_root=${RIME_BACKUP_DIR:-$HOME/.local/share/fcitx5/rime-userdb-backup}
 editor=${RIME_USERDB_EDITOR:-vim}
+keep=${RIME_BACKUP_KEEP:-10}
 no_fcitx=${RIME_NO_FCITX:-0}
 
 die() { echo "rime-userdb-edit: $*" >&2; exit 1; }
@@ -167,6 +169,16 @@ fi
 # 用新库重新生成同步快照,免得旧快照在下次同步时把删掉的词带回来
 (cd "$user_dir" && rime_dict_manager -b "$dict" >/dev/null 2>&1) || echo "警告:重新生成同步快照失败" >&2
 info "已导入,旧库备份在 $backup"
+
+# 备份滚动:只保留本词库最近 $keep 份。目录名带 %Y%m%d-%H%M%S 时间戳,按名字排序即按时间排序。
+mapfile -t old_backups < <(
+    find "$backup_root" -mindepth 1 -maxdepth 1 -type d \
+        -regextype posix-extended -regex ".*/$dict-[0-9]{8}-[0-9]{6}" | sort | head -n -"$keep"
+)
+for d in "${old_backups[@]}"; do
+    rm -rf "${d:?}"
+done
+(( ${#old_backups[@]} > 0 )) && info "清理旧备份 ${#old_backups[@]} 份,保留最近 $keep 份"
 
 # ---- 5. 起 fcitx5 ----
 if [[ $no_fcitx != 1 ]]; then
