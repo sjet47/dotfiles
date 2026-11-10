@@ -1,0 +1,170 @@
+#!/bin/bash
+# 用 vim 编辑 Rime 用户词库,保存退出后自动:停 fcitx5 → 备份旧库 → 导入新库 → 重启 fcitx5。
+#
+# 为什么要这么绕:
+#   - userdb 是 LevelDB,fcitx5 运行时独占锁,外部工具改不了,只能停掉再换。
+#   - Shift+Del 只是软删(commits 取负),再选一次就带着原词频复活;
+#     librime 的 import/restore 都是合并语义,删不掉已有词条。
+#     所以真删只能"导出 → 删行 → 导入到全新空库"。
+#   - sync/<id>/<dict>.userdb.txt 是同步快照,不一起换的话下次同步会把删掉的词合并回来。
+#
+# 编辑期间 fcitx5 照常运行(方便在 vim 里用中文搜索);这段时间新学到的词在导入时
+# 合并回来,但你在 vim 里删掉的词不会因此复活。
+#
+# 用法: rime-userdb-edit [dict_name]     默认 rime_ice
+# 环境变量(主要给测试用):
+#   RIME_USER_DIR        Rime 用户目录,默认 ~/.local/share/fcitx5/rime
+#   RIME_BACKUP_DIR      旧库备份目录,默认 ~/.local/share/fcitx5/rime-userdb-backup
+#   RIME_USERDB_EDITOR   编辑器命令,默认 vim
+#   RIME_NO_FCITX=1      不停/不起 fcitx5(只在副本目录上测试时用)
+
+set -euo pipefail
+
+dict=${1:-rime_ice}
+user_dir=${RIME_USER_DIR:-$HOME/.local/share/fcitx5/rime}
+backup_root=${RIME_BACKUP_DIR:-$HOME/.local/share/fcitx5/rime-userdb-backup}
+editor=${RIME_USERDB_EDITOR:-vim}
+no_fcitx=${RIME_NO_FCITX:-0}
+
+die() { echo "rime-userdb-edit: $*" >&2; exit 1; }
+info() { echo ":: $*"; }
+
+command -v rime_dict_manager >/dev/null || die "找不到 rime_dict_manager(librime 包)"
+[[ -d $user_dir/$dict.userdb ]] || die "没有用户词库 $user_dir/$dict.userdb"
+[[ -f $user_dir/installation.yaml ]] || die "没有 $user_dir/installation.yaml"
+
+work=$(mktemp -d -t rime-userdb.XXXXXX)
+trap 'rm -rf "${work:?}"' EXIT
+
+# 在副本上做 backup(-b):输出带 c/d/t 的快照,含软删条目(c<0),-e 导出会丢掉 d/t 和软删条目。
+# fcitx5 运行时原库被锁,所以复制一份、删 LOCK 再读。
+snapshot() { # $1=输出文件
+    local tmp
+    tmp=$(mktemp -d -p "$work" snap.XXXXXX)
+    cp -r "$user_dir/$dict.userdb" "$tmp/"
+    rm -f "$tmp/$dict.userdb/LOCK"
+    cp "$user_dir/installation.yaml" "$tmp/"
+    (cd "$tmp" && rime_dict_manager -b "$dict" >/dev/null 2>&1) || die "导出 $dict 失败"
+    local f
+    f=$(ls "$tmp"/sync/*/"$dict".userdb.txt 2>/dev/null | head -1)
+    [[ -n $f ]] || die "导出 $dict 后没找到快照文件"
+    mv "$f" "$1"
+}
+
+tick_of() { awk -F'\t' '$1=="#@/tick"{print $2; exit}' "$1"; }
+
+# ---- 1. 导出并编辑 ----
+info "导出 $dict"
+snapshot "$work/orig.txt"
+tick0=$(tick_of "$work/orig.txt")
+grep '^#@/' "$work/orig.txt" >"$work/header.txt"
+
+{
+    cat <<'EOF'
+# Rime 用户词库编辑。保存退出后自动导入并重启 fcitx5;不保存退出(:q!)或 :cq 则放弃。
+# 格式: 编码<空格><Tab>词<Tab>c=次数 d=权重 t=时间戳   —— 整行删掉 = 彻底删除该词
+# c 为负数 = Shift+Del 软删过的词,留着的话再选一次就会带着原词频复活,建议删掉。
+# 以 # 开头的行导入时忽略,文件头由脚本自动补回。
+EOF
+    grep -v '^#' "$work/orig.txt"
+} >"$work/$dict.userdb.txt"
+cp "$work/$dict.userdb.txt" "$work/before-edit.txt"
+
+valid_re=$'^[^\t#][^\t]*\t[^\t]+\tc=-?[0-9]+ d=[^ \t]+ t=[0-9]+$'
+while true; do
+    $editor "$work/$dict.userdb.txt" || die "编辑器非零退出,放弃,词库未改动"
+    if cmp -s "$work/$dict.userdb.txt" "$work/before-edit.txt"; then
+        info "文件未修改,词库未改动"
+        exit 0
+    fi
+    grep -v -e '^#' -e '^[[:space:]]*$' "$work/$dict.userdb.txt" >"$work/edited.txt" || true
+    if bad=$(grep -n -v -E "$valid_re" "$work/edited.txt"); then
+        echo "$bad" | head -10 >&2
+        read -r -p "以上行格式不对(行号不含注释行)。[e]重新编辑 / [a]放弃: " ans
+        [[ $ans == e* ]] && continue
+        die "已放弃,词库未改动"
+    fi
+    break
+done
+
+# 统计:按 "编码\t词" 作键
+read -r n_orig n_left n_deleted n_changed < <(awk -F'\t' '
+    FNR==NR { if ($0 !~ /^#/) { o[$1 FS $2]=$3; n++ } next }
+    { e[$1 FS $2]=1; m++; if (($1 FS $2) in o && o[$1 FS $2]!=$3) c++ }
+    END { for (k in o) if (!(k in e)) d++; print n+0, m+0, d+0, c+0 }
+' "$work/orig.txt" "$work/edited.txt")
+info "原有 $n_orig 条,保留 $n_left 条,删除 $n_deleted 条,手改 $n_changed 条"
+
+# ---- 2. 停 fcitx5 ----
+if [[ $no_fcitx != 1 ]]; then
+    info "退出 fcitx5"
+    fcitx5-remote -e 2>/dev/null || true
+    for _ in $(seq 40); do
+        pgrep -x fcitx5 >/dev/null || break
+        sleep 0.25
+    done
+    pgrep -x fcitx5 >/dev/null && die "fcitx5 10 秒内没退出,放弃,词库未改动"
+fi
+
+# ---- 3. 合并编辑期间新学到的词 ----
+# 规则(键 = 编码\t词):
+#   编辑后保留、且没被手改的 → 取最新库里的值(带上编辑期间的词频变化)
+#   编辑后保留、手改过的       → 以手改为准
+#   原来有、被删掉的           → 不要,即使编辑期间又被选过
+#   原来没有、t > tick0 的新词  → 加进来
+snapshot "$work/latest.txt"
+tick1=$(tick_of "$work/latest.txt")
+awk -F'\t' -v OFS='\t' '
+    FILENAME==ARGV[1] { if ($0 !~ /^#/) o[$1 FS $2]=$3; next }
+    FILENAME==ARGV[2] { if ($0 !~ /^#/) l[$1 FS $2]=$3; next }
+    {
+        k=$1 FS $2; e[k]=1
+        if (k in l && o[k]==$3) print $1, $2, l[k]; else print
+    }
+    END { for (k in l) if (!(k in o) && !(k in e)) print k, l[k] }
+' "$work/orig.txt" "$work/latest.txt" "$work/edited.txt" >"$work/merged.body"
+n_new=$(( $(wc -l <"$work/merged.body") - n_left ))
+(( n_new > 0 )) && info "合并编辑期间新学到的 $n_new 条"
+
+# 文件头 tick 取较新的那个,导入时用它折算权重
+awk -F'\t' -v OFS='\t' -v t="$tick1" '$1=="#@/tick"{$2=t} {print}' "$work/header.txt" >"$work/final.txt"
+cat "$work/merged.body" >>"$work/final.txt"
+
+# ---- 4. 备份旧库并导入 ----
+stamp=$(date +%Y%m%d-%H%M%S)
+backup=$backup_root/$dict-$stamp
+mkdir -p "$backup"
+cp "$work/final.txt" "$backup/imported.userdb.txt"
+
+restore_old() {
+    echo "rime-userdb-edit: 导入失败,回滚到旧库" >&2
+    rm -rf "${user_dir:?}/$dict.userdb"
+    mv "$backup/$dict.userdb" "$user_dir/"
+    for f in "$backup"/sync/*/"$dict".userdb.txt; do
+        [[ -e $f ]] && cp "$f" "$user_dir/sync/$(basename "$(dirname "$f")")/"
+    done
+}
+
+mv "$user_dir/$dict.userdb" "$backup/"
+for f in "$user_dir"/sync/*/"$dict".userdb.txt; do
+    [[ -e $f ]] || continue
+    id=$(basename "$(dirname "$f")")
+    mkdir -p "$backup/sync/$id"
+    mv "$f" "$backup/sync/$id/"
+done
+
+if ! (cd "$user_dir" && rime_dict_manager -r "$work/final.txt" >/dev/null 2>&1) ||
+   ! [[ -d $user_dir/$dict.userdb ]]; then
+    restore_old
+    exit 1
+fi
+# 用新库重新生成同步快照,免得旧快照在下次同步时把删掉的词带回来
+(cd "$user_dir" && rime_dict_manager -b "$dict" >/dev/null 2>&1) || echo "警告:重新生成同步快照失败" >&2
+info "已导入,旧库备份在 $backup"
+
+# ---- 5. 起 fcitx5 ----
+if [[ $no_fcitx != 1 ]]; then
+    info "启动 fcitx5"
+    # 与 config/hypr/modules/autostart.lua 保持一致:候选框要 1.5 倍缩放
+    uwsm-app -- env QT_SCALE_FACTOR=1.5 fcitx5 -d >/dev/null 2>&1
+fi
