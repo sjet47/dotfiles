@@ -65,8 +65,14 @@ grep '^#@/' "$work/orig.txt" >"$work/header.txt"
 # 格式: 编码<空格><Tab>词<Tab>c=次数 d=权重 t=时间戳   —— 整行删掉 = 彻底删除该词
 # c 为负数 = Shift+Del 软删过的词,留着的话再选一次就会带着原词频复活,建议删掉。
 # 以 # 开头的行导入时忽略,文件头由脚本自动补回。
+# 按 t 从新到旧排序:t 是每次选词递增的计数,越靠上越是最近选过的。
+# 注意:导入会把所有词的 t 统一成同一个值(librime UserDbMerger),所以上次导入之前的词
+# 之间不再分先后,只有导入之后选过的词排在它们上面。
 EOF
-    grep -v '^#' "$work/orig.txt"
+    # 按 t 降序稳定排序;同 t 的保持原来按编码的顺序
+    grep -v '^#' "$work/orig.txt" |
+        awk -F'\t' '{ t=$3; sub(/.* t=/, "", t); print t "\t" $0 }' |
+        sort -t$'\t' -k1,1nr -s | cut -f2-
 } >"$work/$dict.userdb.txt"
 cp "$work/$dict.userdb.txt" "$work/before-edit.txt"
 
