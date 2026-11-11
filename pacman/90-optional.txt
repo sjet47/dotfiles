@@ -24,6 +24,7 @@ cool-retro-term  # CRT 效果终端,纯玩具
 
 # ── 阅读 / 通讯 / 隧道 ───────────────────────────────────────────────────
 calibre           # 电子书库管理与格式转换;主力阅读是 foliate,只有推书到阅读器才用得上
+readest           # 电子书阅读器,带跨设备同步进度/笔记;主力是 foliate,要多端同步时才装
 wechat-bin        # [AUR] 微信;体积近 700 MiB,只在需要用微信的机器上装
 linuxqq-appimage  # [AUR] QQ(Electron 版);PKGBUILD 里的下载地址跟着腾讯版本号走,常腐烂
 cloudflared-bin   # [AUR] Cloudflare Tunnel;内网穿透主力是 frpc,这个是备选
