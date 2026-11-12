@@ -19,7 +19,6 @@
     "cpu",
     "memory",
     "custom/netio",
-    "custom/claude",
     "custom/keyboard",
     "bluetooth",
     "network",
@@ -181,12 +180,6 @@
   "tray": {
     "icon-size": 18,
     "spacing": 12
-  },
-  "custom/claude": {
-    "exec": "/home/sjet/.config/waybar/scripts/claude-usage.sh",
-    "return-type": "json",
-    "on-click": "pkill -USR1 -f 'scripts/claude-usage.sh$'",
-    "on-click-right": "xdg-open https://claude.ai/settings/usage"
   },
   "custom/notifications": {
     // 后端已从 mako 换成 quickshell(config/quickshell/,单实例 qs)。
