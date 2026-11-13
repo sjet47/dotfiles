@@ -30,6 +30,7 @@ config/herdr/herdr.sock.agent
 !config/sddm/
 !config/environment.d/
 !config/environment.d/
+!config/git/
 !pi-agent/agents
 !pi-agent/prompts
 !pi-agent/extensions
@@ -77,6 +78,10 @@ config/systemd/user/*
 !config/systemd/user/tmux-resurrect-cleanup.timer
 !config/systemd/user/waybar.service
 !config/systemd/user/wayvnc@.service
+
+# git XDG 目录:只收全局 ignore;config 含签名 key、工作目录 includeIf、credential host,机器相关不入库
+config/git/*
+!config/git/ignore
 
 # KDE/Plasma 自动生成,机器相关,只保留 conf.d 里我们自己的配置
 config/fontconfig/fonts.conf
